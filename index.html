@@ -6,6 +6,11 @@
   <title>Friesen Ventures Gaming Hub</title>
   <link rel="icon" href="favicon.ico" />
   <style>
+    html, body {
+      min-height: 100%;
+      scroll-behavior: auto;
+    }
+
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -47,6 +52,8 @@
       font-size: 1rem;
       border-top: 1px solid #333;
       border-bottom: 1px solid #333;
+      z-index: 10;
+      position: relative;
     }
 
     main {
@@ -129,6 +136,11 @@
       text-decoration: underline;
     }
   </style>
+  <script>
+    window.addEventListener('load', () => {
+      document.body.style.display = 'block';
+    });
+  </script>
 </head>
 <body>
   <header>
