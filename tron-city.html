@@ -1,35 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="description" content="Play Tron City 1989 — Your forked MicropolisJS port embedded in your browser">
   <title>Tron City 1989</title>
+  <link rel="stylesheet" href="css/style.css">
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; background: #111; color: #eee; }
-    header { background: #222; padding: 1rem; text-align: center; }
-    header h1 { margin: 0; font-size: 2rem; }
-    nav a { color: #eee; margin: 0 1rem; text-decoration: none; }
-    main { padding: 2rem; }
-    .game-container { width: 100%; max-width: 800px; margin: 0 auto; }
-    .game-container iframe { width: 100%; height: 600px; border: none; }
-    footer { background: #222; text-align: center; padding: 1rem; font-size: 0.8rem; }
-    a.back { color: #007acc; text-decoration: none; display: inline-block; margin-bottom: 1rem; }
+    /* Make the entire page flex so the iframe can fill the space */
+    html, body { height: 100%; margin: 0; padding: 0; font-family: Arial, sans-serif; background: #111; color: #eee; display: flex; flex-direction: column; }
+    header { background: #222; padding: 1rem; text-align: center; flex: 0 0 auto; }
+    header h1 { margin: 0; font-size: 1.5rem; }
+    a.back { position: absolute; top: 1rem; left: 1rem; color: #0af; text-decoration: none; }
+    main { flex: 1 1 auto; display: flex; justify-content: center; align-items: center; padding: 1rem; }
+    iframe { border: none; width: 100%; height: 100%; max-width: 1200px; max-height: 90vh; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
   </style>
 </head>
 <body>
   <header>
     <h1>Tron City 1989</h1>
-    <nav><a class="back" href="index.html">← Back to Hub</a></nav>
+    <a href="index.html" class="back">&larr; Back to Hub</a>
   </header>
-
   <main>
-    <div class="game-container">
-      <iframe src="https://www.graememcc.co.uk/micropolisJS/index.html" allowfullscreen></iframe>
-    </div>
+    <!-- Embed your forked MicropolisJS site here -->
+    <iframe src="https://markfriesen1979.github.io/micropolisJS/" title="MicropolisJS: Tron City 1989"></iframe>
   </main>
-
-  <footer>
-    &copy; 2025 Friesen Ventures • <a href="mailto:markfriesen2014@gmail.com">Contact Us</a>
-  </footer>
 </body>
 </html>
