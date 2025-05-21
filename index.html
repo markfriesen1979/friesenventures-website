@@ -1,55 +1,29 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Friesen Ventures Gaming Hub</title>
+  <title>Tron City 1989</title>
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; background: #111; color: #eee; }
-    header { background: #222; padding: 1rem; text-align: center; }
-    header h1 { margin: 0; font-size: 2rem; }
-    nav a { color: #eee; margin: 0 1rem; text-decoration: none; }
-    .hero { background: url('images/hero.jpg') center/cover no-repeat; height: 300px; display: flex; align-items: center; justify-content: center; }
-    .hero h2 { background: rgba(0,0,0,0.5); padding: 1rem 2rem; border-radius: 4px; }
-    .games { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 1rem; padding: 2rem; }
-    .card { background: #1a1a1a; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-    .card img { width: 100%; display: block; }
-    .card-content { padding: 1rem; }
-    .card-content h3 { margin: 0 0 0.5rem; }
-    .card-content p { margin: 0 0 1rem; font-size: 0.9rem; color: #ccc; }
-    .card-content a { display: inline-block; padding: 0.5rem 1rem; background: #007acc; color: #fff; text-decoration: none; border-radius: 4px; }
-    footer { background: #222; text-align: center; padding: 1rem; font-size: 0.8rem; }
+    body, html { margin:0; padding:0; width:100%; height:100%; background:#000; color:#fff; }
+    header { background:#111; padding:1rem; text-align:center; font-family:Arial,sans-serif; }
+    header h1 { margin:0; font-size:1.5rem; }
+    header a { color:#00aaff; text-decoration:none; font-size:0.9rem; display:inline-block; margin-top:0.5rem; }
+    .iframe-container { position:absolute; top:60px; left:0; width:100%; height:calc(100% - 60px); border:none; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Friesen Ventures Gaming Hub</h1>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#games">Games</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <h1>Tron City 1989</h1>
+    <a href="index.html">← Back to Hub</a>
   </header>
-
-  <section class="hero">
-    <h2>Welcome to the Tron City & Beyond</h2>
-  </section>
-
-  <section id="games" class="games">
-    <div class="card">
-      <img src="tron%20city%201989.jpg" alt="Tron City 1989 cover art">
-      <div class="card-content">
-        <h3>Tron City</h3>
-        <p>Build and manage your city in this modern Micropolis port.</p>
-        <a href="tron-city.html">Play Now</a>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    &copy; 2025 Friesen Ventures &bull; <a href="mailto:markfriesen2014@gmail.com">Contact Us</a>
-  </footer>
+  <!-- Embed MicropolisJS from official GitHub Pages -->
+  <iframe
+    class="iframe-container"
+    src="https://graememcc.github.io/micropolisJS/"
+    title="Tron City 1989"
+    frameborder="0"
+    allowfullscreen>
+  </iframe>
 </body>
 </html>
