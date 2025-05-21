@@ -3,15 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
-  <meta name="description" content="Play Tron City and build a virtual city in your browser!">
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="Play Tron City 1989 on FriesenVentures.net">
+  <!-- Use CSS hosted on friesenventures.net/GitHub via jsDelivr -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markfriesen1979/friesenventures-website@main/tron-city/css/style.css">
   <title>Tron City 1989</title>
 </head>
 <body>
-  <!-- Tile and sprite assets -->
-  <img id="tiles" class="imageData" src="images/tiles.png" alt="Tiles">
-  <img id="snowtiles" class="imageData" src="images/tilessnow.png" alt="Snow Tiles">
-  <img id="sprites" class="imageData" src="images/sprites.png" alt="Sprites">
+  <!-- Tile and sprite assets loaded from GitHub via CDN -->
+  <img id="tiles" class="imageData" src="https://cdn.jsdelivr.net/gh/markfriesen1979/friesenventures-website@main/tron-city/images/tiles.png" alt="Tiles">
+  <img id="snowtiles" class="imageData" src="https://cdn.jsdelivr.net/gh/markfriesen1979/friesenventures-website@main/tron-city/images/tilessnow.png" alt="Snow Tiles">
+  <img id="sprites" class="imageData" src="https://cdn.jsdelivr.net/gh/markfriesen1979/friesenventures-website@main/tron-city/images/sprites.png" alt="Sprites">
 
   <!-- Custom Header -->
   <header id="header" class="chunk border-bottom padding10">
@@ -28,21 +29,22 @@
 
   <div id="wrapper">
     <main id="canvasContainer">
-      <!-- Remove nagWindow: no nag messages -->
+      <!-- Loading banner (hidden when game bundles initialize) -->
       <div data-hasscript="false" id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
-      <!-- All other original MicropolisJS UI (splash, start, controls, etc.) retained here -->
+      <!-- MicropolisJS UI markup retained here -->
     </main>
 
     <!-- Custom Footer -->
     <footer id="footer" class="alignCenter chunk white padding10">
       <div>Brought to you by Friesen Ventures</div>
-      <div>Visit <a href="https://friesenventures.net" target="_blank">FriesenVentures.net</a> for more projects</div>
+      <div><a href="https://friesenventures.net" target="_blank">Visit FriesenVentures.net</a> for more projects</div>
     </footer>
   </div>
 
-  <!-- Core scripts -->
-  <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-  <script defer src="dist/vendor.[hash].js"></script>
-  <script defer src="dist/app.[hash].js"></script>
+  <!-- jQuery via CDN -->
+  <script defer src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <!-- Official pre-built MicropolisJS bundles via jsDelivr -->
+  <script defer src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS/dist/vendor.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS/dist/app.min.js"></script>
 </body>
 </html>
