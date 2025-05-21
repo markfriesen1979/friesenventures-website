@@ -2,29 +2,151 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <meta name="description" content="Play Tron City 1989 — Your forked MicropolisJS port embedded in your browser">
+  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
+  <meta name="description" content="Play Tron City 1989 on FriesenVentures.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS@master/css/style.css">
   <title>Tron City 1989</title>
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    body { margin:0; padding:0; background:#111; color:#eee; font-family:Arial,sans-serif; }
-    header { background:#222; padding:1rem; text-align:center; position:relative; }
-    header h1 { margin:0; font-size:2rem; }
-    a.back { position:absolute; top:1rem; left:1rem; color:#0af; text-decoration:none; }
-    .game-container { width:100%; max-width:900px; margin:2rem auto; }
-    .game-container iframe { width:100%; height:650px; border:none; display:block; }
-  </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="back">← Back to Hub</a>
-    <h1>Tron City 1989</h1>
+  <!-- Preload images -->
+  <img id="tiles" class="imageData" src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS@master/images/tiles.png" alt="Tiles">
+  <img id="snowtiles" class="imageData" src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS@master/images/tilessnow.png" alt="Snow Tiles">
+  <img id="sprites" class="imageData" src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS@master/images/sprites.png" alt="Sprites">
+
+  <!-- Custom Header -->
+  <header id="header" class="chunk border-bottom padding10">
+    <div class="left inlineblock">
+      <h1 class="fontlarge white">Tron City 1989</h1>
+    </div>
+    <nav class="white right padding10 inlineblock">
+      <ul>
+        <li><a href="about.html" target="_blank">About</a></li>
+        <li><a href="https://friesenventures.net" target="_blank">Friesen Ventures</a></li>
+      </ul>
+    </nav>
   </header>
-  <div class="game-container">
-    <iframe src="https://markfriesen1979.github.io/micropolisJS/index.html" title="MicropolisJS: Tron City 1989"></iframe>
+
+  <div id="wrapper">
+    <main id="canvasContainer">
+      <div class="hidden" id="opaque"></div>
+      <div data-hasscript="false" id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
+
+      <!-- Splash screen -->
+      <div id="splash" class="mintcream awaitGeneration open shadow padding10 centred">
+        <h2 class="chunk alignCenter">Welcome!</h2>
+        <p>micropolisJS is a handmade Javascript port of the open-source city simulator <cite>Micropolis</cite></p>
+        <div id="splashContainer"></div>
+        <div id="splashButtonContainer">
+          <div id="splashButtons">
+            <button id="splashLoad" class="width140 block loadSave splashButton" disabled>Load game</button>
+            <button id="splashPlay" class="width140 block margin10 splashButton">Play this map</button>
+            <button id="splashGenerate" class="width140 block margin10 splashButton">Generate another</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- New game form -->
+      <div id="start" class="mintcream open shadow padding10 centred">
+        <h2 class="chunk alignCenter">New Game</h2>
+        <form id="playForm">
+          <label for="nameForm">City name (max 15 letters)</label>
+          <input id="nameForm" autofocus required class="margin10" type="text" maxlength="15">
+          Difficulty
+          <input type="radio" class="difficulty" name="difficulty" id="difficultyEasy" value="0" checked><label for="difficultyEasy">Easy</label>
+          <input type="radio" class="difficulty" name="difficulty" id="difficultyMed" value="1"><label for="difficultyMed">Medium</label>
+          <input type="radio" class="difficulty" name="difficulty" id="difficultyHard" value="2"><label for="difficultyHard">Hard</label>
+          <div id="playSubmitDiv">
+            <input id="playit" type="submit" value="Play!">
+          </div>
+        </form>
+      </div>
+
+      <!-- Info bar -->
+      <div id="infobar" class="alignCenter leftedge open width140 padding10 controlShadow mintcream z1 initialHidden">
+        <div class="inner">
+          <div class="semibold chunk"><span id="name">Your Name Here</span></div>
+          <div><span id="date">Jan 1900</span></div>
+          <div class="elided">Funds $<span id="funds">20000</span></div>
+          <div class="elided">Score: <span id="score">0</span></div>
+          <div><span id="cclass">VILLAGE</span></div>
+          <div class="elided">Population:<br><span id="population">0</span></div>
+        </div>
+      </div>
+
+      <!-- Misc buttons -->
+      <div id="miscButtons" class="alignCenter leftedge open controlShadow width140 padding10 mintcream z1 initialHidden">
+        <div class="inner">
+          <button id="budgetRequest" class="miscButton">Budget</button>
+          <button id="evalRequest" class="miscButton">Evaluation</button>
+          <button id="disasterRequest" class="miscButton">Disasters</button>
+          <button id="saveRequest" class="miscButton loadSave" disabled>Save</button>
+          <button id="settingsRequest" class="miscButton">Settings</button>
+          <button id="screenshotRequest" class="miscButton">Take Picture</button>
+          <button id="pauseRequest" class="miscButton">Pause</button>
+        </div>
+      </div>
+
+      <!-- RCI container -->
+      <div id="RCIContainer" class="controlShadow leftedge width140 padding10 mintcream z1 initialHidden"></div>
+
+      <!-- Controls -->
+      <div id="controls" class="controlShadow mintcream z1 initialHidden rightedge open">
+        <div id="toolInfo" class="alignCenter"><span id="toolOutput">Tools</span></div>
+        <div id="buttons">
+          <!-- all tool buttons here (residential, commercial, etc.) -->
+          <button id="residentialButton" data-size="3" data-tool="residential" class="toolButton unselected">Residential $100</button>
+          <!-- ... repeat for all tools ... -->
+        </div>
+      </div>
+
+      <!-- Monster TV -->
+      <div id="monstertv" class="alignCenter z1 hidden rightedge padding10 controlShadow open">
+        <div id="monsterTVContainer"><div id="tvContainer"></div>
+          <form id="monsterTVForm"><input type="submit" value="Close" class="width140 cancel"></form>
+        </div>
+      </div>
+
+      <!-- Debug panel -->
+      <div id="debug" class="alignCenter z1 rightedge padding10 mintcream controlShadow open">
+        <div id="fps"><span id="fpsValue">0</span> FPS</div>
+        <button id="debugRequest">Debug</button>
+      </div>
+
+      <!-- Notifications & tooSmall -->
+      <div id="notifications" class="initialHidden neutral z1 rightedge alignCenter padding10 controlShadow"></div>
+      <div id="tooSmall" data-hasscript="false" class="mintcream open">
+        <div id="tooSmallInner" class="alignCenter padding10">
+          <h2>Uh-oh!</h2>
+          <p>This screen is too small—I won't be able to fit in all the controls!</p>
+        </div>
+      </div>
+
+      <!-- NoScript -->
+      <noscript>
+        <div class="open mintcream centred padding10">
+          <h1>micropolisJS</h1>
+          <p>Javascript appears disabled. Enable JS to play!</p>
+        </div>
+      </noscript>
+
+    </main>
+
+    <!-- Custom Footer -->
+    <footer id="footer" class="alignCenter chunk white padding10">
+      <div>Brought to you by Friesen Ventures</div>
+      <div><a href="https://friesenventures.net" target="_blank">Visit FriesenVentures.net</a></div>
+      <div id="build">Build: (cdn)</div>
+    </footer>
   </div>
-  <footer style="background:#222;color:#eee;text-align:center;padding:1rem;font-size:0.9rem;">
-    Brought to you by Friesen Ventures · <a href="https://FriesenVentures.net" style="color:#0af;">Visit FriesenVentures.net</a>
-  </footer>
+
+  <!-- Script initializer -->
+  <script>
+    [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(e) {
+      e.setAttribute('data-hasscript', 'true');
+    });
+  </script>
+  <script defer src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS/dist/vendor.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS/dist/app.min.js"></script>
 </body>
 </html>
