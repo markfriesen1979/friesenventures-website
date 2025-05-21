@@ -4,24 +4,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
   <meta name="description" content="Play Tron City 1989 — forked MicropolisJS">
-  <!-- CSS from your fork -->
-  <link rel="stylesheet" media="screen" type="text/css" href="https://cdn.jsdelivr.net/gh/markfriesen1979/micropolisJS@main/css/style.css">
   <title>Tron City 1989</title>
+  <!-- Local CSS -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Preload images from your fork -->
-  <img id="tiles" class="imageData" src="https://cdn.jsdelivr.net/gh/markfriesen1979/micropolisJS@main/images/tiles.png" alt="Tiles">
-  <img id="snowtiles" class="imageData" src="https://cdn.jsdelivr.net/gh/markfriesen1979/micropolisJS@main/images/tilessnow.png" alt="Snow Tiles">
-  <img id="sprites" class="imageData" src="https://cdn.jsdelivr.net/gh/markfriesen1979/micropolisJS@main/sprites/sprites.png" alt="Sprites">
+  <!-- Preload images -->
+  <img id="tiles" class="imageData" src="images/tiles.png" alt="Tiles">
+  <img id="snowtiles" class="imageData" src="images/tilessnow.png" alt="Snow Tiles">
+  <img id="sprites" class="imageData" src="sprites/sprites.png" alt="Sprites">
 
-  <!-- Custom Header -->
+  <!-- Header -->
   <header id="header" class="chunk border-bottom padding10">
     <div class="left inlineblock">
       <h1 id="title" class="white fontlarge">Tron City 1989</h1>
     </div>
     <nav class="white right padding10 inlineblock">
       <ul>
-        <li class="padding10"><a href="about.html" target="_blank">About</a></li>
+        <li class="padding10"><a href="/about.html" target="_blank">About</a></li>
         <li class="padding10"><a href="https://friesenventures.net" target="_blank">Friesen Ventures</a></li>
       </ul>
     </nav>
@@ -30,12 +30,12 @@
   <div id="wrapper">
     <main id="canvasContainer">
       <div class="hidden" id="opaque"></div>
-      <div data-hasscript="false" id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
+      <div id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
 
-      <!-- Splash -->
+      <!-- Splash / Welcome -->
       <div id="splash" class="mintcream awaitGeneration open shadow padding10 centred">
         <h2 class="chunk alignCenter">Welcome!</h2>
-        <p>micropolisJS forked by Friesen — JavaScript port of the open-source SimCity</p>
+        <p>Tron City 1989 — your personal MicropolisJS port</p>
         <div id="splashContainer"></div>
         <div id="splashButtonContainer">
           <div id="splashButtons">
@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <!-- New Game -->
+      <!-- New Game Form -->
       <div id="start" class="mintcream open shadow padding10 centred">
         <h2 class="chunk alignCenter">New Game</h2>
         <form id="playForm">
@@ -54,9 +54,9 @@
           <input id="nameForm" autofocus required class="margin10" type="text" maxlength="15">
           <div>
             Difficulty:
-            <input type="radio" class="difficulty" name="difficulty" id="difficultyEasy" value="0" checked><label for="difficultyEasy">Easy</label>
-            <input type="radio" class="difficulty" name="difficulty" id="difficultyMed" value="1"><label for="difficultyMed">Medium</label>
-            <input type="radio" class="difficulty" name="difficulty" id="difficultyHard" value="2"><label for="difficultyHard">Hard</label>
+            <label><input type="radio" class="difficulty" name="difficulty" value="0" checked> Easy</label>
+            <label><input type="radio" class="difficulty" name="difficulty" value="1"> Medium</label>
+            <label><input type="radio" class="difficulty" name="difficulty" value="2"> Hard</label>
           </div>
           <div id="playSubmitDiv"><input id="playit" type="submit" value="Play!"></div>
         </form>
@@ -74,7 +74,7 @@
         </div>
       </div>
 
-      <!-- Misc Buttons -->
+      <!-- Misc Controls -->
       <div id="miscButtons" class="alignCenter leftedge open controlShadow width140 padding10 mintcream z1 initialHidden">
         <div class="inner">
           <button id="budgetRequest" class="miscButton">Budget</button>
@@ -87,7 +87,7 @@
         </div>
       </div>
 
-      <!-- Controls panel -->
+      <!-- Building Tools -->
       <div id="controls" class="controlShadow mintcream z1 rightedge open">
         <div id="toolInfo" class="alignCenter"><span id="toolOutput">Tools</span></div>
         <div id="buttons">
@@ -110,26 +110,27 @@
         </div>
       </div>
 
-      <!-- Additional modals (monstertv, debug, notifications, tooSmall, noscript) -->
-      <!-- ...copy from your fork's index.html, except remove the <div id="nagWindow"> block entirely... -->
+      <!-- (Other modals and windows here—copy from your build, except omit the nagWindow) -->
+
     </main>
 
-    <!-- Custom Footer -->
+    <!-- Footer -->
     <footer id="footer" class="alignCenter chunk white padding10">
       <div>Brought to you by Friesen Ventures</div>
       <div><a href="https://friesenventures.net" target="_blank">Visit FriesenVentures.net</a></div>
     </footer>
   </div>
 
-  <!-- Initialize data-hasscript flags -->
+  <!-- Mark script-enabled elements -->
   <script>
-    [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(e){ e.setAttribute('data-hasscript','true'); });
+    [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(e){
+      e.setAttribute('data-hasscript','true');
+    });
   </script>
 
-  <!-- jQuery from CDN -->
+  <!-- jQuery -->
   <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-  <!-- Bundles from your fork -->
-  <script defer src="https://cdn.jsdelivr.net/gh/markfriesen1979/micropolisJS@main/dist/vendor.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/gh/markfriesen1979/micropolisJS@main/dist/app.min.js"></script>
+  <!-- MicropolisJS engine -->
+  <script defer src="src/micropolis.js"></script>
 </body>
 </html>
