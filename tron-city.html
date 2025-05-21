@@ -2,86 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
-  <meta name="description" content="Play Tron City 1989 on FriesenVentures.net">
-  <!-- Use official MicropolisJS CSS via CDN -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS@master/css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="description" content="Play Tron City 1989 — Your forked MicropolisJS port embedded in your browser">
   <title>Tron City 1989</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { margin:0; padding:0; background:#111; color:#eee; font-family:Arial,sans-serif; }
+    header { background:#222; padding:1rem; text-align:center; position:relative; }
+    header h1 { margin:0; font-size:2rem; }
+    a.back { position:absolute; top:1rem; left:1rem; color:#0af; text-decoration:none; }
+    .game-container { width:100%; max-width:900px; margin:2rem auto; }
+    .game-container iframe { width:100%; height:650px; border:none; display:block; }
+  </style>
 </head>
 <body>
-  <!-- Tile and sprite assets via CDN -->
-  <img id="tiles" class="imageData" src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS@master/images/tiles.png" alt="Tiles">
-  <img id="snowtiles" class="imageData" src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS@master/images/tilessnow.png" alt="Snow Tiles">
-  <img id="sprites" class="imageData" src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS@master/images/sprites.png" alt="Sprites">
-
-  <!-- Custom Header -->
-  <header id="header" class="chunk border-bottom padding10">
-    <h1 class="fontlarge white">Tron City 1989</h1>
-    <nav class="white right padding10">
-      <a href="about.html" target="_blank">About</a> |
-      <a href="https://friesenventures.net" target="_blank">Friesen Ventures</a>
-    </nav>
+  <header>
+    <a href="index.html" class="back">← Back to Hub</a>
+    <h1>Tron City 1989</h1>
   </header>
-
-  <!-- Game UI Container -->
-  <div id="wrapper">
-    <main id="canvasContainer">
-      <!-- Loading banner -->
-      <div data-hasscript="false" id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
-
-      <!-- MicropolisJS UI markup begins -->
-      <div id="splash" class="mintcream awaitGeneration open shadow padding10 centred">
-        <h2 class="chunk alignCenter">Welcome!</h2>
-        <p>micropolisJS is a handmade Javascript port of the open-source city simulator <cite>Micropolis</cite></p>
-        <div id="splashContainer"></div>
-        <div id="splashButtonContainer">
-          <div id="splashButtons">
-            <button id="splashLoad" class="width140 block loadSave splashButton" disabled>Load game</button>
-            <button id="splashPlay" class="width140 block margin10 splashButton">Play this map</button>
-            <button id="splashGenerate" class="width140 block margin10 splashButton">Generate another</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="start" class="mintcream open shadow padding10 centred">
-        <h2 class="chunk alignCenter">New Game</h2>
-        <form id="playForm">
-          <label for="nameForm">City name (max 15 letters)</label>
-          <input id="nameForm" autofocus required class="margin10" type="text" maxlength="15">
-          <!-- difficulty radios here -->
-          <div id="playSubmitDiv">
-            <input id="playit" type="submit" value="Play!">
-          </div>
-        </form>
-      </div>
-
-      <!-- Side panels -->
-      <div id="infobar" class="alignCenter leftedge open">
-        <!-- info bar content -->
-      </div>
-      <div id="miscButtons" class="alignCenter leftedge open">
-        <!-- budget, evaluation, disasters, save, settings, screenshot, pause -->
-      </div>
-      <div id="controls" class="controlShadow mintcream open rightedge">
-        <!-- tools: residential, commercial, road, bulldozer, etc. -->
-      </div>
-
-      <!-- Additional modals: monsterTV, debug, notifications, tooSmall -->
-      <!-- ... (copy from original index.html) -->
-      <!-- MicropolisJS UI markup ends -->
-
-    </main>
-
-    <!-- Custom Footer -->
-    <footer id="footer" class="alignCenter chunk white padding10">
-      <div>Brought to you by Friesen Ventures</div>
-      <div><a href="https://friesenventures.net" target="_blank">Visit FriesenVentures.net</a></div>
-    </footer>
+  <div class="game-container">
+    <iframe src="https://markfriesen1979.github.io/micropolisJS/index.html" title="MicropolisJS: Tron City 1989"></iframe>
   </div>
-
-  <!-- Scripts via CDN -->
-  <script defer src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS/dist/vendor.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS/dist/app.min.js"></script>
+  <footer style="background:#222;color:#eee;text-align:center;padding:1rem;font-size:0.9rem;">
+    Brought to you by Friesen Ventures · <a href="https://FriesenVentures.net" style="color:#0af;">Visit FriesenVentures.net</a>
+  </footer>
 </body>
 </html>
