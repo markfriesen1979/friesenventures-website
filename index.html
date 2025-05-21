@@ -6,106 +6,89 @@
   <title>Friesen Ventures Gaming Hub</title>
   <link rel="icon" href="favicon.ico" />
   <style>
-    html, body {
-      min-height: 100%;
-      scroll-behavior: auto;
-    }
-
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background: #0a0a0a;
       color: #eee;
     }
-
     header {
       background: #000;
       padding: 1.5rem;
       text-align: center;
       box-shadow: 0 0 20px #00ffff55;
     }
-
     header h1 {
       color: #0ff;
       font-size: 2.2rem;
       text-shadow: 0 0 10px #0ff;
       margin: 0;
     }
-
     nav {
       margin-top: 1rem;
     }
-
     nav a {
       color: #0ff;
       text-decoration: none;
       margin: 0 1rem;
       font-weight: bold;
     }
-
     .ad-banner {
       background: #111;
       color: #0ff;
       text-align: center;
       padding: 1rem;
-      margin: 0 auto;
-      font-size: 1rem;
       border-top: 1px solid #333;
       border-bottom: 1px solid #333;
-      z-index: 10;
-      position: relative;
     }
-
+    .filters {
+      text-align: center;
+      margin: 2rem 0;
+    }
+    .filters button {
+      margin: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: #111;
+      border: 1px solid #0ff;
+      color: #0ff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .filters button.active {
+      background: #0ff;
+      color: #000;
+    }
     main {
-      padding: 2rem;
       max-width: 1200px;
       margin: auto;
+      padding: 2rem;
     }
-
-    h2 {
-      text-align: center;
-      font-size: 1.8rem;
-      color: #0ff;
-      margin-bottom: 1.5rem;
-      text-shadow: 0 0 5px #0ff;
-    }
-
     .game-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 2rem;
     }
-
     .game-card {
       background: #1a1a1a;
       border-radius: 8px;
       box-shadow: 0 0 12px #00ffff33;
       padding: 1rem;
       text-align: center;
-      transition: transform 0.3s ease;
     }
-
-    .game-card:hover {
-      transform: scale(1.03);
-    }
-
     .game-card img {
       width: 100%;
       border-radius: 6px;
       max-height: 150px;
       object-fit: cover;
     }
-
     .game-card h3 {
       color: #0ff;
       margin: 1rem 0 0.5rem;
     }
-
     .game-card p {
       font-size: 0.95rem;
       color: #ccc;
     }
-
     .button {
       display: inline-block;
       margin-top: 1rem;
@@ -117,11 +100,6 @@
       font-weight: bold;
       box-shadow: 0 0 8px #00f;
     }
-
-    .button:hover {
-      background: #0056cc;
-    }
-
     footer {
       text-align: center;
       padding: 1rem;
@@ -130,16 +108,77 @@
       margin-top: 4rem;
       font-size: 0.9rem;
     }
-
     footer a {
       color: #0ff;
       text-decoration: underline;
     }
   </style>
   <script>
-    window.addEventListener('load', () => {
-      document.body.style.display = 'block';
-    });
+    const games = [
+      {
+        title: "Tron City 1989",
+        desc: "Build and manage your city in this retro Micropolis remake.",
+        thumb: "images/tron city 1989.jpg",
+        url: "tron-city.html",
+        categories: ["City Builder", "PC Only", "Nostalgic Classics"]
+      },
+      {
+        title: "Stock Ticker Millennium",
+        desc: "Simulate the stock market and compete for fortune.",
+        thumb: "images/stock-ticker.jpg",
+        url: "stock-ticker.html",
+        categories: ["Simulators", "PC Only"]
+      },
+      {
+        title: "Pixel Snake",
+        desc: "Classic snake game reimagined. Mobile optimized!",
+        thumb: "images/snake.jpg",
+        url: "snake.html",
+        categories: ["Arcade", "Mobile Friendly", "Nostalgic Classics"]
+      }
+    ];
+
+    function renderGames(filter = "") {
+      const grid = document.getElementById("gameGrid");
+      grid.innerHTML = "";
+
+      const filtered = !filter
+        ? games
+        : games.filter(g => g.categories.includes(filter));
+
+      if (filtered.length === 0) {
+        grid.innerHTML = "<p style='text-align:center;'>No games found.</p>";
+        return;
+      }
+
+      filtered.forEach(g => {
+        grid.innerHTML += `
+          <div class="game-card">
+            <img src="${g.thumb}" alt="${g.title}" />
+            <h3>${g.title}</h3>
+            <p>${g.desc}</p>
+            <a class="button" href="${g.url}">Play Now</a>
+          </div>
+        `;
+      });
+    }
+
+    function setFilter(button) {
+      document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active"));
+      if (button) button.classList.add("active");
+    }
+
+    window.onload = () => {
+      renderGames();
+
+      document.querySelectorAll(".filters button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const filter = btn.dataset.cat;
+          setFilter(btn);
+          renderGames(filter);
+        });
+      });
+    };
   </script>
 </head>
 <body>
@@ -154,22 +193,18 @@
     Your Ad Here — <a href="mailto:markfriesen2014@gmail.com" style="color:#0ff;">Advertise with us</a>
   </div>
 
-  <main>
-    <h2>Featured Games</h2>
-    <div class="game-grid">
-      <div class="game-card">
-        <img src="images/tron city 1989.jpg" alt="Tron City 1989" />
-        <h3>Tron City 1989</h3>
-        <p>Build and manage your city in this retro Micropolis remake.</p>
-        <a class="button" href="tron-city.html">Play Now</a>
-      </div>
+  <div class="filters">
+    <button data-cat="">All</button>
+    <button data-cat="Mobile Friendly">Mobile Friendly</button>
+    <button data-cat="PC Only">PC Only</button>
+    <button data-cat="City Builder">City Builders</button>
+    <button data-cat="Simulators">Simulators</button>
+    <button data-cat="Arcade">Arcade</button>
+    <button data-cat="Nostalgic Classics">Nostalgic</button>
+  </div>
 
-      <div class="game-card">
-        <h3>Your Ad Here</h3>
-        <p>Reach 10,000+ players. Promote your game or site.</p>
-        <a class="button" href="mailto:markfriesen2014@gmail.com">Contact to Advertise</a>
-      </div>
-    </div>
+  <main>
+    <div id="gameGrid" class="game-grid"></div>
   </main>
 
   <footer>
