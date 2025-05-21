@@ -2,30 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <meta name="description" content="Play Tron City 1989 — Your forked MicropolisJS port embedded in your browser">
-  <title>Tron City 1989</title>
+  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
+  <meta name="description" content="Play Tron City and build a virtual city in your browser!">
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    /* Full-page flex container */
-    html, body { height: 100%; margin: 0; padding: 0; font-family: Arial, sans-serif; background: #111; color: #eee; display: flex; flex-direction: column; }
-    /* Header stays fixed */
-    header { background: #222; padding: 1rem; text-align: center; flex: 0 0 auto; }
-    header h1 { margin: 0; font-size: 2rem; }
-    a.back { position: absolute; top: 1rem; left: 1rem; color: #0af; text-decoration: none; }
-    /* Main stretches to fill remaining space */
-    main { flex: 1 1 auto; display: flex; justify-content: center; align-items: center; padding: 0; }
-    /* Iframe now truly fullscreen (minus header) */
-    iframe { border: none; width: 100%; height: 100%; max-width: none; max-height: none; }
-  </style>
+  <title>Tron City 1989</title>
 </head>
 <body>
-  <header>
-    <h1>Tron City 1989</h1>
-    <a href="index.html" class="back">&larr; Back to Hub</a>
+  <!-- Tile and sprite assets -->
+  <img id="tiles" class="imageData" src="images/tiles.png" alt="Tiles">
+  <img id="snowtiles" class="imageData" src="images/tilessnow.png" alt="Snow Tiles">
+  <img id="sprites" class="imageData" src="images/sprites.png" alt="Sprites">
+
+  <!-- Custom Header -->
+  <header id="header" class="chunk border-bottom padding10">
+    <div class="left inlineblock">
+      <h1 class="fontlarge white">Tron City 1989</h1>
+    </div>
+    <nav class="white right padding10 inlineblock">
+      <ul>
+        <li><a href="about.html" target="_blank">About</a></li>
+        <li><a href="https://friesenventures.net" target="_blank">Friesen Ventures</a></li>
+      </ul>
+    </nav>
   </header>
-  <main>
-    <iframe src="https://markfriesen1979.github.io/micropolisJS/" title="MicropolisJS: Tron City 1989"></iframe>
-  </main>
+
+  <div id="wrapper">
+    <main id="canvasContainer">
+      <!-- Remove nagWindow: no nag messages -->
+      <div data-hasscript="false" id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
+      <!-- All other original MicropolisJS UI (splash, start, controls, etc.) retained here -->
+    </main>
+
+    <!-- Custom Footer -->
+    <footer id="footer" class="alignCenter chunk white padding10">
+      <div>Brought to you by Friesen Ventures</div>
+      <div>Visit <a href="https://friesenventures.net" target="_blank">FriesenVentures.net</a> for more projects</div>
+    </footer>
+  </div>
+
+  <!-- Core scripts -->
+  <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
+  <script defer src="dist/vendor.[hash].js"></script>
+  <script defer src="dist/app.[hash].js"></script>
 </body>
 </html>
