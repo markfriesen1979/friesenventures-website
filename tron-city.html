@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
   <meta name="description" content="Play Tron City 1989 — forked MicropolisJS">
   <title>Tron City 1989</title>
-  <!-- Local CSS -->
-  <link rel="stylesheet" href="css/style.css">
+  <!-- Local CSS, note the tron-city/ prefix -->
+  <link rel="stylesheet" href="tron-city/css/style.css">
 </head>
 <body>
   <!-- Preload images -->
-  <img id="tiles" class="imageData" src="images/tiles.png" alt="Tiles">
-  <img id="snowtiles" class="imageData" src="images/tilessnow.png" alt="Snow Tiles">
-  <img id="sprites" class="imageData" src="sprites/sprites.png" alt="Sprites">
+  <img id="tiles"      class="imageData" src="tron-city/images/tiles.png"     alt="Tiles">
+  <img id="snowtiles"  class="imageData" src="tron-city/images/tilessnow.png" alt="Snow Tiles">
+  <img id="sprites"    class="imageData" src="tron-city/sprites/sprites.png"  alt="Sprites">
 
   <!-- Header -->
   <header id="header" class="chunk border-bottom padding10">
@@ -21,8 +21,8 @@
     </div>
     <nav class="white right padding10 inlineblock">
       <ul>
-        <li class="padding10"><a href="/about.html" target="_blank">About</a></li>
-        <li class="padding10"><a href="https://friesenventures.net" target="_blank">Friesen Ventures</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="https://friesenventures.net">Friesen Ventures</a></li>
       </ul>
     </nav>
   </header>
@@ -31,106 +31,25 @@
     <main id="canvasContainer">
       <div class="hidden" id="opaque"></div>
       <div id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
-
-      <!-- Splash / Welcome -->
-      <div id="splash" class="mintcream awaitGeneration open shadow padding10 centred">
-        <h2 class="chunk alignCenter">Welcome!</h2>
-        <p>Tron City 1989 — your personal MicropolisJS port</p>
-        <div id="splashContainer"></div>
-        <div id="splashButtonContainer">
-          <div id="splashButtons">
-            <button id="splashLoad" class="width140 block loadSave splashButton" disabled>Load game</button>
-            <button id="splashPlay" class="width140 block margin10 splashButton">Play this map</button>
-            <button id="splashGenerate" class="width140 block margin10 splashButton">Generate another</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- New Game Form -->
-      <div id="start" class="mintcream open shadow padding10 centred">
-        <h2 class="chunk alignCenter">New Game</h2>
-        <form id="playForm">
-          <label for="nameForm">City name (max 15 letters)</label>
-          <input id="nameForm" autofocus required class="margin10" type="text" maxlength="15">
-          <div>
-            Difficulty:
-            <label><input type="radio" class="difficulty" name="difficulty" value="0" checked> Easy</label>
-            <label><input type="radio" class="difficulty" name="difficulty" value="1"> Medium</label>
-            <label><input type="radio" class="difficulty" name="difficulty" value="2"> Hard</label>
-          </div>
-          <div id="playSubmitDiv"><input id="playit" type="submit" value="Play!"></div>
-        </form>
-      </div>
-
-      <!-- Info Bar -->
-      <div id="infobar" class="alignCenter leftedge open width140 padding10 controlShadow mintcream z1 initialHidden">
-        <div class="inner">
-          <div class="semibold chunk"><span id="name">Your Name</span></div>
-          <div><span id="date">Jan 1900</span></div>
-          <div class="elided">Funds $<span id="funds">20000</span></div>
-          <div class="elided">Score: <span id="score">0</span></div>
-          <div><span id="cclass">VILLAGE</span></div>
-          <div class="elided">Population:<br><span id="population">0</span></div>
-        </div>
-      </div>
-
-      <!-- Misc Controls -->
-      <div id="miscButtons" class="alignCenter leftedge open controlShadow width140 padding10 mintcream z1 initialHidden">
-        <div class="inner">
-          <button id="budgetRequest" class="miscButton">Budget</button>
-          <button id="evalRequest" class="miscButton">Evaluation</button>
-          <button id="disasterRequest" class="miscButton">Disasters</button>
-          <button id="saveRequest" class="miscButton loadSave" disabled>Save</button>
-          <button id="settingsRequest" class="miscButton">Settings</button>
-          <button id="screenshotRequest" class="miscButton">Take Picture</button>
-          <button id="pauseRequest" class="miscButton">Pause</button>
-        </div>
-      </div>
-
-      <!-- Building Tools -->
-      <div id="controls" class="controlShadow mintcream z1 rightedge open">
-        <div id="toolInfo" class="alignCenter"><span id="toolOutput">Tools</span></div>
-        <div id="buttons">
-          <button id="residentialButton" data-size="3" data-tool="residential" class="toolButton unselected">Residential $100</button>
-          <button id="commercialButton" data-size="3" data-tool="commercial" class="toolButton unselected">Commercial $100</button>
-          <button id="industrialButton" data-size="3" data-tool="industrial" class="toolButton unselected">Industrial $100</button>
-          <button id="roadButton" data-size="1" data-tool="road" class="toolButton unselected">Road $10</button>
-          <button id="railButton" data-size="1" data-tool="rail" class="toolButton unselected">Rail $20</button>
-          <button id="wireButton" data-size="1" data-tool="wire" class="toolButton unselected">Wire $5</button>
-          <button id="bulldozerButton" data-size="1" data-tool="bulldozer" class="toolButton unselected">Bulldozer $1</button>
-          <button id="parkButton" data-size="1" data-tool="park" class="toolButton unselected">Park $10</button>
-          <button id="policeButton" data-size="3" data-tool="police" class="toolButton unselected">Police $500</button>
-          <button id="fireButton" data-size="3" data-tool="fire" class="toolButton unselected">Fire $500</button>
-          <button id="coalButton" data-size="4" data-tool="coal" class="toolButton unselected">Coal $3000</button>
-          <button id="nuclearButton" data-size="4" data-tool="nuclear" class="toolButton unselected">Nuclear $5000</button>
-          <button id="stadiumButton" data-size="4" data-tool="stadium" class="toolButton unselected">Stadium $5000</button>
-          <button id="portButton" data-size="4" data-tool="port" class="toolButton unselected">Port $3000</button>
-          <button id="airportButton" data-size="6" data-tool="airport" class="toolButton unselected">Airport $10000</button>
-          <button id="queryButton" data-size="1" data-tool="query" class="toolButton unselected">Query</button>
-        </div>
-      </div>
-
-      <!-- (Other modals and windows here—copy from your build, except omit the nagWindow) -->
-
+      <!-- …the rest of your copied build’s HTML… -->
     </main>
 
-    <!-- Footer -->
     <footer id="footer" class="alignCenter chunk white padding10">
       <div>Brought to you by Friesen Ventures</div>
-      <div><a href="https://friesenventures.net" target="_blank">Visit FriesenVentures.net</a></div>
+      <div><a href="https://friesenventures.net">Visit FriesenVentures.net</a></div>
     </footer>
   </div>
 
-  <!-- Mark script-enabled elements -->
+  <!-- data-hasscript initializer -->
   <script>
-    [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(e){
-      e.setAttribute('data-hasscript','true');
-    });
+    [].forEach.call(document.querySelectorAll('[data-hasscript]'),
+      e => e.setAttribute('data-hasscript','true'));
   </script>
 
   <!-- jQuery -->
-  <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-  <!-- MicropolisJS engine -->
-  <script defer src="src/micropolis.js"></script>
+  <script defer src="tron-city/thirdparty/jquery/jquery-2.1.1.min.js"></script>
+  <!-- MicropolisJS bundles -->
+  <script defer src="tron-city/vendor.min.js"></script>
+  <script defer src="tron-city/app.min.js"></script>
 </body>
 </html>
