@@ -9,21 +9,49 @@
     header { background: #222; padding: 1rem; text-align: center; }
     header h1 { margin: 0; font-size: 2rem; }
     nav a { color: #eee; margin: 0 1rem; text-decoration: none; }
-    .iframe-container { position: fixed; top: 60px; left: 0; width: 100%; height: calc(100% - 60px); border: none; }
+    .hero { background: url('images/hero.jpg') center/cover no-repeat; height: 200px; display: flex; align-items: center; justify-content: center; }
+    .hero h2 { background: rgba(0,0,0,0.5); padding: 1rem 2rem; border-radius: 4px; }
+    .games { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 1rem; padding: 2rem; }
+    .card { background: #1a1a1a; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
+    .card img, .card iframe { width: 100%; }
+    .card-content { padding: 1rem; flex: 1; display: flex; flex-direction: column; }
+    .card-content h3 { margin: 0 0 0.5rem; }
+    .card-content p { margin: 0 0 1rem; font-size: 0.9rem; color: #ccc; flex: 1; }
+    .card-content a, .card-content button { display: inline-block; padding: 0.5rem 1rem; background: #007acc; color: #fff; text-decoration: none; border: none; border-radius: 4px; cursor: pointer; text-align: center; }
+    footer { background: #222; text-align: center; padding: 1rem; font-size: 0.8rem; }
   </style>
 </head>
 <body>
   <header>
-    <h1>MicropolisJS</h1>
+    <h1>Friesen Ventures Gaming Hub</h1>
     <nav>
-      <a href="index.html">Home</a>
+      <a href="#">Home</a>
+      <a href="#games">Games</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
     </nav>
   </header>
-  <!-- Embedded MicropolisJS game from Graeme's site -->
-  <iframe class="iframe-container"
-          src="https://www.graememcc.co.uk/micropolisJS/"
-          title="MicropolisJS"
-          allowfullscreen>
-  </iframe>
+
+  <section class="hero">
+    <h2>Welcome to Your Gaming Hub</h2>
+  </section>
+
+  <section id="games" class="games">
+    <!-- Tron City Card -->
+    <div class="card">
+      <!-- Embedded game preview -->
+      <iframe src="https://www.graememcc.co.uk/micropolisJS/" height="200" frameborder="0" allowfullscreen></iframe>
+      <div class="card-content">
+        <h3>MicropolisJS</h3>
+        <p>Play the classic 1989 city simulator in your browser.</p>
+        <a href="tron-city.html">Play Now</a>
+      </div>
+    </div>
+    <!-- Additional game cards can go here -->
+  </section>
+
+  <footer>
+    &copy; 2025 Friesen Ventures &bull; <a href="mailto:markfriesen2014@gmail.com">Contact Us</a>
+  </footer>
 </body>
 </html>
