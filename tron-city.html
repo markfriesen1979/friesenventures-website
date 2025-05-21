@@ -1,17 +1,20 @@
+<!-- This Tron-city.html is based on the index.html in markfriesen1979/micropolisJS fork, so you can edit that repo's index.html to remove the nag -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
   <meta name="description" content="Play Tron City 1989 on FriesenVentures.net">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS@master/css/style.css">
+    <!-- CSS from your GitHub -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/markfriesen1979/friesenventures-website@main/tron-city/css/style.css">
   <title>Tron City 1989</title>
 </head>
 <body>
   <!-- Preload images -->
-  <img id="tiles" class="imageData" src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS@master/images/tiles.png" alt="Tiles">
-  <img id="snowtiles" class="imageData" src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS@master/images/tilessnow.png" alt="Snow Tiles">
-  <img id="sprites" class="imageData" src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS@master/images/sprites.png" alt="Sprites">
+    <!-- Preload images from your GitHub -->
+  <img id="tiles" class="imageData" src="https://cdn.jsdelivr.net/gh/markfriesen1979/friesenventures-website@main/tron-city/images/tiles.png" alt="Tiles">
+  <img id="snowtiles" class="imageData" src="https://cdn.jsdelivr.net/gh/markfriesen1979/friesenventures-website@main/tron-city/images/tilessnow.png" alt="Snow Tiles">
+  <img id="sprites" class="imageData" src="https://cdn.jsdelivr.net/gh/markfriesen1979/friesenventures-website@main/tron-city/sprites/sprites.png" alt="Sprites"> alt="Sprites">
 
   <!-- Custom Header -->
   <header id="header" class="chunk border-bottom padding10">
@@ -145,8 +148,9 @@
       e.setAttribute('data-hasscript', 'true');
     });
   </script>
-  <script defer src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS/dist/vendor.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/gh/graememcc/micropolisJS/dist/app.min.js"></script>
+    <script defer src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <!-- Game bundles from official MicropolisJS via CDN -->
+  <script defer src="https://cdn.jsdelivr.net/gh/markfriesen1979/micropolisJS/dist/vendor.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/gh/markfriesen1979/micropolisJS/dist/app.min.js"></script>
 </body>
 </html>
