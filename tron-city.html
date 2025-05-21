@@ -7,13 +7,16 @@
   <title>Tron City 1989</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* Make the entire page flex so the iframe can fill the space */
+    /* Full-page flex container */
     html, body { height: 100%; margin: 0; padding: 0; font-family: Arial, sans-serif; background: #111; color: #eee; display: flex; flex-direction: column; }
+    /* Header stays fixed */
     header { background: #222; padding: 1rem; text-align: center; flex: 0 0 auto; }
-    header h1 { margin: 0; font-size: 1.5rem; }
+    header h1 { margin: 0; font-size: 2rem; }
     a.back { position: absolute; top: 1rem; left: 1rem; color: #0af; text-decoration: none; }
-    main { flex: 1 1 auto; display: flex; justify-content: center; align-items: center; padding: 1rem; }
-    iframe { border: none; width: 100%; height: 100%; max-width: 1200px; max-height: 90vh; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+    /* Main stretches to fill remaining space */
+    main { flex: 1 1 auto; display: flex; justify-content: center; align-items: center; padding: 0; }
+    /* Iframe now truly fullscreen (minus header) */
+    iframe { border: none; width: 100%; height: 100%; max-width: none; max-height: none; }
   </style>
 </head>
 <body>
@@ -22,7 +25,6 @@
     <a href="index.html" class="back">&larr; Back to Hub</a>
   </header>
   <main>
-    <!-- Embed your forked MicropolisJS site here -->
     <iframe src="https://markfriesen1979.github.io/micropolisJS/" title="MicropolisJS: Tron City 1989"></iframe>
   </main>
 </body>
