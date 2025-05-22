@@ -1,10 +1,38 @@
 <!DOCTYPE html>
-<html>
+<!--
+  micropolisJS fork, rebranded as Tron City
+  Original by Graeme McCutcheon, customized for FriesenVentures.net
+-->
+<html lang="en">
   <head>
-    <meta http-equiv="refresh" content="0; url=https://graememcc.github.io/micropolisJS/">
-    <title>Redirecting to Tron City</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
+    <meta name="description" content="Play Tron City and build your own virtual metropolis in the browser!" />
+    <title>Tron City 1989</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="icon" href="favicon.ico" />
   </head>
   <body>
-    <p>If you are not redirected, <a href="https://graememcc.github.io/micropolisJS/">click here to play Tron City</a>.</p>
+    <img id="tiles" class="imageData" src="images/tiles.png" alt="Game Tileset" />
+    <img id="sprites" class="imageData" src="images/sprites.png" alt="Sprite Sheet" />
+    <canvas id="city" width="640" height="480"></canvas>
+
+    <div id="controls">
+      <h1>Tron City</h1>
+      <div id="buttonPanel"></div>
+      <div id="speedPanel"></div>
+      <div id="budgetPanel"></div>
+      <div id="mapPanel"></div>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/micropolis.js"></script>
+    <script>
+      // Start the game once everything is loaded
+      window.onload = () => {
+        MicropolisJS.init('city');
+      };
+    </script>
   </body>
 </html>
