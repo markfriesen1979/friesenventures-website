@@ -453,6 +453,19 @@
         elem.setAttribute('data-hasscript', 'true');
       });
     </script>
-    <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script></body>
+    -  <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
+-  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
++  <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
++  <script>
++    (function(){
++      const _orig = window.setTimeout;
++      window.setTimeout = function(fn, delay) {
++        if (delay === 30 * 60 * 1000) return 0;
++        return _orig(fn, delay);
++      };
++      window.nagMessage = function(){};
++    })();
++  </script>
++  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
+
 </html>
