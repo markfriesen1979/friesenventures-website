@@ -17,19 +17,61 @@
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
    <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
 <!-- ↓ GHOST-PREVIEW STYLES ↓ -->
-  <script>
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        (function(){
-          // … existing ghost‐preview setup …
+ <!-- ↓ AUTO-START + GHOST-PREVIEW + SMART HIDE ↓ -->
+<script>
+window.addEventListener('load', () => {
+  // 1) Kick off map gen & initial clicks
+  document.getElementById('splashGenerate').click();
+  setTimeout(() => {
+    document.getElementById('splashPlay').click();
+    document.getElementById('residentialButton').click();
+  }, 1000);
 
-+         // now the map & tools are up—hide the splash/start overlays
-+         document.getElementById('splash').style.display = 'none';
-+         document.getElementById('start' ).style.display = 'none';
-        })();
-      }, 100000);  // you can tweak this delay lower, now that CSS isn't pre-hiding it
+  // 2) Set up ghost‐building preview
+  (function(){
+    const ghost = document.createElement('div');
+    ghost.id = 'ghostPreview';
+    Object.assign(ghost.style, {
+      position: 'absolute',
+      pointerEvents: 'none',
+      opacity: '0.5',
+      display: 'none',
     });
-  </script>
+    document.body.appendChild(ghost);
+
+    let currentTool = null;
+    document.querySelectorAll('.toolButton').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentTool = btn.dataset.tool;
+        ghost.style.display = currentTool ? 'block' : 'none';
+      });
+    });
+    document.getElementById('canvasContainer')
+      .addEventListener('mousemove', e => {
+        if (!currentTool) return;
+        ghost.style.background = `url("images/${currentTool}.png") no-repeat center`;
+        ghost.style.width  = '32px';
+        ghost.style.height = '32px';
+        ghost.style.left   = (e.pageX - 16) + 'px';
+        ghost.style.top    = (e.pageY - 16) + 'px';
+      });
+  })();
+
+  // 3) Watch the “Loading” banner disappear, then hide splash/start
+  const banner = document.getElementById('loadingBanner');
+  const obs = new MutationObserver(muts => {
+    muts.forEach(m => {
+      if (m.target.style.display === 'none') {
+        document.getElementById('splash').style.display = 'none';
+        document.getElementById('start' ).style.display = 'none';
+        obs.disconnect();
+      }
+    });
+  });
+  obs.observe(banner, { attributes: true, attributeFilter: ['style'] });
+});
+</script>
+
 
 +    display: block !important;
 +    visibility: visible !important;
