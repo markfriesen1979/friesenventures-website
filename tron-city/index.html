@@ -14,9 +14,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
-    <meta name="description" content="Play Tron City 1989 and build a virtual city in your browser! Tron City 1989 is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
+    <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
     <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
-    <title>Tron City 1989 - Friesen Ventures Gaming Hub</title>
+    <title>micropolisJS</title>
   </head>
   <body>
     <img id="tiles" class="imageData" src="images/tiles.png" alt="These are the game's principal tiles">
@@ -24,12 +24,12 @@
     <img id="sprites" class="imageData" src="images/sprites.png" alt="These are the game's sprites">
     <header id="header" class="chunk border-bottom padding10">
       <div class="left inlineblock">
-        <h1 id="title" class="white fontlarge">Tron City 1989</h1>
+        <h1 id="title" class="white fontlarge">micropolisJS</h1>
       </div>
       <nav class="white right padding10 inlineblock">
         <ul>
           <li class="padding10"><a href="about.html" target="_blank">About</a></li>
-          <li class="padding10"><a href="https://github.com/markfriesen1979/friesenventures-website" target="_blank">GitHub</a></li>
+          <li class="padding10"><a href="https://github.com/graememcc/micropolisJS" target="_blank">GitHub</a></li>
         </ul>
       </nav>
     </header>
@@ -39,7 +39,7 @@
         <div data-hasscript="false" id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
         <div id="splash" class="mintcream awaitGeneration open shadow padding10 centred">
           <h2 class="chunk alignCenter">Welcome!</h2>
-          <p>Tron City 1989 is a handmade Javascript port of the open-source city simulator <cite>Micropolis</cite></p>
+          <p>micropolisJS is a handmade Javascript port of the open-source city simulator <cite>Micropolis</cite></p>
           <div id="splashContainer"></div>
           <div id="splashButtonContainer">
             <div id="splashButtons">
@@ -133,7 +133,7 @@
           </div>
         </div>
         <div id="tw" class="z1 rightedge initialHidden">
-          <a class="twitter-share-button" href="https://twitter.com/share?count=none" data-text="I'm city-building like it's 1989! Playing Tron City 1989 on Friesen Ventures https://friesenventures.net">Tweet</a><script type="text/javascript">window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return}js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));</script>
+          <a class="twitter-share-button" href="https://twitter.com/share?count=none" data-text="I'm city-building like it's 1989! Playing micropolisJS, a HTML5 retro city-builder https://graememcc.github.io/micropolisJS">Tweet</a><script type="text/javascript">window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return}js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));</script>
         </div>
         <div id="monstertv" class="alignCenter z1 hidden rightedge padding10 controlShadow open">
           <div id="monsterTVContainer">
@@ -153,7 +153,7 @@
           </div>
         </div>
         <div id="notifications" class="initialHidden neutral z1 rightedge alignCenter elided padding10 controlShadow"></div>
-        <div id="tooSmall" data-hasscript="false" class="mintcream open"><div id="tooSmallInner" class="alignCenter padding10"><h2 class="chunk">Uh-oh!</h2><p>This screen is too small—I won't be able to fit in all the controls, buttons and gizmos! Sorry!</p></div></div>
+        <div id="tooSmall" data-hasscript="false" class="mintcream open"><div id="tooSmallInner" class="alignCenter padding10"><h2 class="chunk">Uh-oh!</h2><p>This screen is too small&mdash;I won't be able to fit in all the controls, buttons and gizmos! Sorry!</p></div></div>
         <noscript>
           <div id="noscript" class="open mintcream centred padding10">
             <h1 class="chunk alignCenter">micropolisJS</h1>
@@ -163,7 +163,10 @@
         </noscript>
       </main>
       <footer id="footer" class="alignCenter chunk white padding10">
-        <div id="author" class="open">© 2025 Friesen Ventures • <a href="mailto:markfriesen2014@gmail.com">Contact Us</a> • <a href="../index.html">Back to Home</a></div>
+        Enjoyed micropolisJS? <a href="https://www.refuweegee.co.uk/your-donations">Click here to donate to a charity whose work I love!</a>
+        <div id="author" class="open">Brought to you by <a rel="author" href="http://www.graememcc.co.uk" target="_blank">Graeme McCutcheon</a><i><a rel="author" href="https://twitter.com/graememcc" target="_blank">(@graememcc)</a></i> and <a rel="author" href="https://github.com/graememcc/micropolisJS/graphs/contributors" target="_blank">contributors</a>
+          <div id="build">Build: e9d224f51592</div>
+        </div>
       </footer>
       <div class="hidden modal shadow" id="budget">
         <header id="budgetHeader" class="budgetHeader padding10 chunk alignCenter">
@@ -237,9 +240,9 @@
               <dt class="evalItem statisticsItem">Category:</dt><dd class="elided statisticsRight evalItem evalRight" id="evalClass"></dd>
               <dt class="evalItem statisticsItem">Game Level:</dt><dd class="elided statisticsRight evalItem evalRight" id="evalLevel"></dd>
               <dt class="evalItem statisticsItem">Score:</dt><dd class="elided statisticsRight evalItem evalRight" id="evalScore"></dd>
-              <dt class="evalItem statisticsItem">Annual change:</dt><dd class="elided statisticsRight evalItem evalRight" id="evalScoreDelta"></dd>
-            </dl>
-          </section>
+              <dt class="evalItem statisticsItem">Annual change:</dt><dd class=" elided statisticsRight evalItem evalRight" id="evalScoreDelta"></dd>
+	    </dl>
+	  </section>
           <form id="evalButtons" class="alignCenter margin10">
             <input type="submit" id="evalOK" class="width140 dialogOK" value="OK">
           </form>
@@ -316,14 +319,14 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+	        <tr>
                   <td id="queryTileBurnable"></td>
                   <td id="queryTileBulldozable"></td>
                   <td id="queryTileCond"></td>
                   <td id="queryTileAnim"></td>
                   <td id="queryTilePowered"></td>
-                  <td id="queryTileZone"></td>
-                </tr>
+		  <td id="queryTileZone"></td>
+	        </tr>
               </tbody>
             </table>
           </div>
@@ -433,7 +436,7 @@
              It seems you're using a touchscreen device!
           </p>
           <p class="padding10">
-            Just to warn you, micropolisJS isn't really geared towards touch devices—I don't own a tablet—so you might be in for a bad time.
+            Just to warn you, micropolisJS isn't really geared towards touch devices&mdash;I don't own a tablet&mdash;so you might be in for a bad time.
           </p>
           <p class="padding10">
             However, if you're wanting to give it a shot, I won't stop you!
@@ -449,107 +452,7 @@
       [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(elem) {
         elem.setAttribute('data-hasscript', 'true');
       });
-
-      // Initialize the game and address freezing/map rendering issues
-      let micropolisGame = null;
-      let lastRedraw = 0;
-      let lastUpdate = 0;
-      let pauseState = false;
-
-      window.onload = function() {
-        const canvasContainer = document.getElementById("canvasContainer");
-        const canvas = document.createElement("canvas");
-        canvas.id = "gameCanvas";
-        canvasContainer.appendChild(canvas);
-
-        if (!canvas) {
-          console.error("Canvas not found");
-          return;
-        }
-        canvas.width = 800;
-        canvas.height = 600;
-
-        try {
-          micropolisGame = new Micropolis({
-            canvas: canvas,
-            onReady: () => {
-              console.log("Micropolis initialized");
-              document.getElementById("splash").classList.add("hidden");
-              document.getElementById("start").classList.add("hidden");
-              showGameElements();
-              micropolisGame.start();
-              monitorGameState();
-            }
-          });
-
-          // Handle city name and difficulty form submission
-          document.getElementById("playForm").addEventListener("submit", (e) => {
-            e.preventDefault();
-            const cityName = document.getElementById("nameForm").value;
-            const difficulty = document.querySelector('input[name="difficulty"]:checked').value;
-            micropolisGame.setCityName(cityName);
-            micropolisGame.setDifficulty(parseInt(difficulty));
-            document.getElementById("start").classList.add("hidden");
-          });
-
-          // Handle splash screen buttons
-          document.getElementById("splashPlay").addEventListener("click", () => {
-            document.getElementById("splash").classList.add("hidden");
-          });
-          document.getElementById("splashGenerate").addEventListener("click", () => {
-            micropolisGame.generateNewMap();
-          });
-        } catch (error) {
-          console.error("Failed to initialize Micropolis:", error);
-        }
-      };
-
-      function showGameElements() {
-        document.getElementById("infobar").classList.remove("initialHidden");
-        document.getElementById("miscButtons").classList.remove("initialHidden");
-        document.getElementById("RCIContainer").classList.remove("initialHidden");
-        document.getElementById("controls").classList.remove("initialHidden");
-        document.getElementById("tw").classList.remove("initialHidden");
-        document.getElementById("notifications").classList.remove("initialHidden");
-      }
-
-      function monitorGameState() {
-        const checkGameState = () => {
-          if (!micropolisGame) return;
-
-          const now = performance.now();
-          if (now - lastUpdate < 2000) return; // Check every 2 seconds
-          lastUpdate = now;
-
-          const population = micropolisGame.getPopulation();
-          if (population >= 2000 && !pauseState) {
-            // Temporarily pause to reduce load
-            if (typeof micropolisGame.pause === "function") {
-              micropolisGame.pause();
-              pauseState = true;
-              setTimeout(() => {
-                if (typeof micropolisGame.resume === "function") {
-                  micropolisGame.resume();
-                  pauseState = false;
-                }
-              }, 500); // Resume after 500ms
-            }
-          }
-
-          // Periodically refresh the map display to fix rendering issues
-          if (now - lastRedraw > 10000) { // Redraw every 10 seconds
-            lastRedraw = now;
-            if (typeof micropolisGame.redrawMap === "function") {
-              micropolisGame.redrawMap();
-              console.log("Forced map redraw at population " + population);
-            }
-          }
-        };
-
-        setInterval(checkGameState, 2000);
-      }
     </script>
     <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
-  </body>
+  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script></body>
 </html>
