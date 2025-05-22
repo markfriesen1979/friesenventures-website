@@ -486,46 +486,43 @@
       });
     </script>
 
-        <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
--    <script defer src="src/micropolis.js?f2dcf3e190bdf59fa9c2"></script>
-+    <script defer src="src/micropolis.js?f2dcf3e190bdf59fa9c2"></script>
+          <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
+   <script defer src="src/micropolis.js?f2dcf3e190bdf59fa9c2"></script>
 +
-+    <!-- ↓ GHOST-BUILDING PREVIEW SCRIPT (insert here) ↓ -->
-+    <script>
-+      (function(){
-+        const ghost = document.createElement('div');
-+        ghost.id = 'ghostPreview';
-+        Object.assign(ghost.style, {
-+          position: 'absolute',
-+          pointerEvents: 'none',
-+          opacity: '0.5',
-+          display: 'none',
-+        });
-+        document.body.appendChild(ghost);
-+
-+        let currentTool = null;
-+        // when a tool button is clicked...
-+        document.querySelectorAll('.toolButton').forEach(btn => {
-+          btn.addEventListener('click', () => {
-+            currentTool = btn.dataset.tool;
-+            ghost.style.display = currentTool ? 'block' : 'none';
++  <!-- ↓ GHOST-BUILDING PREVIEW (delayed init) ↓ line ~380 -->
++  <script>
++    // wait 1 second after micropolis.js loads to set up ghost preview
++    window.addEventListener('load', () => {
++      setTimeout(() => {
++        (function(){
++          const ghost = document.createElement('div');
++          ghost.id = 'ghostPreview';
++          Object.assign(ghost.style, {
++            position: 'absolute',
++            pointerEvents: 'none',
++            opacity: '0.5',
++            display: 'none',
 +          });
-+        });
++          document.body.appendChild(ghost);
 +
-+        // move the ghost image with the mouse
-+        document.getElementById('canvasContainer')
-+          .addEventListener('mousemove', e => {
-+            if (!currentTool) return;
-+            ghost.style.backgroundImage = `url("images/${currentTool}.png")`;
-+            ghost.style.width  = '32px';
-+            ghost.style.height = '32px';
-+            ghost.style.left   = (e.pageX - 16) + 'px';
-+            ghost.style.top    = (e.pageY - 16) + 'px';
++          let currentTool = null;
++          document.querySelectorAll('.toolButton').forEach(btn => {
++            btn.addEventListener('click', () => {
++              currentTool = btn.dataset.tool;
++              ghost.style.display = currentTool ? 'block' : 'none';
++            });
 +          });
-+      })();
-+    </script>
----
-</html>
-
-
-</html>
++
++          document.getElementById('canvasContainer')
++            .addEventListener('mousemove', e => {
++              if (!currentTool) return;
++              ghost.style.background = `url("images/${currentTool}.png") no-repeat center`;
++              ghost.style.width  = '32px';
++              ghost.style.height = '32px';
++              ghost.style.left   = (e.pageX - 16) + 'px';
++              ghost.style.top    = (e.pageY - 16) + 'px';
++            });
++        })();
++      }, 1000);  // adjust delay if needed
++    });
++  </script>
