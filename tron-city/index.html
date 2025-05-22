@@ -33,10 +33,35 @@
         </ul>
       </nav>
     </header>
-    <div id="wrapper">
-      <main id="canvasContainer">
-        <canvas id="canvas" class="chunk shadow"></canvas>
         <div class="hidden" id="opaque"></div>
+<!-- PREVIEW CANVAS FOR GHOST BUILDINGS/ROADS -->
+<canvas
+  id="previewCanvas"
+  class="chunk shadow"
+  width="512"      <!-- ← your map width in pixels -->
+  height="512"     <!-- ← your map height in pixels -->
+  style="
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    pointer-events: none;
+  ">
+</canvas>
+<!-- MAIN GAME CANVAS -->
+<canvas
+  id="canvas"
+  class="chunk shadow"
+  width="512"
+  height="512"
+  style="
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  ">
+</canvas>
+
         <div data-hasscript="false" id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
         <div id="splash" class="mintcream awaitGeneration open shadow padding10 centred">
           <h2 class="chunk alignCenter">Welcome!</h2>
