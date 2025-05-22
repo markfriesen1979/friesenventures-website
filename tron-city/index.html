@@ -452,7 +452,46 @@
       [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(elem) {
         elem.setAttribute('data-hasscript', 'true');
       });
-    </script>
+        </script>
     <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script></body>
+
+    <!-- ── Disable Nag / Eval / 2,000-pop Banner & Restore Preview ── -->
+    <style>
+      /* hide the 30-min nag timer UI, eval modal, opaque overlay & pop-up banner */
+      #evalWindow,
+      .modal,
+      #opaque,
+      #notifications {
+        display: none !important;
+        pointer-events: none !important;
+      }
+      /* keep the map canvas interactive so you still see the placement box */
+      #canvasContainer {
+        pointer-events: auto !important;
+        cursor: default !important;
+      }
+    </style>
+    <script>
+      // 1) Kill only the 30-minute nag timer
+      const _origSet = window.setTimeout;
+      window.setTimeout = function(fn, delay) {
+        return delay === 1800000 ? 0 : _origSet(fn, delay);
+      };
+
+      // 2) Stub out any direct calls
+      window.nagMessage     = () => {};
+      window.showEvalWindow = () => {};
+
+      // 3) On load, clear any leftover “open” classes or banner text
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('evalWindow')?.classList.remove('open');
+        const note = document.getElementById('notifications');
+        if (note) note.innerHTML = '';
+      });
+    </script>
+
+    <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
+
+  </body>
 </html>
+
