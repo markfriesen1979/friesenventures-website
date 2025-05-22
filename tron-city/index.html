@@ -57,18 +57,12 @@ window.addEventListener('load', () => {
       });
   })();
 
-  // 3) Watch the “Loading” banner disappear, then hide splash/start
-  const banner = document.getElementById('loadingBanner');
-  const obs = new MutationObserver(muts => {
-    muts.forEach(m => {
-      if (m.target.style.display === 'none') {
-        document.getElementById('splash').style.display = 'none';
-        document.getElementById('start' ).style.display = 'none';
-        obs.disconnect();
-      }
-    });
-  });
-  obs.observe(banner, { attributes: true, attributeFilter: ['style'] });
+  // 3) Delay hiding splash/start until map is fully up
+  setTimeout(() => {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('start').style.display  = 'none';
+  }, 3000);  // increase 3000 → 5000 or more if needed
+
 });
 </script>
 
