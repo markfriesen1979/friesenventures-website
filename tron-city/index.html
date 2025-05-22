@@ -15,97 +15,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
-   <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
-+<!-- ↓ GHOST-PREVIEW STYLES ↓ -->
-+<style>
-+  /* always show the tools panel */
-+  #controls {
-+    display: block !important;
-+    visibility: visible !important;
-+  }
-+
-+  /* keep the opaque overlay visible while loading */
-+  #opaque {
-+    display: block !important;
-+    opacity: 0.5 !important;
-+  }
-+
-+  /* ghost-preview defaults */
-+  #ghostPreview {
-+    position: absolute;
-+    pointer-events: none;
-+    opacity: 0.5;
-+    display: none;
-+    width: 32px;
-+    height: 32px;
-+    background-repeat: no-repeat;
-+    background-position: center;
-+  }
-+</style>
-+
-+<!-- ↓ AUTO-START + GHOST-PREVIEW + MANUAL SPLASH→START ↓ -->
-+<script>
-+window.addEventListener('load', () => {
-+  // 1) Kick off map gen & initial clicks
-+  document.getElementById('splashGenerate').click();
-+  setTimeout(() => {
-+    document.getElementById('splashPlay').click();
-+    document.getElementById('residentialButton').click();
-+  }, 1000);
-+
-+  // 2) Set up ghost-building preview
-+  (function(){
-+    const ghost = document.createElement('div');
-+    ghost.id = 'ghostPreview';
-+    document.body.appendChild(ghost);
-+    let currentTool = null;
-+    document.querySelectorAll('.toolButton').forEach(btn => {
-+      btn.addEventListener('click', () => {
-+        currentTool = btn.dataset.tool;
-+        ghost.style.display = currentTool ? 'block' : 'none';
-+        ghost.style.backgroundImage = `url("images/${currentTool}.png")`;
-+      });
-+    });
-+    document.getElementById('canvasContainer').addEventListener('mousemove', e => {
-+      if (!currentTool) return;
-+      ghost.style.left = (e.pageX - 16) + 'px';
-+      ghost.style.top  = (e.pageY - 16) + 'px';
-+    });
-+  })();
-+
-+  // 3) Manual splash→start
-+  const splash = document.getElementById('splash');
-+  const start  = document.getElementById('start');
-+  start.style.display = 'none';
-+  ['splashPlay','splashLoad'].forEach(id => {
-+    document.getElementById(id).addEventListener('click', () => {
-+      splash.style.display = 'none';
-+      start.style.display  = 'block';
-+    });
-+  });
-+
-+  // 4) Lock #start visible once shown
-+  new MutationObserver(() => {
-+    start.style.display = 'block';
-+  }).observe(start, { attributes: true, attributeFilter: ['style'] });
-+});
-+</script>
-
-
-
-
-+    display: block !important;
-+    visibility: visible !important;
-+  }
-  /* show the ghost preview at 50% opacity */
-  #opaque {
-    display: block !important;
-    opacity: 0.5 !important;
-  }
-</style>
-
-<title>micropolisJS</title>
-
+    <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
+    <title>micropolisJS</title>
   </head>
   <body>
     <img id="tiles" class="imageData" src="images/tiles.png" alt="These are the game's principal tiles">
@@ -536,61 +447,12 @@
         </div>
       </div>
     </div>
-       <script>
-      // mark script-enabled elements
-      [].forEach.call(document.querySelectorAll('[data-hasscript]'), elem =>
-        elem.setAttribute('data-hasscript', 'true')
-      );
-    </script>
-
-    <!-- ↓ AUTO-START MAP & SELECT TOOL ↓ -->
     <script>
-      window.addEventListener('load', () => {
-        document.getElementById('splashGenerate').click();
-        setTimeout(() => {
-          document.getElementById('splashPlay').click();
-          document.getElementById('residentialButton').click();
-        }, 1000);
+      // If we got here, then we have script. Note we don't necessarily have jQuery though
+      [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(elem) {
+        elem.setAttribute('data-hasscript', 'true');
       });
     </script>
-
-          <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-   <script defer src="src/micropolis.js?f2dcf3e190bdf59fa9c2"></script>
-+
-+  <!-- ↓ GHOST-BUILDING PREVIEW (delayed init) ↓ line ~380 -->
-+  <script>
-+    // wait 1 second after micropolis.js loads to set up ghost preview
-+    window.addEventListener('load', () => {
-+      setTimeout(() => {
-+        (function(){
-+          const ghost = document.createElement('div');
-+          ghost.id = 'ghostPreview';
-+          Object.assign(ghost.style, {
-+            position: 'absolute',
-+            pointerEvents: 'none',
-+            opacity: '0.5',
-+            display: 'none',
-+          });
-+          document.body.appendChild(ghost);
-+
-+          let currentTool = null;
-+          document.querySelectorAll('.toolButton').forEach(btn => {
-+            btn.addEventListener('click', () => {
-+              currentTool = btn.dataset.tool;
-+              ghost.style.display = currentTool ? 'block' : 'none';
-+            });
-+          });
-+
-+          document.getElementById('canvasContainer')
-+            .addEventListener('mousemove', e => {
-+              if (!currentTool) return;
-+              ghost.style.background = `url("images/${currentTool}.png") no-repeat center`;
-+              ghost.style.width  = '32px';
-+              ghost.style.height = '32px';
-+              ghost.style.left   = (e.pageX - 16) + 'px';
-+              ghost.style.top    = (e.pageY - 16) + 'px';
-+            });
-+        })();
-+      }, 10000);  // adjust delay if needed
-+    });
-+  </script>
+    <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script></body>
+</html>
