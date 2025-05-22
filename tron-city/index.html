@@ -448,25 +448,69 @@
       </div>
     </div>
     <script>
+       <script>
       // If we got here, then we have script. Note we don't necessarily have jQuery though
       [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(elem) {
         elem.setAttribute('data-hasscript', 'true');
       });
     </script>
     <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-<!-- disable 30-minute nag popup -->
-<script>
-  (function(){
-    const _orig = window.setTimeout;
-    window.setTimeout = function(fn, delay) {
-      // if it's the 30 min timer, skip it
-      if (delay === 30 * 60 * 1000) return 0;
-      return _orig(fn, delay);
-    };
-    // stub out any direct calls to nagMessage()
-    window.nagMessage = function(){};
-  })();
-</script>
 
-  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script></body>
+    <!-- ── Disable 30-minute nag popup & add ghost‐building preview ── -->
+    <style>
+      /* hide default cursor */
+      #canvasContainer { cursor: none; }
+      /* ghost tile follows mouse */
+      #ghostPreview {
+        position: absolute;
+        pointer-events: none;
+        display: none;
+        opacity: 0.5;
+        z-index: 1000;
+        width: 32px;   /* adjust to your tile size */
+        height: 32px;  /* adjust to your tile size */
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+    </style>
+    <script>
+      (function(){
+        // —— Disable nag popup ——
+        const _orig = window.setTimeout;
+        window.setTimeout = function(fn, delay) {
+          if (delay === 30 * 60 * 1000) return 0;
+          return _orig(fn, delay);
+        };
+        window.nagMessage = function(){};
+
+        // —— Ghost‐building preview ——
+        const canvas = document.getElementById('canvasContainer');
+        const controls = document.getElementById('controls');
+        const ghost = document.createElement('div');
+        ghost.id = 'ghostPreview';
+        document.body.appendChild(ghost);
+
+        let currentTool = null;
+        controls.addEventListener('click', e => {
+          const btn = e.target.closest('button.toolButton');
+          if (!btn) return;
+          currentTool = btn.dataset.tool;
+          ghost.style.backgroundImage = `url(images/${currentTool}.png)`;
+        });
+
+        canvas.addEventListener('mousemove', e => {
+          if (!currentTool) return;
+          ghost.style.left = (e.pageX - 16) + 'px';
+          ghost.style.top  = (e.pageY - 16) + 'px';
+          ghost.style.display = 'block';
+        });
+        canvas.addEventListener('mouseleave', () => {
+          ghost.style.display = 'none';
+        });
+      })();
+    </script>
+
+    <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
+  </body>
 </html>
+
