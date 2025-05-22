@@ -1,54 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenCity - Friesen Ventures Gaming Hub</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            background: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        .return-link {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1000;
-        }
-        .return-link a {
-            color: #00f;
-            text-decoration: none;
-            font-size: 16px;
-        }
-        .return-link a:hover {
-            text-decoration: underline;
-        }
-        .game-container {
-            margin-top: 50px;
-        }
-        .game-container a {
-            color: #00f;
-            text-decoration: none;
-            font-size: 18px;
-        }
-        .game-container a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Friesen Ventures Gaming Hub</title>
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #eee;
+    }
+    header {
+      background: #000;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 0 20px #00ffff55;
+    }
+    header h1 {
+      color: #0ff;
+      font-size: 2.2rem;
+      text-shadow: 0 0 10px #0ff;
+      margin: 0;
+    }
+    nav {
+      margin-top: 1rem;
+    }
+    nav a {
+      color: #0ff;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: bold;
+    }
+    .ad-banner {
+      background: #111;
+      color: #0ff;
+      text-align: center;
+      padding: 1rem;
+      border-top: 1px solid #333;
+      border-bottom: 1px solid #333;
+    }
+    .filters {
+      text-align: center;
+      margin: 2rem 0;
+    }
+    .filters button {
+      margin: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: #111;
+      border: 1px solid #0ff;
+      color: #0ff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .filters button.active {
+      background: #0ff;
+      color: #000;
+    }
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 2rem;
+    }
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    .game-card {
+      background: #1a1a1a;
+      border-radius: 8px;
+      box-shadow: 0 0 12px #00ffff55;
+      padding: 1rem;
+      text-align: center;
+    }
+    .game-card img {
+      width: 100%;
+      border-radius: 6px;
+      max-height: 150px;
+      object-fit: cover;
+    }
+    .game-card h3 {
+      color: #0ff;
+      margin: 1rem 0 0.5rem;
+    }
+    .game-card p {
+      font-size: 0.95rem;
+      color: #ccc;
+    }
+    .button {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background: #00f;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 0 8px #00f;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #000;
+      color: #0ff;
+      margin-top: 4rem;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: #0ff;
+      text-decoration: underline;
+    }
+  </style>
+  <script>
+    // ——— GAMES ARRAY ———
+    const games = [
+      {
+        title: "OpenCity",
+        desc: "Build your city in 3D with zoning and infrastructure management. Download required.",
+        thumb: "images/opencity-thumb.jpg",
+        url: "city-builders/opencity/index.html",
+        categories: ["City Builder", "Nostalgic Classics"]
+      },
+      {
+        title: "Tetris",
+        desc: "Arrange falling blocks to clear lines in this timeless puzzle game.",
+        thumb: "images/tetris-thumb.jpg",
+        url: "arcade/tetris/index.html",
+        categories: ["Puzzle", "Arcade", "Nostalgic Classics"]
+      },
+      {
+        title: "Your Ad Here",
+        desc: "Reach 10,000+ players. Promote your game or website.",
+        thumb: "images/ad-placeholder.jpg",
+        url: "mailto:markfriesen2014@gmail.com",
+        categories: ["Promotion"]
+      }
+    ];
+
+    function renderGames(filter = "") {
+      const grid = document.getElementById("gameGrid");
+      grid.innerHTML = "";
+
+      const filtered = !filter
+        ? games
+        : games.filter(g => g.categories.includes(filter));
+
+      if (filtered.length === 0) {
+        grid.innerHTML = "<p style='text-align:center;'>No games found.</p>";
+        return;
+      }
+
+      filtered.forEach(g => {
+        grid.innerHTML += `
+          <div class="game-card">
+            <img src="${g.thumb}" alt="${g.title}" />
+            <h3>${g.title}</h3>
+            <p>${g.desc}</p>
+            <a class="button" href="${g.url}">Play Now</a>
+          </div>
+        `;
+      });
+    }
+
+    function setFilter(button) {
+      document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active"));
+      if (button) button.classList.add("active");
+    }
+
+    window.onload = () => {
+      renderGames();
+      document.querySelectorAll(".filters button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const filter = btn.dataset.cat;
+          setFilter(btn);
+          renderGames(filter);
+        });
+      });
+    };
+  </script>
 </head>
 <body>
-    <div class="return-link">
-        <a href="https://friesenventures.website/gaming-hub.html">Click here to Return to Friesen Ventures Gaming Hub</a>
-    </div>
-    <div class="game-container">
-        <h1>OpenCity</h1>
-        <p>Build your city in this 3D SimCity-inspired game! Download and play on your desktop.</p>
-        <a href="opencity-0.0.6.zip" download>Download OpenCity (8.84 MB)</a>
-        <p>Unzip the file and run the executable to start building your city. Requires a desktop with SDL and OpenGL support.</p>
-    </div>
+  <header>
+    <h1>Friesen Ventures Gaming Hub</h1>
+    <nav>
+      <a href="/">Home</a>
+    </nav>
+  </header>
+
+  <div class="ad-banner">
+    Your Ad Here — <a href="mailto:markfriesen2014@gmail.com" style="color:#0ff;">Advertise with us</a>
+  </div>
+
+  <div class="filters">
+    <button data-cat="">All</button>
+    <button data-cat="Mobile Friendly">Mobile Friendly</button>
+    <button data-cat="PC Only">PC Only</button>
+    <button data-cat="City Builder">City Builders</button>
+    <button data-cat="Simulators">Simulators</button>
+    <button data-cat="Arcade">Arcade</button>
+    <button data-cat="Nostalgic Classics">Nostalgic</button>
+  </div>
+
+  <main>
+    <h2 style="text-align:center; font-size: 2rem; color: #0ff; text-shadow: 0 0 5px #0ff;">
+      Featured Games
+    </h2>
+    <p style="text-align:center; color: #0ff; font-size: 1rem; margin-top: -1rem;">
+      <em>
+        Stay tuned for new games coming soon to Friesen Ventures Gaming Hub!
+      </em>
+    </p>
+
+    <div id="gameGrid" class="game-grid"></div>
+  </main>
+
+  <div class="ad-banner">
+    Promote your brand or product here.
+    Email <a href="mailto:markfriesen2014@gmail.com">markfriesen2014@gmail.com</a>
+  </div>
+
+  <footer>
+    © 2025 Friesen Ventures •
+    <a href="mailto:markfriesen2014@gmail.com">Contact Us</a>
+  </footer>
 </body>
 </html>
