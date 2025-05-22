@@ -30,7 +30,6 @@
         <ul>
           <li class="padding10"><a href="about.html" target="_blank">About</a></li>
           <li class="padding10"><a href="https://github.com/markfriesen1979/friesenventures-website" target="_blank">GitHub</a></li>
-          <li class="padding10"><a href="https://www.graememcc.co.uk/micropolisJS/" target="_blank">Original MicropolisJS</a></li>
         </ul>
       </nav>
     </header>
@@ -450,6 +449,91 @@
       [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(elem) {
         elem.setAttribute('data-hasscript', 'true');
       });
+
+      // Initialize the game and prevent freezing at 2000 population
+      let micropolisGame = null;
+      let lastUpdate = 0;
+
+      window.onload = function() {
+        const canvasContainer = document.getElementById("canvasContainer");
+        const canvas = document.createElement("canvas");
+        canvas.id = "gameCanvas";
+        canvasContainer.appendChild(canvas);
+
+        if (!canvas) {
+          console.error("Canvas not found");
+          return;
+        }
+        canvas.width = 800;
+        canvas.height = 600;
+
+        try {
+          micropolisGame = new Micropolis({
+            canvas: canvas,
+            onReady: () => {
+              console.log("Micropolis initialized");
+              document.getElementById("splash").classList.add("hidden");
+              document.getElementById("start").classList.add("hidden");
+              showGameElements();
+              micropolisGame.start();
+              monitorPerformance(); // Start monitoring population
+            }
+          });
+
+          // Handle city name and difficulty form submission
+          document.getElementById("playForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const cityName = document.getElementById("nameForm").value;
+            const difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+            micropolisGame.setCityName(cityName);
+            micropolisGame.setDifficulty(parseInt(difficulty));
+            document.getElementById("start").classList.add("hidden");
+          });
+
+          // Handle splash screen buttons
+          document.getElementById("splashPlay").addEventListener("click", () => {
+            document.getElementById("splash").classList.add("hidden");
+          });
+          document.getElementById("splashGenerate").addEventListener("click", () => {
+            micropolisGame.generateNewMap();
+          });
+        } catch (error) {
+          console.error("Failed to initialize Micropolis:", error);
+        }
+      };
+
+      function showGameElements() {
+        document.getElementById("infobar").classList.remove("initialHidden");
+        document.getElementById("miscButtons").classList.remove("initialHidden");
+        document.getElementById("RCIContainer").classList.remove("initialHidden");
+        document.getElementById("controls").classList.remove("initialHidden");
+        document.getElementById("tw").classList.remove("initialHidden");
+        document.getElementById("notifications").classList.remove("initialHidden");
+      }
+
+      function monitorPerformance() {
+        const updatePerformance = () => {
+          if (!micropolisGame) return;
+
+          const now = performance.now();
+          if (now - lastUpdate < 1000) return; // Throttle updates to once per second
+          lastUpdate = now;
+
+          const population = micropolisGame.getPopulation();
+          if (population >= 2000) {
+            // Reduce frame rate to prevent freezing
+            if (micropolisGame.fps > 30) {
+              micropolisGame.setFPS(30); // Cap FPS to reduce load
+            }
+            // Ensure tools remain active (assumes method exists in micropolis.js)
+            if (micropolisGame.isBuildingMode && typeof micropolisGame.resetTools === "function") {
+              micropolisGame.resetTools();
+            }
+          }
+        };
+
+        setInterval(updatePerformance, 1000);
+      }
     </script>
     <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
