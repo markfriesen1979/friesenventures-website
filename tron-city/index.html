@@ -23,32 +23,67 @@
     <img id="snowtiles" class="imageData" src="images/tilessnow.png" alt="These are the game's alternate tiles">
     <img id="sprites" class="imageData" src="images/sprites.png" alt="These are the game's sprites">
     <header id="header" class="chunk border-bottom padding10">
-      <div class="left inlineblock">
-        <h1 id="title" class="white fontlarge">micropolisJS</h1>
-      </div>
-      <nav class="white right padding10 inlineblock">
-        <ul>
-          <li class="padding10"><a href="about.html" target="_blank">About</a></li>
-          <li class="padding10"><a href="https://github.com/graememcc/micropolisJS" target="_blank">GitHub</a></li>
-        </ul>
-      </nav>
+  <div class="left inlineblock">
+    <h1 id="title" class="white fontlarge">micropolisJS</h1>
+  </div>
+  <nav class="white right padding10 inlineblock">
+    <ul>
+      <li class="padding10"><a href="about.html" target="_blank">About</a></li>
+      <li class="padding10"><a href="https://github.com/graememcc/micropolisJS" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
     </header>
-    <div id="wrapper">
-      <main id="canvasContainer">
-        <div class="hidden" id="opaque"></div>
-        <div data-hasscript="false" id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
-        <div id="splash" class="mintcream awaitGeneration open shadow padding10 centred">
-          <h2 class="chunk alignCenter">Welcome!</h2>
-          <p>micropolisJS is a handmade Javascript port of the open-source city simulator <cite>Micropolis</cite></p>
-          <div id="splashContainer"></div>
-          <div id="splashButtonContainer">
-            <div id="splashButtons">
-              <button id="splashLoad" class="width140 block loadSave splashButton" disabled>Load game</button>
-              <button id="splashPlay" class="width140 block margin10 splashButton">Play this map</button>
-              <button id="splashGenerate" class="width140 block margin10 splashButton">Generate another</button>
-            </div>
-          </div>
-        </div>
+	<div id="wrapper">
+
+  <!-- PREVIEW CANVAS FOR “GHOST” BUILDINGS/ROADS -->
+  <canvas
+    id="previewCanvas"
+    class="chunk shadow"
+    width="512"
+    height="512"
+    style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 5;
+      pointer-events: none;
+    ">
+  </canvas>
+
+  <!-- MAIN GAME CANVAS -->
+  <canvas
+    id="canvas"
+    class="chunk shadow"
+    width="512"
+    height="512"
+    style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    ">
+  </canvas>
+
+  <div class="hidden" id="opaque"></div>
+
+  <!-- only one loadingBanner, here: -->
+  <div data-hasscript="false" id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">
+    Loading
+  </div>
+
+
+  <!-- now the splash screen -->
+  <div id="splash" class="mintcream awaitGeneration open shadow padding10 centred">
+    <h2 class="chunk alignCenter">Welcome!</h2>
+    <p>micropolisJS is a handmade Javascript port of the open-source city simulator <cite>Micropolis</cite></p>
+    <div id="splashButtonContainer">
+      <div id="splashButtons">
+        <button id="splashLoad" class="width140 block loadSave splashButton" disabled>Load game</button>
+        <button id="splashPlay" class="width140 block margin10 splashButton">Play this map</button>
+        <button id="splashGenerate" class="width140 block margin10 splashButton">Generate another</button>
+      </div>
+    </div>
+  </div>
         <div id="start" class="mintcream open shadow padding10 centred">
           <h2 class="chunk alignCenter">New Game</h2>
           <form id="playForm">
