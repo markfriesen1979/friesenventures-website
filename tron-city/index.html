@@ -450,10 +450,9 @@
         elem.setAttribute('data-hasscript', 'true');
       });
 
-      // Initialize the game and prevent freezing at 2000 population
+      // Initialize the game and ensure map rendering persists
       let micropolisGame = null;
-      let lastUpdate = 0;
-      let updateCounter = 0; // To track simulation updates
+      let lastRedraw = 0;
 
       window.onload = function() {
         const canvasContainer = document.getElementById("canvasContainer");
@@ -477,7 +476,11 @@
               document.getElementById("start").classList.add("hidden");
               showGameElements();
               micropolisGame.start();
-              monitorPerformance(); // Start monitoring population
+              monitorMapRendering(); // Start monitoring map rendering
+              // Load any saved game state
+              if (typeof micropolisGame.loadGame === "function") {
+                micropolisGame.loadGame();
+              }
             }
           });
 
@@ -499,19 +502,12 @@
             micropolisGame.generateNewMap();
           });
 
-          // Override the simulation step to skip updates when population is high
-          if (typeof micropolisGame.simulate === "function") {
-            const originalSimulate = micropolisGame.simulate;
-            micropolisGame.simulate = function() {
-              const population = micropolisGame.getPopulation();
-              updateCounter++;
-              if (population >= 2000 && updateCounter % 2 !== 0) {
-                // Skip every other simulation update when population is 2000+
-                return;
-              }
-              originalSimulate.call(this);
-            };
-          }
+          // Periodically save game state to prevent data loss
+          setInterval(() => {
+            if (micropolisGame && typeof micropolisGame.saveGame === "function") {
+              micropolisGame.saveGame();
+            }
+          }, 30000); // Save every 30 seconds
         } catch (error) {
           console.error("Failed to initialize Micropolis:", error);
         }
@@ -526,22 +522,25 @@
         document.getElementById("notifications").classList.remove("initialHidden");
       }
 
-      function monitorPerformance() {
-        const updatePerformance = () => {
+      function monitorMapRendering() {
+        const updateMapRendering = () => {
           if (!micropolisGame) return;
 
           const now = performance.now();
-          if (now - lastUpdate < 1000) return; // Throttle checks to once per second
-          lastUpdate = now;
+          if (now - lastRedraw < 5000) return; // Redraw every 5 seconds
+          lastRedraw = now;
 
           const population = micropolisGame.getPopulation();
           if (population >= 2000) {
-            // Log for debugging; simulation skipping should already be handled
-            console.log("Population at " + population + ", skipping alternate simulation updates.");
+            // Force a full map redraw to ensure all sections are visible
+            if (typeof micropolisGame.redrawMap === "function") {
+              micropolisGame.redrawMap();
+              console.log("Forced map redraw at population " + population);
+            }
           }
         };
 
-        setInterval(updatePerformance, 1000);
+        setInterval(updateMapRendering, 5000);
       }
     </script>
     <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
