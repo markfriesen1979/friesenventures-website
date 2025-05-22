@@ -114,12 +114,14 @@
     }
   </style>
   <script>
+    // ——— GAMES ARRAY ———
     const games = [
       {
         title: "Tron City 1989",
         desc: "Build and manage your city in this retro Micropolis remake.",
         thumb: "images/tron city 1989.jpg",
-        url: "tron-city.html",
+        // UPDATED: point at the directory route, not a .html file
+        url: "/tron-city/",
         categories: ["City Builder", "PC Only", "Nostalgic Classics"]
       },
       {
@@ -177,7 +179,8 @@
   <header>
     <h1>Friesen Ventures Gaming Hub</h1>
     <nav>
-      <a href="index.html">Home</a>
+      <!-- UPDATED: use root-relative link -->
+      <a href="/">Home</a>
     </nav>
   </header>
 
@@ -196,21 +199,29 @@
   </div>
 
   <main>
-    <h2 style="text-align:center; font-size: 2rem; color: #0ff; text-shadow: 0 0 5px #0ff;">Featured Games</h2>
+    <h2 style="text-align:center; font-size: 2rem; color: #0ff; text-shadow: 0 0 5px #0ff;">
+      Featured Games
+    </h2>
     <p style="text-align:center; color: #0ff; font-size: 1rem; margin-top: -1rem;">
-      <em>Tron City is being actively tweaked by our Owner & Creator <strong>Mark Friesen</strong>,<br>
-      the CEO and 100% owner of Friesen Ventures Game Hub and registered Corporation <strong>1366422 B.C LTD</strong>.</em>
+      <em>
+        Tron City is being actively tweaked by our Owner &amp; Creator
+        <strong>Mark Friesen</strong>,<br>
+        the CEO and 100% owner of Friesen Ventures Game Hub and registered
+        Corporation <strong>1366422 B.C LTD</strong>.
+      </em>
     </p>
 
     <div id="gameGrid" class="game-grid"></div>
   </main>
 
   <div class="ad-banner">
-    Promote your brand or product here. Email <a href="mailto:markfriesen2014@gmail.com">markfriesen2014@gmail.com</a>
+    Promote your brand or product here.
+    Email <a href="mailto:markfriesen2014@gmail.com">markfriesen2014@gmail.com</a>
   </div>
 
   <footer>
-    &copy; 2025 Friesen Ventures • <a href="mailto:markfriesen2014@gmail.com">Contact Us</a>
+    &copy; 2025 Friesen Ventures •
+    <a href="mailto:markfriesen2014@gmail.com">Contact Us</a>
   </footer>
 </body>
 </html>
