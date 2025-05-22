@@ -453,41 +453,6 @@
         elem.setAttribute('data-hasscript', 'true');
       });
     </script>
-    -  <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-    <!-- ── Suppress Evaluation Modal & other blocking popups ── -->
-    <style>
-      /* hide the built-in evaluation window and any other modal so it never blocks input */
-      #evalWindow,
-      #budget, #disasterWindow, #queryWindow,
-      #saveWindow, #screenshotWindow, #settingsWindow,
-      .modal {
-        display: none !important;
-        pointer-events: none !important;
-      }
-    </style>
-    <script>
-      // Override the function that opens the eval window, just in case
-      if (window.showEvalWindow) window.showEvalWindow = () => {};
-      // Also remove any existing open class
-      document.addEventListener('DOMContentLoaded', () => {
-        const ev = document.getElementById('evalWindow');
-        if (ev) ev.classList.remove('open');
-      });
-    </script>
-    <!-- ──────────────────────────────────────────────────────── -->
-
--  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
-+  <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-+  <script>
-+    (function(){
-+      const _orig = window.setTimeout;
-+      window.setTimeout = function(fn, delay) {
-+        if (delay === 30 * 60 * 1000) return 0;
-+        return _orig(fn, delay);
-+      };
-+      window.nagMessage = function(){};
-+    })();
-+  </script>
-+  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
-
+    <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script></body>
 </html>
