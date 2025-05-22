@@ -464,17 +464,20 @@
         elem.setAttribute('data-hasscript', 'true');
       });
     </script>
-       …  
+        …  
    <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
 -  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
 +  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
-
-+  <!-- Auto-start MicropolisJS on page load -->
++
++  <!-- Auto-start MicropolisJS after a short pause to show “Loading” -->
 +  <script>
 +    window.addEventListener('load', () => {
-+      document.getElementById('splashPlay').click();
++      setTimeout(() => {
++        document.getElementById('splashPlay').click();
++      }, 500);
 +    });
 +  </script>
   </body>
 </html>
+
 
