@@ -454,5 +454,19 @@
       });
     </script>
     <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
+<!-- disable 30-minute nag popup -->
+<script>
+  (function(){
+    const _orig = window.setTimeout;
+    window.setTimeout = function(fn, delay) {
+      // if it's the 30 min timer, skip it
+      if (delay === 30 * 60 * 1000) return 0;
+      return _orig(fn, delay);
+    };
+    // stub out any direct calls to nagMessage()
+    window.nagMessage = function(){};
+  })();
+</script>
+
   <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script></body>
 </html>
