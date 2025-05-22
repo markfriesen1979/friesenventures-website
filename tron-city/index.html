@@ -16,7 +16,6 @@
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
       <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
-  <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
 <style>
   /* hide all splash/start UI */
   #splash,
@@ -34,14 +33,7 @@
     visibility: visible !important;
   }
 </style>
-
-
-
-
-
-
-
-    <title>micropolisJS</title>
+<title>micropolisJS</title>
   </head>
   <body>
     <img id="tiles" class="imageData" src="images/tiles.png" alt="These are the game's principal tiles">
@@ -480,8 +472,15 @@
     </script>
          …  
    <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-   <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
-  </body>
+  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('splashPlay').click();
+      }, 200);
+    });
+  </script>
+</body>
 </html>
 
 
