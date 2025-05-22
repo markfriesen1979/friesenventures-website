@@ -16,20 +16,25 @@
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
       <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
-  <style>
--   /* hide only the greyed-out overlay */
--   #opaque {
--     display: block !important;
--   }
--  /* make sure the Loading banner actually shows */
--  #loadingBanner { display: block !important; }
--  /* ensure the map canvas is visible */
--  #canvasContainer { visibility: visible !important; }
-+   /* hide only the greyed-out preview layer */
-+   #opaque {
-+     display: none !important;
-+   }
-  </style>
+  <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
+<style>
+  /* hide all splash/start UI */
+  #splash,
+  #start,
+  #loadingBanner {
+    display: none !important;
+  }
+  /* show preview overlay */
+  #opaque {
+    display: block !important;
+  }
+  /* make sure map & tools are visible */
+  #canvasContainer,
+  #controls {
+    visibility: visible !important;
+  }
+</style>
+
 
 
 
