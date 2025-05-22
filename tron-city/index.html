@@ -453,30 +453,34 @@
         elem.setAttribute('data-hasscript', 'true');
       });
     </script>
-    <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-<!-- ── Disable Nag & Eval Popup ── -->
+ <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
+
+<!-- ── Disable Nag/Eval & Restore Canvas Interactions ── -->
 <style>
-  /* CSS: hide the evaluation modal permanently */
-  #evalWindow { display: none !important; pointer-events: none !important; }
+  /* hide eval modal & opaque overlay */
+  #evalWindow, .modal, #opaque {
+    display: none !important;
+    pointer-events: none !important;
+  }
+  /* ensure map remains interactive */
+  #canvasContainer {
+    cursor: default !important;
+    pointer-events: auto !important;
+  }
 </style>
 <script>
-  // JS: override setTimeout to skip the 30-minute nag
-  const _origSet = window.setTimeout;
-  window.setTimeout = function(fn, delay) {
-    return delay === 1800000
-      ? 0
-      : _origSet(fn, delay);
-  };
-  // stub out direct calls
+  // kill only the 30-min nag timer
+  const _orig = window.setTimeout;
+  window.setTimeout = (fn, d) => d === 1800000 ? 0 : _orig(fn, d);
+  // stub out popups
   window.nagMessage     = () => {};
   window.showEvalWindow = () => {};
-  // ensure any leftover evalWindow is closed on load
+  // remove any leftover open-class
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('evalWindow')?.classList.remove('open');
   });
 </script>
-<!-- ──────────────────────────────── -->
 
-
-  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script></body>
+<script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
+</body>
 </html>
