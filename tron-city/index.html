@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Friesen Ventures Gaming Hub</title>
-  <link rel="icon" href="favicon.ico">
+  <title>Tron City 1989 - Friesen Ventures Gaming Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -12,196 +11,178 @@
       font-family: 'Orbitron', sans-serif;
       background: #0a0a0a;
       color: #e5e7eb;
-    }
-    .game-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .game-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(0, 255, 255, 0.7);
-    }
-    .filter-btn {
-      transition: all 0.3s ease;
-    }
-    .filter-btn:hover {
-      background-color: #0ff;
-      color: #000;
-      transform: translateY(-2px);
+      margin: 0;
+      padding: 0;
     }
     .neon-text {
-      text-shadow: 0 0 5px rgba(0, 255, 255, 0.8); /* Reduced glow for readability */
+      text-shadow: 0 0 5px rgba(0, 255, 255, 0.8);
     }
     .neon-border {
       box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
     }
-    .hero-section {
-      background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-      background-size: cover;
-      background-position: center;
+    .game-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      text-align: center;
     }
-    .hero-text-bg {
-      background: rgba(0, 0, 0, 0.7); /* Semi-transparent background for text */
+    .game-canvas {
+      max-width: 100%;
+      height: auto;
+      border: 2px solid #0ff;
+    }
+    #placementPreview {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(0, 255, 255, 0.3);
+      border: 1px solid #0ff;
+      z-index: 1001;
+    }
+    .controls {
+      margin: 1rem 0;
+    }
+    .control-btn {
       padding: 0.5rem 1rem;
-      border-radius: 8px;
+      background: #111;
+      border: 1px solid #0ff;
+      color: #0ff;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
-    .parallax {
-      background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-      background-attachment: fixed;
-      background-size: cover;
-      background-position: center;
+    .control-btn:hover {
+      background-color: #0ff;
+      color: #000;
     }
-    .modal {
-      display: none;
+    footer {
+      background: #000;
+      color: #0ff;
+      text-align: center;
+      padding: 1rem;
       position: fixed;
-      top: 0;
-      left: 0;
+      bottom: 0;
       width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
     }
-    .modal-content {
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+    footer a {
+      color: #0ff;
+      text-decoration: underline;
     }
   </style>
+  <script src="thirdparty/jquery/dist/jquery.min.js"></script>
+  <script src="src/micropolis.js"></script>
   <script>
-    const games = [
-      {
-        title: "Tron City 1989",
-        desc: "Build and manage your city in this retro Micropolis remake.",
-        thumb: "images/tron city 1989.jpg",
-        url: "tron-city.html",
-        categories: ["City Builder", "PC Only", "Nostalgic Classics"]
-      },
-      {
-        title: "Your Ad Here",
-        desc: "Reach 10,000+ players. Promote your game or website.",
-        thumb: "images/ad-placeholder.jpg",
-        url: "mailto:markfriesen2014@gmail.com",
-        categories: ["Promotion"]
-      }
-    ];
+    let micropolisGame = null;
+    let placementPreview = null;
+    let isBuilding = false;
+    let population = 0;
 
-    function renderGames(filter = "") {
-      const grid = document.getElementById("gameGrid");
-      grid.innerHTML = "";
-      
-      const filteredGames = filter ? games.filter(game => game.categories.includes(filter)) : games;
-
-      if (filteredGames.length === 0) {
-        grid.innerHTML = '<p class="text-center text-cyan-400">No games found.</p>';
+    function initializeGame() {
+      const canvas = document.getElementById("gameCanvas");
+      if (!canvas) {
+        console.error("Canvas not found");
         return;
       }
+      canvas.width = 800;
+      canvas.height = 600;
 
-      filteredGames.forEach((game, index) => {
-        const card = document.createElement("div");
-        card.className = "game-card bg-gray-900 rounded-lg p-4 border border-cyan-400 cursor-pointer";
-        card.dataset.index = index;
-        card.innerHTML = `
-          <img src="${game.thumb}" alt="${game.title}" class="w-full h-40 object-cover rounded-md mb-4">
-          <h3 class="text-xl font-bold text-cyan-400">${game.title}</h3>
-          <p class="text-gray-300 text-sm mb-4">${game.desc}</p>
-          <button class="inline-block px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-500 transition-colors">View Details</button>
-        `;
-        card.addEventListener("click", () => openModal(game));
-        grid.appendChild(card);
+      try {
+        micropolisGame = new Micropolis({
+          canvas: canvas,
+          onReady: () => {
+            console.log("Micropolis initialized");
+            micropolisGame.start();
+            setupPlacementPreview();
+            monitorPopulation();
+          },
+          // Bypassing touchscreen nag
+          isTouchDevice: () => false
+        });
+      } catch (error) {
+        console.error("Failed to initialize Micropolis:", error);
+      }
+    }
+
+    function setupPlacementPreview() {
+      const canvas = document.getElementById("gameCanvas");
+      placementPreview = document.getElementById("placementPreview");
+      if (!placementPreview || !canvas) return;
+
+      const tileSize = 16; // Adjust based on Micropolis tile size
+
+      canvas.addEventListener("mousemove", (e) => {
+        if (!micropolisGame || !micropolisGame.isBuildingMode) return;
+        isBuilding = true;
+
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left) / tileSize) * tileSize;
+        const y = Math.floor((e.clientY - rect.top) / tileSize) * tileSize;
+
+        placementPreview.style.width = `${tileSize * 3}px`; // 3x3 tile building
+        placementPreview.style.height = `${tileSize * 3}px`;
+        placementPreview.style.left = `${rect.left + x}px`;
+        placementPreview.style.top = `${rect.top + y}px`;
+        placementPreview.style.display = "block";
       });
+
+      canvas.addEventListener("mouseout", () => {
+        if (isBuilding) {
+          placementPreview.style.display = "none";
+          isBuilding = false;
+        }
+      });
+
+      // Reset preview if stuck
+      setInterval(() => {
+        if (!isBuilding && placementPreview.style.display !== "none") {
+          placementPreview.style.display = "none";
+        }
+      }, 500);
     }
 
-    function openModal(game) {
-      const modal = document.getElementById("gameModal");
-      const modalContent = document.getElementById("modalContent");
-      modalContent.innerHTML = `
-        <div class="bg-gray-800 p-6 rounded-lg max-w-lg w-full">
-          <h2 class="text-2xl font-bold text-cyan-400 neon-text">${game.title}</h2>
-          <img src="${game.thumb}" alt="${game.title}" class="w-full h-48 object-cover rounded-md my-4">
-          <p class="text-gray-300 mb-4">${game.desc}</p>
-          <a href="${game.url}" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-500">Play Now</a>
-          <button onclick="closeModal()" class="ml-4 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-500">Close</button>
-        </div>
-      `;
-      modal.style.display = "flex";
+    function monitorPopulation() {
+      setInterval(() => {
+        if (micropolisGame) {
+          population = micropolisGame.getPopulation();
+          if (population >= 2000) {
+            // Optimize rendering to prevent freeze
+            micropolisGame.optimizeRendering();
+            // Ensure building tool remains active
+            micropolisGame.ensureBuildingToolActive();
+          }
+        }
+      }, 1000);
     }
 
-    function closeModal() {
-      document.getElementById("gameModal").style.display = "none";
-    }
-
-    function setFilter(button) {
-      document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("bg-cyan-400", "text-black"));
-      if (button) button.classList.add("bg-cyan-400", "text-black");
+    function togglePause() {
+      if (micropolisGame) {
+        micropolisGame.isPaused ? micropolisGame.resume() : micropolisGame.pause();
+        document.getElementById("pauseBtn").textContent = micropolisGame.isPaused ? "Resume" : "Pause";
+      }
     }
 
     window.onload = () => {
-      renderGames();
-      document.querySelectorAll(".filter-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const filter = btn.dataset.cat;
-          setFilter(btn);
-          renderGames(filter);
-        });
-      });
-      document.getElementById("gameModal").addEventListener("click", (e) => {
-        if (e.target === document.getElementById("gameModal")) closeModal();
-      });
+      initializeGame();
+    };
+
+    window.onunload = () => {
+      if (micropolisGame) {
+        micropolisGame.stop();
+      }
     };
   </script>
 </head>
-<body class="min-h-screen flex flex-col">
-  <section class="hero-section py-20 text-center">
-    <div class="hero-text-bg inline-block">
-      <h1 class="text-5xl font-extrabold text-cyan-300 neon-text mb-4">Welcome to Friesen Ventures Gaming Hub</h1>
+<body>
+  <div class="game-container">
+    <h1 class="text-4xl font-bold text-cyan-400 neon-text mb-4">Tron City 1989</h1>
+    <p class="text-lg text-gray-300 mb-6">Build and manage your city in this retro Micropolis remake.</p>
+    <canvas id="gameCanvas" class="game-canvas"></canvas>
+    <div id="placementPreview"></div>
+    <div class="controls">
+      <button id="pauseBtn" onclick="togglePause()" class="control-btn">Pause</button>
     </div>
-    <p class="text-lg text-gray-300 mb-6">Discover epic games and retro classics in a neon-charged world!</p>
-    <a href="#gameGrid" class="inline-block px-6 py-3 bg-cyan-400 text-black font-semibold rounded-md hover:bg-cyan-300 transition-colors neon-border">Explore Games</a>
-  </section>
-
-  <header class="bg-black p-6 text-center neon-border">
-    <h1 class="text-4xl font-bold text-cyan-400 neon-text">Friesen Ventures Gaming Hub</h1>
-    <nav class="mt-4">
-      <a href="index.html" class="text-cyan-400 font-semibold hover:underline">Home</a>
-    </nav>
-  </header>
-
-  <div class="ad-banner parallax text-cyan-400 text-center py-8">
-    Your Ad Here — <a href="mailto:markfriesen2014@gmail.com" class="text-cyan-400 underline hover:text-cyan-300">Advertise with us</a>
   </div>
-
-  <div class="filters text-center my-6">
-    <button data-cat="" class="filter-btn px-4 py-2 mx-2 bg-gray-800 border border-cyan-400 text-cyan-400 rounded-md">All</button>
-    <button data-cat="Mobile Friendly" class="filter-btn px-4 py-2 mx-2 bg-gray-800 border border-cyan-400 text-cyan-400 rounded-md">Mobile Friendly</button>
-    <button data-cat="PC Only" class="filter-btn px-4 py-2 mx-2 bg-gray-800 border border-cyan-400 text-cyan-400 rounded-md">PC Only</button>
-    <button data-cat="City Builder" class="filter-btn px-4 py-2 mx-2 bg-gray-800 border border-cyan-400 text-cyan-400 rounded-md">City Builders</button>
-    <button data-cat="Simulators" class="filter-btn px-4 py-2 mx-2 bg-gray-800 border border-cyan-400 text-cyan-400 rounded-md">Simulators</button>
-    <button data-cat="Arcade" class="filter-btn px-4 py-2 mx-2 bg-gray-800 border border-cyan-400 text-cyan-400 rounded-md">Arcade</button>
-    <button data-cat="Nostalgic Classics" class="filter-btn px-4 py-2 mx-2 bg-gray-800 border border-cyan-400 text-cyan-400 rounded-md">Nostalgic</button>
-  </div>
-
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
-    <h2 class="text-3xl font-bold text-cyan-400 text-center neon-text">Featured Games</h2>
-    <p class="text-center text-cyan-400 text-sm mt-2 italic">
-      <em>Tron City is being actively tweaked by our Owner & Creator <strong>Mark Friesen</strong>,<br>
-      the CEO and 100% owner of Friesen Ventures Game Hub and registered Corporation <strong>1366422 B.C LTD</strong>.</em>
-    </p>
-    <div id="gameGrid" class="game-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8"></div>
-  </main>
-
-  <div class="ad-banner bg-gray-800 text-cyan-400 text-center py-4 border-t border-b border-gray-700">
-    Promote your brand or product here. Email <a href="mailto:markfriesen2014@gmail.com" class="text-cyan-400 underline hover:text-cyan-300">markfriesen2014@gmail.com</a>
-  </div>
-
-  <footer class="bg-black text-cyan-400 text-center py-4 mt-auto">
-    © 2025 Friesen Ventures • <a href="mailto:markfriesen2014@gmail.com" class="underline hover:text-cyan-300">Contact Us</a>
+  <footer>
+    © 2025 Friesen Ventures • <a href="mailto:markfriesen2014@gmail.com">Contact Us</a> • <a href="index.html">Back to Home</a>
   </footer>
-
-  <div id="gameModal" class="modal">
-    <div id="modalContent" class="modal-content"></div>
-  </div>
 </body>
 </html>
