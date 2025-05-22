@@ -453,6 +453,7 @@
       // Initialize the game and prevent freezing at 2000 population
       let micropolisGame = null;
       let lastUpdate = 0;
+      let updateCounter = 0; // To track simulation updates
 
       window.onload = function() {
         const canvasContainer = document.getElementById("canvasContainer");
@@ -497,6 +498,20 @@
           document.getElementById("splashGenerate").addEventListener("click", () => {
             micropolisGame.generateNewMap();
           });
+
+          // Override the simulation step to skip updates when population is high
+          if (typeof micropolisGame.simulate === "function") {
+            const originalSimulate = micropolisGame.simulate;
+            micropolisGame.simulate = function() {
+              const population = micropolisGame.getPopulation();
+              updateCounter++;
+              if (population >= 2000 && updateCounter % 2 !== 0) {
+                // Skip every other simulation update when population is 2000+
+                return;
+              }
+              originalSimulate.call(this);
+            };
+          }
         } catch (error) {
           console.error("Failed to initialize Micropolis:", error);
         }
@@ -516,19 +531,13 @@
           if (!micropolisGame) return;
 
           const now = performance.now();
-          if (now - lastUpdate < 1000) return; // Throttle updates to once per second
+          if (now - lastUpdate < 1000) return; // Throttle checks to once per second
           lastUpdate = now;
 
           const population = micropolisGame.getPopulation();
           if (population >= 2000) {
-            // Reduce frame rate to prevent freezing
-            if (micropolisGame.fps > 30) {
-              micropolisGame.setFPS(30); // Cap FPS to reduce load
-            }
-            // Ensure tools remain active (assumes method exists in micropolis.js)
-            if (micropolisGame.isBuildingMode && typeof micropolisGame.resetTools === "function") {
-              micropolisGame.resetTools();
-            }
+            // Log for debugging; simulation skipping should already be handled
+            console.log("Population at " + population + ", skipping alternate simulation updates.");
           }
         };
 
