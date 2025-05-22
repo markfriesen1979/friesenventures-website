@@ -15,26 +15,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
-      <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
-<style>
-  /* hide all splash/start UI */
-  #splash,
-  #start {
-    display: none !important;
-  }
-  /* show preview overlay */
-  #opaque {
-    display: block !important;
-  }
-  /* make sure map & tools are visible */
-  #canvasContainer,
-  #controls {
-    visibility: visible !important;
-  }
-</style>
-
-
-<title>micropolisJS</title>
+    <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
+    <title>micropolisJS</title>
   </head>
   <body>
     <img id="tiles" class="imageData" src="images/tiles.png" alt="These are the game's principal tiles">
@@ -53,7 +35,7 @@
     </header>
     <div id="wrapper">
       <main id="canvasContainer">
-        <div id="opaque"></div>
+        <div class="hidden" id="opaque"></div>
         <div data-hasscript="false" id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
         <div id="splash" class="mintcream awaitGeneration open shadow padding10 centred">
           <h2 class="chunk alignCenter">Welcome!</h2>
@@ -129,7 +111,7 @@
           </div>
         </div>
         <div id="RCIContainer" class="controlShadow leftedge width140 padding10 mintcream z1 initialHidden"></div>
-        <div id="controls" class="controlShadow mintcream z1 rightedge open">
+        <div id="controls" class="controlShadow mintcream z1 initialHidden rightedge open">
           <div id="toolInfo" class="alignCenter"><span id="toolOutput">Tools</span></div>
           <div id="buttons">
             <button id="residentialButton" data-size="3" data-tool="residential" data-colour="lime" class="toolButton unselected">Residential $100</button>
@@ -464,32 +446,13 @@
           </form>
         </div>
       </div>
-           </div> <!-- end #wrapper -->
-
-    <!-- mark which elements got script -->
+    </div>
     <script>
-      [].forEach.call(
-        document.querySelectorAll('[data-hasscript]'),
-        elem => elem.setAttribute('data-hasscript', 'true')
-      );
-    </script>
-
-    <!-- auto-start terrain generation, play & select tool -->
-    <script>
-      window.addEventListener('load', () => {
-        document.getElementById('splashGenerate').click();
-        setTimeout(() => {
-          document.getElementById('splashPlay').click();
-          document.getElementById('residentialButton').click();
-        }, 1000);
+      // If we got here, then we have script. Note we don't necessarily have jQuery though
+      [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(elem) {
+        elem.setAttribute('data-hasscript', 'true');
       });
     </script>
-
-    <!-- engine scripts (load jQuery first, then micropolis.js) -->
     <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-    <script defer src="src/micropolis.js?f2dcf3e190bdf59fa9c2"></script>
-
-  </body>
+  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script></body>
 </html>
-
-
