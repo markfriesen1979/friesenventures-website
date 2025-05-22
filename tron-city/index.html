@@ -15,8 +15,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
-    <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
-    <title>micropolisJS</title>
+   <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
+<!-- ↓ GHOST-PREVIEW STYLES ↓ -->
+<style>
+  /* hide UI chrome so only preview shows */
+  #splash, #start, #header, #infobar, #miscButtons, #controls, #footer {
+    display: none !important;
+  }
+  /* show the ghost preview at 50% opacity */
+  #opaque {
+    display: block !important;
+    opacity: 0.5 !important;
+  }
+</style>
+<title>micropolisJS</title>
+
   </head>
   <body>
     <img id="tiles" class="imageData" src="images/tiles.png" alt="These are the game's principal tiles">
@@ -447,12 +460,64 @@
         </div>
       </div>
     </div>
+       <script>
+      // mark script-enabled elements
+      [].forEach.call(document.querySelectorAll('[data-hasscript]'), elem =>
+        elem.setAttribute('data-hasscript', 'true')
+      );
+    </script>
+
+    <!-- ↓ AUTO-START MAP & SELECT TOOL ↓ -->
     <script>
-      // If we got here, then we have script. Note we don't necessarily have jQuery though
-      [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(elem) {
-        elem.setAttribute('data-hasscript', 'true');
+      window.addEventListener('load', () => {
+        document.getElementById('splashGenerate').click();
+        setTimeout(() => {
+          document.getElementById('splashPlay').click();
+          document.getElementById('residentialButton').click();
+        }, 1000);
       });
     </script>
-    <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script></body>
+
+        <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
+-    <script defer src="src/micropolis.js?f2dcf3e190bdf59fa9c2"></script>
++    <script defer src="src/micropolis.js?f2dcf3e190bdf59fa9c2"></script>
++
++    <!-- ↓ GHOST-BUILDING PREVIEW SCRIPT (insert here) ↓ -->
++    <script>
++      (function(){
++        const ghost = document.createElement('div');
++        ghost.id = 'ghostPreview';
++        Object.assign(ghost.style, {
++          position: 'absolute',
++          pointerEvents: 'none',
++          opacity: '0.5',
++          display: 'none',
++        });
++        document.body.appendChild(ghost);
++
++        let currentTool = null;
++        // when a tool button is clicked...
++        document.querySelectorAll('.toolButton').forEach(btn => {
++          btn.addEventListener('click', () => {
++            currentTool = btn.dataset.tool;
++            ghost.style.display = currentTool ? 'block' : 'none';
++          });
++        });
++
++        // move the ghost image with the mouse
++        document.getElementById('canvasContainer')
++          .addEventListener('mousemove', e => {
++            if (!currentTool) return;
++            ghost.style.backgroundImage = `url("images/${currentTool}.png")`;
++            ghost.style.width  = '32px';
++            ghost.style.height = '32px';
++            ghost.style.left   = (e.pageX - 16) + 'px';
++            ghost.style.top    = (e.pageY - 16) + 'px';
++          });
++      })();
++    </script>
+---
+</html>
+
+
 </html>
