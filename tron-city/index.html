@@ -6,6 +6,10 @@
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
     <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
     <title>micropolisJS</title>
+    <style>
+      #toolPreview { position: absolute; border: 2px dashed #0f0; pointer-events: none; }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
     <img id="tiles" class="imageData" src="images/tiles.png" alt="These are the game's principal tiles">
@@ -150,6 +154,8 @@
             <p class="padding10">Unfortunately, the <abbr title="Javascript">JS</abbr> stands for "<em>Javascript</em>", which appears to be disabled on your system. Consult your browser's documentation on how to enable Javascript!</p>
           </div>
         </noscript>
+        <canvas id="gameCanvas" width="600" height="400" style="position: absolute; top: 0; left: 0; z-index: -1;"></canvas>
+        <div id="toolPreview" style="position: absolute; border: 2px dashed #0f0; pointer-events: none; display: none;"></div>
       </main>
       <footer id="footer" class="alignCenter chunk white padding10">
         Enjoyed micropolisJS? <a href="https://www.refuweegee.co.uk/your-donations">Click here to donate to a charity whose work I love!</a>
@@ -340,4 +346,200 @@
            Take Picture
         </header>
         <div id="screenshotLinkContainer" class="padding10 open">
-          <div id="screenshotLinkMessage" class="
+          <div id="screenshotLinkMessage" class="alignCenter">
+            Click <a id="screenshotLink" target="_blank">here</a> to view your picture (right-click to save)
+          </div>
+          <form id="screenshotLinkForm" class="alignCenter margin10">
+            <input type="submit" id="screenshotLinkOK" class="dialogOK" value="OK">
+          </form>
+        </div>
+      </div>
+      <div class="hidden modal shadow" id="screenshotWindow">
+        <header id="screenshotHeader" class="screenshotHeader white padding10 chunk alignCenter">
+           Take Picture
+        </header>
+        <div id="screenshotContainer" class="padding10 open">
+          <form id="screenshotForm" class="alignCenter margin10">
+            <div id="screenshotContainerDiv">
+              Area to take picture of:
+              <input type="radio" class="screenshotType" name="screenshotType" id="screenshotVisible" value="visible" checked="checked"><label for="screenshotVisible">Visible Map</label>
+              <input type="radio" class="screenshotType" name="screenshotType" id="screenshotAll" value="all"><label for="screenshotAll">Full map</label>
+            </div>
+            <button id="screenshotCancel" class="cancel">Cancel</button>
+            <input type="submit" id="screenshotOK" class="dialogOK" value="OK">
+          </form>
+        </div>
+      </div>
+      <div class="hidden modal shadow" id="settingsWindow">
+        <header id="settingsHeader" class="settingsHeader white padding10 chunk alignCenter">
+           Settings
+        </header>
+        <div id="settingsContainer" class="padding10 open">
+          <form id="settingsForm" class="alignCenter margin10">
+            <div id="settingsFormContainer">
+              <div id="autoBudgetSelect" class="padding10">
+                Autobudget:
+                <input type="radio" class="autoBudgetSetting" name="autoBudgetSetting" id="autoBudgetYes" value="true" checked="checked"><label for="autoBudgetYes">Yes</label>
+                <input type="radio" class="autoBudgetSetting" name="autoBudgetSetting" id="autoBudgetNo" value="false"><label for="autoBudgetNo">No</label>
+              </div>
+              <div id="autoBulldozeSelect" class="padding10">
+                Autobulldoze:
+                <input type="radio" class="autoBulldozeSetting" name="autoBulldozeSetting" id="autoBulldozeYes" value="true" checked="checked"><label for="autoBulldozeYes">Yes</label>
+                <input type="radio" class="autoBulldozeSetting" name="autoBulldozeSetting" id="autoBulldozeNo" value="false"><label for="autoBulldozeNo">No</label>
+              </div>
+              <div id="speedSelect" class="padding10">
+                Speed:
+                <input type="radio" class="speedSetting" name="speedSetting" id="speedSlow" value="1" checked="checked"><label for="speedSlow">Slow</label>
+                <input type="radio" class="speedSetting" name="speedSetting" id="speedMed" value="2"><label for="speedMed">Medium</label>
+                <input type="radio" class="speedSetting" name="speedSetting" id="speedFast" value="3"><label for="speedFast">Fast</label>
+              </div>
+              <div id="disastersSelect" class="padding10">
+                Disasters:
+                <input type="radio" class="enableDisastersSetting" name="disastersSetting" id="disastersYes" value="true" checked="checked"><label for="disastersYes">Yes</label>
+                <input type="radio" class="enableDisastersSetting" name="disastersSetting" id="disastersNo" value="false"><label for="disastersNo">No</label>
+              </div>
+            </div>
+            <button id="settingsCancel" class="cancel">Cancel</button>
+            <input type="submit" id="settingsOK" class="dialogOK" value="OK">
+          </form>
+        </div>
+      </div>
+      <div class="hidden modal shadow" id="debugWindow">
+        <header id="debugHeader" class="debugHeader white padding10 chunk alignCenter">
+           Debug
+        </header>
+        <div id="debugContainer" class="padding10 open">
+          <form id="debugForm" class="alignCenter margin10">
+            <div id="debugFundContainer">
+              Add funds:
+              <input type="radio" class="debugAdd" name="debugAdd" id="fundsYes" value="true" checked="checked"><label for="fundsYes">Yes</label>
+              <input type="radio" class="debugAdd" name="debugAdd" id="fundsNo" value="false"><label for="fundsNo">No</label>
+            </div>
+            <button id="debugCancel" class="cancel">Cancel</button>
+            <input type="submit" id="debugOK" class="dialogOK" value="OK">
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      // If we got here, then we have script
+      [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(elem) {
+        elem.setAttribute('data-hasscript', 'true');
+      });
+
+      const canvas = document.getElementById('gameCanvas');
+      const ctx = canvas.getContext('2d');
+      const toolPreview = document.getElementById('toolPreview');
+      let currentTool = null;
+      let funds = 20000;
+      let population = 0;
+      let cityName = 'Your Name Here';
+      let mouseX = 0;
+      let mouseY = 0;
+      let gridSize = 16;
+      let gameRunning = false;
+
+      // Initialize game
+      $('#playForm').on('submit', function(e) {
+        e.preventDefault();
+        cityName = $('#nameForm').val().substring(0, 15) || 'Your Name Here';
+        $('#name').text(cityName);
+        $('#start').hide();
+        $('#infobar, #controls, #miscButtons').removeClass('initialHidden');
+        gameRunning = true;
+        drawMap();
+        setInterval(updateGame, 1000);
+      });
+
+      // Draw initial map using tiles
+      function drawMap() {
+        const tilesImg = document.getElementById('tiles');
+        for (let x = 0; x < canvas.width; x += gridSize) {
+          for (let y = 0; y < canvas.height; y += gridSize) {
+            ctx.drawImage(tilesImg, 0, 0, gridSize, gridSize, x, y, gridSize, gridSize);
+          }
+        }
+      }
+
+      // Update game state
+      function updateGame() {
+        if (!gameRunning) return;
+        population += Math.floor(Math.random() * 5); // Simulate growth
+        $('#population').text(population);
+        $('#funds').text(funds);
+        if (population >= 2000) {
+          $('#cclass').text('TOWN'); // Update city class
+        }
+        drawToolPreview();
+      }
+
+      // Tool selection
+      $('.toolButton').on('click', function() {
+        if (!gameRunning) return;
+        currentTool = $(this).data('tool');
+        const cost = parseInt($(this).text().match(/\$(\d+)/)[1]);
+        if (funds >= cost) {
+          funds -= cost;
+          $('#funds').text(funds);
+          $('.toolButton').removeClass('selected');
+          $(this).addClass('selected');
+        } else {
+          alert('Not enough funds!');
+          currentTool = null;
+        }
+      });
+
+      // Mouse movement for tool preview
+      $('#canvasContainer').on('mousemove', function(e) {
+        if (!gameRunning || !currentTool) return;
+        mouseX = e.pageX - canvas.offsetLeft;
+        mouseY = e.pageY - canvas.offsetTop;
+        drawToolPreview();
+      });
+
+      // Place building on click
+      $('#canvasContainer').on('click', function(e) {
+        if (!gameRunning || !currentTool) return;
+        const gridX = Math.floor((e.pageX - canvas.offsetLeft) / gridSize) * gridSize;
+        const gridY = Math.floor((e.pageY - canvas.offsetTop) / gridSize) * gridSize;
+        if (gridX >= 0 && gridX < canvas.width && gridY >= 0 && gridY < canvas.height) {
+          ctx.fillStyle = '#666'; // Placeholder color for buildings
+          ctx.fillRect(gridX, gridY, gridSize, gridSize);
+          population += 10; // Simulate population growth
+          currentTool = null;
+          $('.toolButton').removeClass('selected');
+        }
+      });
+
+      // Draw tool preview
+      function drawToolPreview() {
+        if (!gameRunning || !currentTool) {
+          toolPreview.style.display = 'none';
+          return;
+        }
+        const gridX = Math.floor(mouseX / gridSize) * gridSize;
+        const gridY = Math.floor(mouseY / gridSize) * gridSize;
+        toolPreview.style.left = gridX + 'px';
+        toolPreview.style.top = gridY + 'px';
+        toolPreview.style.width = gridSize + 'px';
+        toolPreview.style.height = gridSize + 'px';
+        toolPreview.style.display = 'block';
+        // Ensure tool preview works after 2000 population
+        if (population >= 2000) {
+          toolPreview.style.display = 'block'; // Force visibility
+          requestAnimationFrame(drawToolPreview); // Continuous update to prevent freezing
+        }
+      }
+
+      // Basic modal handling (placeholders)
+      $('.modal').hide();
+      $('#budgetRequest, #evalRequest, #disasterRequest, #saveRequest, #settingsRequest, #screenshotRequest, #debugRequest').on('click', function() {
+        const id = $(this).attr('id').replace('Request', '');
+        $('#' + id).show();
+      });
+      $('.cancel, .dialogOK').on('click', function() {
+        $(this).closest('.modal').hide();
+      });
+    </script>
+  </body>
+</html>
