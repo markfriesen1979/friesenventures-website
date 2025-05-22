@@ -4,17 +4,43 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
-    <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
     <title>micropolisJS</title>
     <style>
-      #toolPreview { position: absolute; border: 2px dashed #0f0; pointer-events: none; }
+      body { margin: 0; font-family: Arial, sans-serif; }
+      #canvasContainer { position: relative; }
+      #gameCanvas { position: absolute; top: 0; left: 0; z-index: -1; }
+      #toolPreview { position: absolute; border: 2px dashed #0f0; pointer-events: none; display: none; }
+      /* Minimal styles to make the UI visible without css/style.css */
+      .mintcream { background: #f5fffa; }
+      .padding10 { padding: 10px; }
+      .alignCenter { text-align: center; }
+      .shadow { box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+      .centred { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+      .initialHidden { display: none; }
+      .open { display: block; }
+      .leftedge { left: 0; }
+      .rightedge { right: 0; }
+      .controlShadow { background: #f5fffa; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+      .width140 { width: 140px; }
+      .z1 { z-index: 1; }
+      .chunk { font-weight: bold; }
+      .white { color: white; }
+      .fontlarge { font-size: 1.5em; }
+      .border-bottom { border-bottom: 1px solid #ccc; }
+      .inlineblock { display: inline-block; }
+      .toolButton { display: block; margin: 5px 0; width: 100%; }
+      .selected { background: #ddd; }
+      .hidden { display: none; }
+      .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; }
+      button, input[type="submit"] { padding: 5px 10px; margin: 5px; }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      // Fallback for jQuery if CDN fails
+      window.jQuery || document.write('<script src="thirdparty/jquery/jquery-3.6.0.min.js"><\/script>');
+    </script>
   </head>
   <body>
-    <img id="tiles" class="imageData" src="images/tiles.png" alt="These are the game's principal tiles">
-    <img id="snowtiles" class="imageData" src="images/tilessnow.png" alt="These are the game's alternate tiles">
-    <img id="sprites" class="imageData" src="images/sprites.png" alt="These are the game's sprites">
     <header id="header" class="chunk border-bottom padding10">
       <div class="left inlineblock">
         <h1 id="title" class="white fontlarge">micropolisJS</h1>
@@ -154,8 +180,8 @@
             <p class="padding10">Unfortunately, the <abbr title="Javascript">JS</abbr> stands for "<em>Javascript</em>", which appears to be disabled on your system. Consult your browser's documentation on how to enable Javascript!</p>
           </div>
         </noscript>
-        <canvas id="gameCanvas" width="600" height="400" style="position: absolute; top: 0; left: 0; z-index: -1;"></canvas>
-        <div id="toolPreview" style="position: absolute; border: 2px dashed #0f0; pointer-events: none; display: none;"></div>
+        <canvas id="gameCanvas" width="600" height="400"></canvas>
+        <div id="toolPreview"></div>
       </main>
       <footer id="footer" class="alignCenter chunk white padding10">
         Enjoyed micropolisJS? <a href="https://www.refuweegee.co.uk/your-donations">Click here to donate to a charity whose work I love!</a>
@@ -423,9 +449,16 @@
     </div>
     <script>
       // If we got here, then we have script
-      [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(elem) {
+      document.querySelectorAll('[data-hasscript]').forEach(function(elem) {
         elem.setAttribute('data-hasscript', 'true');
       });
+
+      // Check if jQuery loaded
+      if (typeof jQuery === 'undefined') {
+        console.error('jQuery failed to load. Please ensure you have an internet connection or provide a local copy.');
+        alert('Failed to load jQuery. Please check your internet connection or try again later.');
+        throw new Error('jQuery not loaded');
+      }
 
       const canvas = document.getElementById('gameCanvas');
       const ctx = canvas.getContext('2d');
@@ -445,20 +478,26 @@
         cityName = $('#nameForm').val().substring(0, 15) || 'Your Name Here';
         $('#name').text(cityName);
         $('#start').hide();
+        $('#splash').hide();
+        $('#loadingBanner').hide();
         $('#infobar, #controls, #miscButtons').removeClass('initialHidden');
         gameRunning = true;
         drawMap();
         setInterval(updateGame, 1000);
       });
 
-      // Draw initial map using tiles
+      // Draw initial map without relying on images
       function drawMap() {
-        const tilesImg = document.getElementById('tiles');
+        console.log('Drawing map...');
+        ctx.fillStyle = '#8B4513'; // Brown for land
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#228B22'; // Green for undeveloped
         for (let x = 0; x < canvas.width; x += gridSize) {
           for (let y = 0; y < canvas.height; y += gridSize) {
-            ctx.drawImage(tilesImg, 0, 0, gridSize, gridSize, x, y, gridSize, gridSize);
+            if (Math.random() > 0.7) ctx.fillRect(x, y, gridSize, gridSize);
           }
         }
+        console.log('Map drawn successfully.');
       }
 
       // Update game state
@@ -503,7 +542,7 @@
         const gridX = Math.floor((e.pageX - canvas.offsetLeft) / gridSize) * gridSize;
         const gridY = Math.floor((e.pageY - canvas.offsetTop) / gridSize) * gridSize;
         if (gridX >= 0 && gridX < canvas.width && gridY >= 0 && gridY < canvas.height) {
-          ctx.fillStyle = '#666'; // Placeholder color for buildings
+          ctx.fillStyle = currentTool === 'road' ? '#000' : '#666';
           ctx.fillRect(gridX, gridY, gridSize, gridSize);
           population += 10; // Simulate population growth
           currentTool = null;
@@ -540,6 +579,9 @@
       $('.cancel, .dialogOK').on('click', function() {
         $(this).closest('.modal').hide();
       });
+
+      // Log when script starts
+      console.log('micropolisJS script loaded at ' + new Date().toISOString());
     </script>
   </body>
 </html>
