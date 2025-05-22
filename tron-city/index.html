@@ -464,27 +464,32 @@
           </form>
         </div>
       </div>
-    </div>
+        </div> <!-- end #wrapper -->
+
+    <!-- mark which elements got script -->
     <script>
-      // If we got here, then we have script. Note we don't necessarily have jQuery though
-      [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(elem) {
-        elem.setAttribute('data-hasscript', 'true');
+      [].forEach.call(
+        document.querySelectorAll('[data-hasscript]'),
+        elem => elem.setAttribute('data-hasscript', 'true')
+      );
+    </script>
+
+    <!-- auto-start terrain generation, play & select tool -->
+    <script>
+      window.addEventListener('load', () => {
+        document.getElementById('splashGenerate').click();
+        setTimeout(() => {
+          document.getElementById('splashPlay').click();
+          document.getElementById('residentialButton').click();
+        }, 1000);
       });
-   <script>
-  window.addEventListener('load', () => {
-    // 1) kick off terrain generation
-    document.getElementById('splashGenerate').click();
+    </script>
 
-    // 2) after 1 s, play & select tool
-    setTimeout(() => {
-      document.getElementById('splashPlay').click();
-      document.getElementById('residentialButton').click();
-    }, 1000);
-  });
-</script>
+    <!-- engine scripts (load jQuery first, then micropolis.js) -->
+    <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
+    <script defer src="src/micropolis.js?f2dcf3e190bdf59fa9c2"></script>
 
-
-</body>
+  </body>
 </html>
 
 
