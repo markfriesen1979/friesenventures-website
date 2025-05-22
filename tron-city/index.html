@@ -17,7 +17,7 @@
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
    <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
 <!-- ↓ GHOST-PREVIEW STYLES ↓ -->
- <!-- ↓ AUTO-START + GHOST-PREVIEW + SMART HIDE ↓ -->
+<!-- ↓ AUTO-START + GHOST-PREVIEW + MANUAL SPLASH→START ↓ -->
 <script>
 window.addEventListener('load', () => {
   // 1) Kick off map gen & initial clicks
@@ -27,44 +27,29 @@ window.addEventListener('load', () => {
     document.getElementById('residentialButton').click();
   }, 1000);
 
-  // 2) Set up ghost‐building preview
+  // 2) Set up ghost-building preview
   (function(){
-    const ghost = document.createElement('div');
-    ghost.id = 'ghostPreview';
-    Object.assign(ghost.style, {
-      position: 'absolute',
-      pointerEvents: 'none',
-      opacity: '0.5',
-      display: 'none',
-    });
-    document.body.appendChild(ghost);
-
-    let currentTool = null;
-    document.querySelectorAll('.toolButton').forEach(btn => {
-      btn.addEventListener('click', () => {
-        currentTool = btn.dataset.tool;
-        ghost.style.display = currentTool ? 'block' : 'none';
-      });
-    });
-    document.getElementById('canvasContainer')
-      .addEventListener('mousemove', e => {
-        if (!currentTool) return;
-        ghost.style.background = `url("images/${currentTool}.png") no-repeat center`;
-        ghost.style.width  = '32px';
-        ghost.style.height = '32px';
-        ghost.style.left   = (e.pageX - 16) + 'px';
-        ghost.style.top    = (e.pageY - 16) + 'px';
-      });
+    /* … your existing ghost-preview code … */
   })();
 
-  // 3) Delay hiding splash/start until map is fully up
-  setTimeout(() => {
-    document.getElementById('splash').style.display = 'none';
-    document.getElementById('start').style.display  = 'none';
-  }, 3000);  // increase 3000 → 5000 or more if needed
+  // 3) Manual splash→start:
+  const splash = document.getElementById('splash');
+  const start  = document.getElementById('start');
+  start.style.display = 'none';           // hide New Game initially
+  ['splashPlay','splashLoad'].forEach(id => {
+    document.getElementById(id).addEventListener('click', () => {
+      splash.style.display = 'none';      // hide Welcome
+      start.style.display  = 'block';     // show New Game, never auto-hide
+    });
+  });
 
+  // 4) Prevent accidental hiding of #start
+  new MutationObserver(() => {
+    start.style.display = 'block';
+  }).observe(start, { attributes: true, attributeFilter: ['style'] });
 });
 </script>
+
 
 
 +    display: block !important;
