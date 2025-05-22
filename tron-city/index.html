@@ -16,20 +16,21 @@
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
       <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
-            <style>
--     /* hide only the greyed-out overlay */
--     #opaque {
--       display: none !important;
--     }
-+     /* show the placement preview overlay */
-+     #opaque {
-+       display: block !important;
-+     }
-      /* make sure the Loading banner actually shows */
-      #loadingBanner { display: block !important; }
-      /* ensure the map canvas is visible */
-      #canvasContainer { visibility: visible !important; }
-    </style>
+  <style>
+-   /* hide only the greyed-out overlay */
+-   #opaque {
+-     display: block !important;
+-   }
+-  /* make sure the Loading banner actually shows */
+-  #loadingBanner { display: block !important; }
+-  /* ensure the map canvas is visible */
+-  #canvasContainer { visibility: visible !important; }
++   /* hide only the greyed-out preview layer */
++   #opaque {
++     display: none !important;
++   }
+  </style>
+
 
 
 
@@ -475,15 +476,6 @@
          …  
    <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
    <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
-+
-+  <!-- Auto-start MicropolisJS after giving Loading time to show -->
-+  <script>
-+    window.addEventListener('load', () => {
-+      setTimeout(() => {
-+        document.getElementById('splashPlay').click();
-+      }, 1500);
-+    });
-+  </script>
   </body>
 </html>
 
