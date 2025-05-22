@@ -15,7 +15,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
-    <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
+      <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
+    <style>
+      /* hide the greyed‐out overlay and splash dialogs */
+      #opaque,
+      #splash,
+      #start,
+      #loadingBanner {
+        display: none !important;
+      }
+      /* ensure the map canvas is visible */
+      #canvasContainer { visibility: visible !important; }
+    </style>
+
     <title>micropolisJS</title>
   </head>
   <body>
@@ -111,7 +123,7 @@
           </div>
         </div>
         <div id="RCIContainer" class="controlShadow leftedge width140 padding10 mintcream z1 initialHidden"></div>
-        <div id="controls" class="controlShadow mintcream z1 initialHidden rightedge open">
+        <div id="controls" class="controlShadow mintcream z1 rightedge open">
           <div id="toolInfo" class="alignCenter"><span id="toolOutput">Tools</span></div>
           <div id="buttons">
             <button id="residentialButton" data-size="3" data-tool="residential" data-colour="lime" class="toolButton unselected">Residential $100</button>
