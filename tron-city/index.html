@@ -7,7 +7,38 @@
  * Please see the files LICENSE and COPYING for details. Alternatively,
  * consult https://graememcc.github.io/micropolisJS/LICENSE and
  * https://graememcc.github.io/micropolisJS/COPYING
- *
+ *<script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
+
+<!-- ── Disable Nag/Eval & Restore Canvas Interactions ── -->
+<style>
+  /* hide eval modal & opaque overlay */
+  #evalWindow, .modal, #opaque {
+    display: none !important;
+    pointer-events: none !important;
+  }
+  /* ensure map remains interactive */
+  #canvasContainer {
+    cursor: default !important;
+    pointer-events: auto !important;
+  }
+</style>
+<script>
+  // kill only the 30-min nag timer
+  const _orig = window.setTimeout;
+  window.setTimeout = (fn, d) => d === 1800000 ? 0 : _orig(fn, d);
+  // stub out popups
+  window.nagMessage     = () => {};
+  window.showEvalWindow = () => {};
+  // remove any leftover open-class
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('evalWindow')?.classList.remove('open');
+  });
+</script>
+
+<script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
+</body>
+</html>
+
  * -->
 
 <html lang="en">
