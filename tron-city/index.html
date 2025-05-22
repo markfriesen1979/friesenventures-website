@@ -10,18 +10,29 @@
  *<script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
 
 <!-- ── Disable Nag/Eval & Restore Canvas Interactions ── -->
-<style>
-  /* hide eval modal & opaque overlay */
-  #evalWindow, .modal, #opaque {
-    display: none !important;
-    pointer-events: none !important;
-  }
-  /* ensure map remains interactive */
-  #canvasContainer {
-    cursor: default !important;
-    pointer-events: auto !important;
-  }
-</style>
++ <!-- ── Disable Nag/Eval/Population Popup & Restore Canvas ── -->
++ <style>
++   /* hide eval modal, generic modals, opaque overlay */
++   #evalWindow,
++   .modal,
++   #opaque {
++     display: none !important;
++     pointer-events: none !important;
++   }
++
++   /* completely hide the “Population has reached 2,000” banner */
++   #notifications,
++   #notifications * {
++     display: none !important;
++     pointer-events: none !important;
++   }
++
++   /* ensure the map remains interactive for placement preview */
++   #canvasContainer {
++     cursor: default !important;
++     pointer-events: auto !important;
++   }
++ </style>
 <script>
   // kill only the 30-min nag timer
   const _orig = window.setTimeout;
