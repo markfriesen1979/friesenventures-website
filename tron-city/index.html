@@ -17,15 +17,14 @@
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
       <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
 <style>
-  /* hide all splash/start/loading UI */
+  /* hide all splash/start UI */
   #splash,
-  #start,
-  #loadingBanner {
+  #start {
     display: none !important;
   }
-  /* hide that grey overlay so you can see the placement preview */
+  /* show preview overlay */
   #opaque {
-    display: none !important;
+    display: block !important;
   }
   /* make sure map & tools are visible */
   #canvasContainer,
@@ -33,6 +32,7 @@
     visibility: visible !important;
   }
 </style>
+
 
 <title>micropolisJS</title>
   </head>
@@ -470,17 +470,19 @@
       [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(elem) {
         elem.setAttribute('data-hasscript', 'true');
       });
-    <script>
+   <script>
   window.addEventListener('load', () => {
-    // 1) start the map
-    document.getElementById('splashPlay').click();
+    // 1) kick off terrain generation
+    document.getElementById('splashGenerate').click();
 
-    // 2) then auto-select the Residential tool so you get a preview cursor immediately
+    // 2) after 1 s, play & select tool
     setTimeout(() => {
+      document.getElementById('splashPlay').click();
       document.getElementById('residentialButton').click();
-    }, 300);
+    }, 1000);
   });
 </script>
+
 
 </body>
 </html>
