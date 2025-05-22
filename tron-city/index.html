@@ -450,9 +450,11 @@
         elem.setAttribute('data-hasscript', 'true');
       });
 
-      // Initialize the game and ensure map rendering persists
+      // Initialize the game and address freezing/map rendering issues
       let micropolisGame = null;
       let lastRedraw = 0;
+      let lastUpdate = 0;
+      let pauseState = false;
 
       window.onload = function() {
         const canvasContainer = document.getElementById("canvasContainer");
@@ -476,11 +478,7 @@
               document.getElementById("start").classList.add("hidden");
               showGameElements();
               micropolisGame.start();
-              monitorMapRendering(); // Start monitoring map rendering
-              // Load any saved game state
-              if (typeof micropolisGame.loadGame === "function") {
-                micropolisGame.loadGame();
-              }
+              monitorGameState();
             }
           });
 
@@ -501,13 +499,6 @@
           document.getElementById("splashGenerate").addEventListener("click", () => {
             micropolisGame.generateNewMap();
           });
-
-          // Periodically save game state to prevent data loss
-          setInterval(() => {
-            if (micropolisGame && typeof micropolisGame.saveGame === "function") {
-              micropolisGame.saveGame();
-            }
-          }, 30000); // Save every 30 seconds
         } catch (error) {
           console.error("Failed to initialize Micropolis:", error);
         }
@@ -522,17 +513,32 @@
         document.getElementById("notifications").classList.remove("initialHidden");
       }
 
-      function monitorMapRendering() {
-        const updateMapRendering = () => {
+      function monitorGameState() {
+        const checkGameState = () => {
           if (!micropolisGame) return;
 
           const now = performance.now();
-          if (now - lastRedraw < 5000) return; // Redraw every 5 seconds
-          lastRedraw = now;
+          if (now - lastUpdate < 2000) return; // Check every 2 seconds
+          lastUpdate = now;
 
           const population = micropolisGame.getPopulation();
-          if (population >= 2000) {
-            // Force a full map redraw to ensure all sections are visible
+          if (population >= 2000 && !pauseState) {
+            // Temporarily pause to reduce load
+            if (typeof micropolisGame.pause === "function") {
+              micropolisGame.pause();
+              pauseState = true;
+              setTimeout(() => {
+                if (typeof micropolisGame.resume === "function") {
+                  micropolisGame.resume();
+                  pauseState = false;
+                }
+              }, 500); // Resume after 500ms
+            }
+          }
+
+          // Periodically refresh the map display to fix rendering issues
+          if (now - lastRedraw > 10000) { // Redraw every 10 seconds
+            lastRedraw = now;
             if (typeof micropolisGame.redrawMap === "function") {
               micropolisGame.redrawMap();
               console.log("Forced map redraw at population " + population);
@@ -540,7 +546,7 @@
           }
         };
 
-        setInterval(updateMapRendering, 5000);
+        setInterval(checkGameState, 2000);
       }
     </script>
     <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
