@@ -16,39 +16,81 @@
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
    <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
-<!-- ↓ GHOST-PREVIEW STYLES ↓ -->
-<!-- ↓ AUTO-START + GHOST-PREVIEW + MANUAL SPLASH→START ↓ -->
-<script>
-window.addEventListener('load', () => {
-  // 1) Kick off map gen & initial clicks
-  document.getElementById('splashGenerate').click();
-  setTimeout(() => {
-    document.getElementById('splashPlay').click();
-    document.getElementById('residentialButton').click();
-  }, 1000);
++<!-- ↓ GHOST-PREVIEW STYLES ↓ -->
++<style>
++  /* always show the tools panel */
++  #controls {
++    display: block !important;
++    visibility: visible !important;
++  }
++
++  /* keep the opaque overlay visible while loading */
++  #opaque {
++    display: block !important;
++    opacity: 0.5 !important;
++  }
++
++  /* ghost-preview defaults */
++  #ghostPreview {
++    position: absolute;
++    pointer-events: none;
++    opacity: 0.5;
++    display: none;
++    width: 32px;
++    height: 32px;
++    background-repeat: no-repeat;
++    background-position: center;
++  }
++</style>
++
++<!-- ↓ AUTO-START + GHOST-PREVIEW + MANUAL SPLASH→START ↓ -->
++<script>
++window.addEventListener('load', () => {
++  // 1) Kick off map gen & initial clicks
++  document.getElementById('splashGenerate').click();
++  setTimeout(() => {
++    document.getElementById('splashPlay').click();
++    document.getElementById('residentialButton').click();
++  }, 1000);
++
++  // 2) Set up ghost-building preview
++  (function(){
++    const ghost = document.createElement('div');
++    ghost.id = 'ghostPreview';
++    document.body.appendChild(ghost);
++    let currentTool = null;
++    document.querySelectorAll('.toolButton').forEach(btn => {
++      btn.addEventListener('click', () => {
++        currentTool = btn.dataset.tool;
++        ghost.style.display = currentTool ? 'block' : 'none';
++        ghost.style.backgroundImage = `url("images/${currentTool}.png")`;
++      });
++    });
++    document.getElementById('canvasContainer').addEventListener('mousemove', e => {
++      if (!currentTool) return;
++      ghost.style.left = (e.pageX - 16) + 'px';
++      ghost.style.top  = (e.pageY - 16) + 'px';
++    });
++  })();
++
++  // 3) Manual splash→start
++  const splash = document.getElementById('splash');
++  const start  = document.getElementById('start');
++  start.style.display = 'none';
++  ['splashPlay','splashLoad'].forEach(id => {
++    document.getElementById(id).addEventListener('click', () => {
++      splash.style.display = 'none';
++      start.style.display  = 'block';
++    });
++  });
++
++  // 4) Lock #start visible once shown
++  new MutationObserver(() => {
++    start.style.display = 'block';
++  }).observe(start, { attributes: true, attributeFilter: ['style'] });
++});
++</script>
 
-  // 2) Set up ghost-building preview
-  (function(){
-    /* … your existing ghost-preview code … */
-  })();
-
-  // 3) Manual splash→start:
-  const splash = document.getElementById('splash');
-  const start  = document.getElementById('start');
-  start.style.display = 'none';           // hide New Game initially
-  ['splashPlay','splashLoad'].forEach(id => {
-    document.getElementById(id).addEventListener('click', () => {
-      splash.style.display = 'none';      // hide Welcome
-      start.style.display  = 'block';     // show New Game, never auto-hide
-    });
-  });
-
-  // 4) Prevent accidental hiding of #start
-  new MutationObserver(() => {
-    start.style.display = 'block';
-  }).observe(start, { attributes: true, attributeFilter: ['style'] });
-});
-</script>
 
 
 
