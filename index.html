@@ -138,11 +138,18 @@
       height: auto;
       aspect-ratio: 12 / 20;
     }
-    .tetris-container p {
+    .tetris-stats {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
       font-family: 'Press Start 2P', cursive;
       color: #fff;
       margin: 1rem 0;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
+    }
+    .tetris-stats span {
+      color: #0ff;
+      text-shadow: 0 0 5px #0ff;
     }
     .tetris-controls {
       display: flex;
@@ -222,8 +229,8 @@
     .tetris-container.fullscreen canvas {
       max-width: 480px;
     }
-    .tetris-container.fullscreen p {
-      font-size: 1rem;
+    .tetris-container.fullscreen .tetris-stats {
+      font-size: 1.2rem;
     }
     @media (max-width: 600px) {
       .tetris-container {
@@ -246,6 +253,9 @@
       .start-overlay button {
         padding: 0.8rem 1.5rem;
         font-size: 0.9rem;
+      }
+      .tetris-stats {
+        font-size: 0.7rem;
       }
     }
   </style>
@@ -281,7 +291,11 @@
         <button onclick="startGame()" ontouchstart="startGame()">Start</button>
       </div>
       <canvas id="tetrisCanvas"></canvas>
-      <p>Score: <span id="tetrisScore">0</span> | Use Arrow Keys or Buttons Below</p>
+      <div class="tetris-stats">
+        <div>Score: <span id="tetrisScore">0</span></div>
+        <div>High Score: <span id="tetrisHighScore">0</span></div>
+        <div>Level: <span id="tetrisLevel">1</span></div>
+      </div>
       <div class="tetris-controls">
         <button ontouchstart="moveLeft()" ontouchend="stopMove()">Left</button>
         <button ontouchstart="moveRight()" ontouchend="stopMove()">Right</button>
@@ -375,6 +389,8 @@
     const canvas = document.getElementById("tetrisCanvas");
     const ctx = canvas.getContext("2d");
     const scoreElement = document.getElementById("tetrisScore");
+    const highScoreElement = document.getElementById("tetrisHighScore");
+    const levelElement = document.getElementById("tetrisLevel");
     const startOverlay = document.getElementById("startOverlay");
     const restartButton = document.querySelector(".restart-btn");
 
@@ -383,6 +399,11 @@
     const BOARD_HEIGHT = 20;
     let board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
     let score = 0;
+    let highScore = localStorage.getItem("tetrisHighScore") || 0;
+    highScoreElement.textContent = highScore;
+    let level = 1;
+    let fallSpeed = 1000; // Initial fall speed in milliseconds (1 second)
+    let blocksLanded = 0; // Track number of blocks that have landed
     let gameOver = false;
     let gameStarted = false;
 
@@ -429,6 +450,12 @@
       if (collides()) {
         gameOver = true;
         restartButton.style.display = "block";
+        // Update high score if current score is higher
+        if (score > highScore) {
+          highScore = score;
+          localStorage.setItem("tetrisHighScore", highScore);
+          highScoreElement.textContent = highScore;
+        }
       }
     }
 
@@ -460,6 +487,16 @@
           }
         }
       }
+      // Increment blocks landed and award points
+      blocksLanded++;
+      score += 10; // 10 points per block landing
+      scoreElement.textContent = score;
+      // Level up every 10 blocks
+      if (blocksLanded % 10 === 0) {
+        level++;
+        fallSpeed = Math.max(200, fallSpeed - 100); // Reduce fall interval by 100ms, minimum 200ms
+        levelElement.textContent = level;
+      }
     }
 
     function clearLines() {
@@ -473,7 +510,11 @@
         }
       }
       if (linesCleared > 0) {
-        score += linesCleared * 100;
+        // Award points based on number of lines cleared
+        if (linesCleared === 1) score += 100;
+        else if (linesCleared === 2) score += 300; // 3x
+        else if (linesCleared === 3) score += 600; // 6x
+        else if (linesCleared === 4) score += 1000; // 10x for a Tetris
         scoreElement.textContent = score;
       }
     }
@@ -571,7 +612,7 @@
       const deltaTime = time - lastTime;
       lastTime = time;
 
-      if (deltaTime > 1000) {
+      if (deltaTime > fallSpeed) {
         moveDown();
         lastTime = time;
       }
@@ -580,7 +621,7 @@
     }
 
     function startGame() {
-      console.log("startGame() called"); // Debug log
+      console.log("startGame() called");
       gameStarted = true;
       startOverlay.style.display = "none";
       createPiece();
@@ -589,10 +630,14 @@
     }
 
     function restartGame() {
-      console.log("restartGame() called"); // Debug log
+      console.log("restartGame() called");
       board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
       score = 0;
       scoreElement.textContent = score;
+      level = 1;
+      levelElement.textContent = level;
+      fallSpeed = 1000;
+      blocksLanded = 0;
       gameOver = false;
       gameStarted = true;
       restartButton.style.display = "none";
