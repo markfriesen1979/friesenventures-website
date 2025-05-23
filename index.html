@@ -5,166 +5,116 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Friesen Ventures Gaming Hub</title>
   <link rel="icon" href="favicon.ico" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
     body {
-      font-family: 'Poppins', sans-serif;
-      background: #222;
-      color: #ddd;
-      line-height: 1.6;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #eee;
     }
     header {
-      background: #111;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #ff5555;
+      background: #000;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 0 20px #00ffff55;
     }
     header h1 {
-      font-size: 1.8rem;
-      color: #ff5555;
+      color: #0ff;
+      font-size: 2.2rem;
+      text-shadow: 0 0 10px #0ff;
+      margin: 0;
     }
-    header nav {
-      display: flex;
-      gap: 1rem;
+    nav {
+      margin-top: 1rem;
     }
-    header nav a {
-      color: #ff5555;
+    nav a {
+      color: #0ff;
       text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s;
+      margin: 0 1rem;
+      font-weight: bold;
     }
-    header nav a:hover {
-      color: #fff;
-    }
-    .container {
-      display: flex;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 2rem;
-      gap: 2rem;
-    }
-    .sidebar {
-      width: 250px;
-      background: #1a1a1a;
+    .ad-banner {
+      background: #111;
+      color: #0ff;
+      text-align: center;
       padding: 1rem;
-      border-radius: 8px;
+      border-top: 1px solid #333;
+      border-bottom: 1px solid #333;
     }
-    .sidebar h3 {
-      color: #ff5555;
-      margin-bottom: 1rem;
+    .filters {
+      text-align: center;
+      margin: 2rem 0;
     }
-    .sidebar ul {
-      list-style: none;
-    }
-    .sidebar ul li {
-      margin-bottom: 0.5rem;
-    }
-    .sidebar ul li button {
-      background: none;
-      border: none;
-      color: #ff5555;
-      font-size: 1rem;
+    .filters button {
+      margin: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: #111;
+      border: 1px solid #0ff;
+      color: #0ff;
+      border-radius: 4px;
       cursor: pointer;
-      transition: color 0.3s;
     }
-    .sidebar ul li button:hover {
-      color: #fff;
-    }
-    .sidebar ul li button.active {
-      color: #fff;
-      font-weight: 600;
+    .filters button.active {
+      background: #0ff;
+      color: #000;
     }
     main {
-      flex: 1;
-    }
-    .section-title {
-      font-size: 2rem;
-      color: #ff5555;
-      margin-bottom: 1.5rem;
+      max-width: 1200px;
+      margin: auto;
+      padding: 2rem;
     }
     .game-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
     }
     .game-card {
-      background: #333;
+      background: #1a1a1a;
       border-radius: 8px;
-      overflow: hidden;
-      transition: transform 0.3s;
-    }
-    .game-card:hover {
-      transform: scale(1.02);
+      box-shadow: 0 0 12px #00ffff55;
+      padding: 1rem;
+      text-align: center;
     }
     .game-card img {
       width: 100%;
-      height: 160px;
+      border-radius: 6px;
+      max-height: 150px;
       object-fit: cover;
     }
-    .game-card-content {
-      padding: 1rem;
-    }
     .game-card h3 {
-      font-size: 1.3rem;
-      color: #ff5555;
-      margin-bottom: 0.5rem;
+      color: #0ff;
+      margin: 1rem 0 0.5rem;
     }
     .game-card p {
-      font-size: 0.9rem;
-      color: #aaa;
-      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      color: #ccc;
     }
-    .game-card .tags {
-      font-size: 0.8rem;
-      color: #ff5555;
-      margin-bottom: 0.5rem;
-    }
-    .game-card .button {
+    .button {
       display: inline-block;
-      padding: 0.5rem 1rem;
-      background: #ff5555;
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background: #00f;
       color: #fff;
-      border-radius: 4px;
+      border-radius: 6px;
       text-decoration: none;
-      font-weight: 600;
-      transition: background 0.3s;
-    }
-    .game-card .button:hover {
-      background: #e04444;
-    }
-    .ad-banner {
-      background: #1a1a1a;
-      color: #ff5555;
-      text-align: center;
-      padding: 1rem;
-      margin: 2rem 0;
-      border-radius: 8px;
-    }
-    .ad-banner a {
-      color: #ff5555;
-      text-decoration: underline;
+      font-weight: bold;
+      box-shadow: 0 0 8px #00f;
     }
     footer {
-      background: #111;
-      color: #ff5555;
       text-align: center;
       padding: 1rem;
+      background: #000;
+      color: #0ff;
+      margin-top: 4rem;
       font-size: 0.9rem;
-      border-top: 2px solid #ff5555;
     }
     footer a {
-      color: #ff5555;
+      color: #0ff;
       text-decoration: underline;
     }
   </style>
   <script>
+    // ——— GAMES ARRAY ———
     const games = [
       {
         title: "OpenCity",
@@ -192,37 +142,36 @@
     function renderGames(filter = "") {
       const grid = document.getElementById("gameGrid");
       grid.innerHTML = "";
-      const filtered = !filter ? games : games.filter(g => g.categories.includes(filter));
+
+      const filtered = !filter
+        ? games
+        : games.filter(g => g.categories.includes(filter));
 
       if (filtered.length === 0) {
-        grid.innerHTML = "<p style='text-align:center; color: #aaa;'>No games found.</p>";
+        grid.innerHTML = "<p style='text-align:center;'>No games found.</p>";
         return;
       }
 
       filtered.forEach(g => {
-        const tags = g.categories.join(", ");
         grid.innerHTML += `
           <div class="game-card">
             <img src="${g.thumb}" alt="${g.title}" />
-            <div class="game-card-content">
-              <h3>${g.title}</h3>
-              <p>${g.desc}</p>
-              <div class="tags">${tags}</div>
-              <a class="button" href="${g.url}">Play Now</a>
-            </div>
+            <h3>${g.title}</h3>
+            <p>${g.desc}</p>
+            <a class="button" href="${g.url}">Play Now</a>
           </div>
         `;
       });
     }
 
     function setFilter(button) {
-      document.querySelectorAll(".sidebar ul li button").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active"));
       if (button) button.classList.add("active");
     }
 
     window.onload = () => {
       renderGames();
-      document.querySelectorAll(".sidebar ul li button").forEach(btn => {
+      document.querySelectorAll(".filters button").forEach(btn => {
         btn.addEventListener("click", () => {
           const filter = btn.dataset.cat;
           setFilter(btn);
@@ -237,36 +186,44 @@
     <h1>Friesen Ventures Gaming Hub</h1>
     <nav>
       <a href="/">Home</a>
-      <a href="/browse">Browse</a>
-      <a href="mailto:markfriesen2014@gmail.com">Advertise</a>
     </nav>
   </header>
 
-  <div class="container">
-    <div class="sidebar">
-      <h3>Categories</h3>
-      <ul>
-        <li><button data-cat="">All</button></li>
-        <li><button data-cat="Mobile Friendly">Mobile Friendly</button></li>
-        <li><button data-cat="PC Only">PC Only</button></li>
-        <li><button data-cat="City Builder">City Builders</button></li>
-        <li><button data-cat="Simulators">Simulators</button></li>
-        <li><button data-cat="Arcade">Arcade</button></li>
-        <li><button data-cat="Nostalgic Classics">Nostalgic</button></li>
-      </ul>
-    </div>
-    <main>
-      <h2 class="section-title">Featured Games</h2>
-      <div id="gameGrid" class="game-grid"></div>
-    </main>
+  <div class="ad-banner">
+    Your Ad Here — <a href="mailto:markfriesen2014@gmail.com" style="color:#0ff;">Advertise with us</a>
   </div>
 
+  <div class="filters">
+    <button data-cat="">All</button>
+    <button data-cat="Mobile Friendly">Mobile Friendly</button>
+    <button data-cat="PC Only">PC Only</button>
+    <button data-cat="City Builder">City Builders</button>
+    <button data-cat="Simulators">Simulators</button>
+    <button data-cat="Arcade">Arcade</button>
+    <button data-cat="Nostalgic Classics">Nostalgic</button>
+  </div>
+
+  <main>
+    <h2 style="text-align:center; font-size: 2rem; color: #0ff; text-shadow: 0 0 5px #0ff;">
+      Featured Games
+    </h2>
+    <p style="text-align:center; color: #0ff; font-size: 1rem; margin-top: -1rem;">
+      <em>
+        Stay tuned for new games coming soon to Friesen Ventures Gaming Hub!
+      </em>
+    </p>
+
+    <div id="gameGrid" class="game-grid"></div>
+  </main>
+
   <div class="ad-banner">
-    Promote your brand or product here. Email <a href="mailto:markfriesen2014@gmail.com">markfriesen2014@gmail.com</a>
+    Promote your brand or product here.
+    Email <a href="mailto:markfriesen2014@gmail.com">markfriesen2014@gmail.com</a>
   </div>
 
   <footer>
-    © 2025 Friesen Ventures • <a href="mailto:markfriesen2014@gmail.com">Contact Us</a>
+    © 2025 Friesen Ventures •
+    <a href="mailto:markfriesen2014@gmail.com">Contact Us</a>
   </footer>
 </body>
 </html>
