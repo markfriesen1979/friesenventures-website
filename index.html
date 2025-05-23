@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Friesen Ventures Gaming Hub</title>
   <link rel="icon" href="favicon.ico" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     * {
       box-sizing: border-box;
@@ -13,170 +13,154 @@
       padding: 0;
     }
     body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-      color: #e0e0e0;
+      font-family: 'Poppins', sans-serif;
+      background: #222;
+      color: #ddd;
       line-height: 1.6;
     }
     header {
-      background: #0f0f1a;
+      background: #111;
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+      border-bottom: 2px solid #ff5555;
     }
     header h1 {
       font-size: 1.8rem;
-      color: #1abc9c;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      color: #ff5555;
     }
     header nav {
       display: flex;
-      align-items: center;
       gap: 1rem;
     }
     header nav a {
-      color: #1abc9c;
+      color: #ff5555;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 600;
       transition: color 0.3s;
     }
     header nav a:hover {
-      color: #ffffff;
-    }
-    header input[type="text"] {
-      padding: 0.5rem;
-      border: none;
-      border-radius: 4px;
-      background: #2a2a3f;
-      color: #e0e0e0;
-      font-size: 0.9rem;
-    }
-    .hero {
-      background: url('images/hero-bg.jpg') center/cover no-repeat;
-      height: 400px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
       color: #fff;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-      margin-bottom: 2rem;
     }
-    .hero h2 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-    .hero p {
-      font-size: 1.2rem;
-    }
-    .filters {
-      text-align: center;
-      margin: 1rem 0;
-    }
-    .filters button {
-      padding: 0.5rem 1rem;
-      margin: 0.3rem;
-      background: #2a2a3f;
-      border: none;
-      color: #1abc9c;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: background 0.3s, color 0.3s;
-    }
-    .filters button:hover {
-      background: #1abc9c;
-      color: #0f0f1a;
-    }
-    .filters button.active {
-      background: #1abc9c;
-      color: #0f0f1a;
-    }
-    main {
+    .container {
+      display: flex;
       max-width: 1400px;
       margin: 0 auto;
       padding: 2rem;
+      gap: 2rem;
+    }
+    .sidebar {
+      width: 250px;
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    .sidebar h3 {
+      color: #ff5555;
+      margin-bottom: 1rem;
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      margin-bottom: 0.5rem;
+    }
+    .sidebar ul li button {
+      background: none;
+      border: none;
+      color: #ff5555;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .sidebar ul li button:hover {
+      color: #fff;
+    }
+    .sidebar ul li button.active {
+      color: #fff;
+      font-weight: 600;
+    }
+    main {
+      flex: 1;
     }
     .section-title {
       font-size: 2rem;
-      color: #1abc9c;
+      color: #ff5555;
       margin-bottom: 1.5rem;
-      text-align: center;
     }
     .game-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
     }
     .game-card {
-      background: #2a2a3f;
+      background: #333;
       border-radius: 8px;
       overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
+      transition: transform 0.3s;
     }
     .game-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 20px rgba(26, 188, 156, 0.3);
+      transform: scale(1.02);
     }
     .game-card img {
       width: 100%;
-      height: 180px;
+      height: 160px;
       object-fit: cover;
     }
     .game-card-content {
       padding: 1rem;
     }
     .game-card h3 {
-      font-size: 1.4rem;
-      color: #1abc9c;
+      font-size: 1.3rem;
+      color: #ff5555;
       margin-bottom: 0.5rem;
     }
     .game-card p {
       font-size: 0.9rem;
-      color: #b0b0b0;
-      margin-bottom: 1rem;
+      color: #aaa;
+      margin-bottom: 0.5rem;
+    }
+    .game-card .tags {
+      font-size: 0.8rem;
+      color: #ff5555;
+      margin-bottom: 0.5rem;
     }
     .game-card .button {
       display: inline-block;
-      padding: 0.6rem 1.2rem;
-      background: #1abc9c;
-      color: #0f0f1a;
+      padding: 0.5rem 1rem;
+      background: #ff5555;
+      color: #fff;
       border-radius: 4px;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 600;
       transition: background 0.3s;
     }
     .game-card .button:hover {
-      background: #16a085;
+      background: #e04444;
     }
     .ad-banner {
-      background: #0f0f1a;
-      color: #1abc9c;
+      background: #1a1a1a;
+      color: #ff5555;
       text-align: center;
       padding: 1rem;
       margin: 2rem 0;
-      border-radius: 4px;
+      border-radius: 8px;
     }
     .ad-banner a {
-      color: #1abc9c;
+      color: #ff5555;
       text-decoration: underline;
     }
     footer {
-      background: #0f0f1a;
-      color: #1abc9c;
+      background: #111;
+      color: #ff5555;
       text-align: center;
       padding: 1rem;
       font-size: 0.9rem;
-      margin-top: 2rem;
+      border-top: 2px solid #ff5555;
     }
     footer a {
-      color: #1abc9c;
+      color: #ff5555;
       text-decoration: underline;
     }
   </style>
@@ -211,17 +195,19 @@
       const filtered = !filter ? games : games.filter(g => g.categories.includes(filter));
 
       if (filtered.length === 0) {
-        grid.innerHTML = "<p style='text-align:center; color: #b0b0b0;'>No games found.</p>";
+        grid.innerHTML = "<p style='text-align:center; color: #aaa;'>No games found.</p>";
         return;
       }
 
       filtered.forEach(g => {
+        const tags = g.categories.join(", ");
         grid.innerHTML += `
           <div class="game-card">
             <img src="${g.thumb}" alt="${g.title}" />
             <div class="game-card-content">
               <h3>${g.title}</h3>
               <p>${g.desc}</p>
+              <div class="tags">${tags}</div>
               <a class="button" href="${g.url}">Play Now</a>
             </div>
           </div>
@@ -230,13 +216,13 @@
     }
 
     function setFilter(button) {
-      document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".sidebar ul li button").forEach(b => b.classList.remove("active"));
       if (button) button.classList.add("active");
     }
 
     window.onload = () => {
       renderGames();
-      document.querySelectorAll(".filters button").forEach(btn => {
+      document.querySelectorAll(".sidebar ul li button").forEach(btn => {
         btn.addEventListener("click", () => {
           const filter = btn.dataset.cat;
           setFilter(btn);
@@ -251,33 +237,29 @@
     <h1>Friesen Ventures Gaming Hub</h1>
     <nav>
       <a href="/">Home</a>
-      <a href="/categories">Categories</a>
+      <a href="/browse">Browse</a>
       <a href="mailto:markfriesen2014@gmail.com">Advertise</a>
-      <input type="text" placeholder="Search games..." />
     </nav>
   </header>
 
-  <div class="hero">
-    <div>
-      <h2>Welcome to Friesen Ventures Gaming Hub</h2>
-      <p>Discover open-source classics and indie games today!</p>
+  <div class="container">
+    <div class="sidebar">
+      <h3>Categories</h3>
+      <ul>
+        <li><button data-cat="">All</button></li>
+        <li><button data-cat="Mobile Friendly">Mobile Friendly</button></li>
+        <li><button data-cat="PC Only">PC Only</button></li>
+        <li><button data-cat="City Builder">City Builders</button></li>
+        <li><button data-cat="Simulators">Simulators</button></li>
+        <li><button data-cat="Arcade">Arcade</button></li>
+        <li><button data-cat="Nostalgic Classics">Nostalgic</button></li>
+      </ul>
     </div>
+    <main>
+      <h2 class="section-title">Featured Games</h2>
+      <div id="gameGrid" class="game-grid"></div>
+    </main>
   </div>
-
-  <div class="filters">
-    <button data-cat="">All</button>
-    <button data-cat="Mobile Friendly">Mobile Friendly</button>
-    <button data-cat="PC Only">PC Only</button>
-    <button data-cat="City Builder">City Builders</button>
-    <button data-cat="Simulators">Simulators</button>
-    <button data-cat="Arcade">Arcade</button>
-    <button data-cat="Nostalgic Classics">Nostalgic</button>
-  </div>
-
-  <main>
-    <h2 class="section-title">Featured Games</h2>
-    <div id="gameGrid" class="game-grid"></div>
-  </main>
 
   <div class="ad-banner">
     Promote your brand or product here. Email <a href="mailto:markfriesen2014@gmail.com">markfriesen2014@gmail.com</a>
