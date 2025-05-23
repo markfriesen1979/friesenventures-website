@@ -163,7 +163,33 @@
       box-shadow: 0 0 8px #00f;
       touch-action: manipulation;
     }
-    .fullscreen-btn, .restart-btn, .start-btn {
+    .start-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .start-overlay button {
+      background: #00f;
+      color: #fff;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 4px;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 0 8px #00f;
+      touch-action: manipulation;
+    }
+    .fullscreen-btn, .restart-btn {
+      position: absolute;
+      top: 1rem;
       background: #00f;
       color: #fff;
       border: none;
@@ -172,25 +198,13 @@
       cursor: pointer;
       box-shadow: 0 0 8px #00f;
       font-family: 'Segoe UI', sans-serif;
-    }
-    .fullscreen-btn, .restart-btn {
-      position: absolute;
-      top: 1rem;
+      touch-action: manipulation;
     }
     .fullscreen-btn {
       right: 1rem;
     }
     .restart-btn {
       left: 1rem;
-    }
-    .start-btn {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1rem;
-      padding: 0.8rem 1.6rem;
-      z-index: 10;
     }
     .tetris-container.fullscreen {
       position: fixed;
@@ -211,10 +225,6 @@
     .tetris-container.fullscreen p {
       font-size: 1rem;
     }
-    .tetris-container.fullscreen .start-btn {
-      font-size: 1.5rem;
-      padding: 1rem 2rem;
-    }
     @media (max-width: 600px) {
       .tetris-container {
         max-width: 100%;
@@ -233,9 +243,9 @@
         padding: 0.6rem 1rem;
         font-size: 0.7rem;
       }
-      .start-btn {
+      .start-overlay button {
+        padding: 0.8rem 1.5rem;
         font-size: 0.9rem;
-        padding: 0.6rem 1.2rem;
       }
     }
   </style>
@@ -267,7 +277,9 @@
       <h2>Tetris</h2>
       <button class="restart-btn" onclick="restartGame()" style="display: none;">Restart</button>
       <button class="fullscreen-btn" onclick="toggleFullscreen()">Full Screen</button>
-      <button class="start-btn" onclick="startGame()">Start</button>
+      <div class="start-overlay" id="startOverlay">
+        <button onclick="startGame()" ontouchstart="startGame()">Start</button>
+      </div>
       <canvas id="tetrisCanvas"></canvas>
       <p>Score: <span id="tetrisScore">0</span> | Use Arrow Keys or Buttons Below</p>
       <div class="tetris-controls">
@@ -301,6 +313,7 @@
   </footer>
 
   <script>
+    // ——— GAMES ARRAY (Tetris removed since it's embedded) ———
     const games = [
       {
         title: "OpenCity",
@@ -348,6 +361,7 @@
       if (button) button.classList.add("active");
     }
 
+    // Full-screen toggle for Tetris
     function toggleFullscreen() {
       const container = document.getElementById("tetrisContainer");
       container.classList.toggle("fullscreen");
@@ -357,11 +371,12 @@
       drawBoard();
     }
 
+    // ——— TETRIS GAME LOGIC ———
     const canvas = document.getElementById("tetrisCanvas");
     const ctx = canvas.getContext("2d");
     const scoreElement = document.getElementById("tetrisScore");
-    const startBtn = document.querySelector(".start-btn");
-    const restartBtn = document.querySelector(".restart-btn");
+    const startOverlay = document.getElementById("startOverlay");
+    const restartButton = document.querySelector(".restart-btn");
 
     const BLOCK_SIZE = 20;
     const BOARD_WIDTH = 12;
@@ -372,23 +387,23 @@
     let gameStarted = false;
 
     const PIECES = [
-      [[1, 1, 1, 1]],
-      [[1, 1], [1, 1]],
-      [[1, 1, 1], [0, 1, 0]],
-      [[1, 1, 1], [1, 0, 0]],
-      [[1, 1, 1], [0, 0, 1]],
-      [[1, 1, 0], [0, 1, 1]],
-      [[0, 1, 1], [1, 1, 0]]
+      [[1, 1, 1, 1]], // I
+      [[1, 1], [1, 1]], // O
+      [[1, 1, 1], [0, 1, 0]], // T
+      [[1, 1, 1], [1, 0, 0]], // L
+      [[1, 1, 1], [0, 0, 1]], // J
+      [[1, 1, 0], [0, 1, 1]], // S
+      [[0, 1, 1], [1, 1, 0]] // Z
     ];
 
     const COLORS = [
-      "#00f",
-      "#ff0",
-      "#f0f",
-      "#ffa500",
-      "#00f",
-      "#0f0",
-      "#f00"
+      "#00f", // I (blue)
+      "#ff0", // O (yellow)
+      "#f0f", // T (purple)
+      "#ffa500", // L (orange)
+      "#00f", // J (blue)
+      "#0f0", // S (green)
+      "#f00" // Z (red)
     ];
 
     let currentPiece = null;
@@ -413,8 +428,7 @@
       currentY = 0;
       if (collides()) {
         gameOver = true;
-        startBtn.style.display = "block";
-        restartBtn.style.display = "block";
+        restartButton.style.display = "block";
       }
     }
 
@@ -492,14 +506,7 @@
         }
       }
 
-      if (!gameStarted) {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#0ff";
-        ctx.font = `${blockSize}px 'Press Start 2P'`;
-        ctx.textAlign = "center";
-        ctx.fillText("Press Start", canvas.width / 2, canvas.height / 2);
-      } else if (gameOver) {
+      if (gameOver) {
         ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#f00";
@@ -557,24 +564,68 @@
       moveInterval = null;
     }
 
+    // Game loop
+    let lastTime = 0;
+    function gameLoop(time = 0) {
+      if (!gameStarted || gameOver) return;
+      const deltaTime = time - lastTime;
+      lastTime = time;
+
+      if (deltaTime > 1000) {
+        moveDown();
+        lastTime = time;
+      }
+
+      requestAnimationFrame(gameLoop);
+    }
+
     function startGame() {
-      if (gameStarted && !gameOver) return;
+      console.log("startGame() called"); // Debug log
       gameStarted = true;
-      gameOver = false;
-      board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
-      score = 0;
-      scoreElement.textContent = score;
-      startBtn.style.display = "none";
-      restartBtn.style.display = "block";
+      startOverlay.style.display = "none";
       createPiece();
       drawBoard();
       gameLoop();
     }
 
     function restartGame() {
-      gameStarted = false;
-      gameOver = false;
+      console.log("restartGame() called"); // Debug log
       board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
       score = 0;
       scoreElement.textContent = score;
-      startBtn.style
+      gameOver = false;
+      gameStarted = true;
+      restartButton.style.display = "none";
+      createPiece();
+      drawBoard();
+      gameLoop();
+    }
+
+    // Keyboard controls
+    document.addEventListener("keydown", e => {
+      if (e.key === "ArrowLeft") moveLeft();
+      if (e.key === "ArrowRight") moveRight();
+      if (e.key === "ArrowDown") moveDown();
+      if (e.key === "ArrowUp") rotate();
+    });
+
+    // Initialize game
+    resizeCanvas();
+    drawBoard();
+
+    // Handle window resize for responsive canvas
+    window.addEventListener("resize", resizeCanvas);
+
+    window.onload = () => {
+      renderGames();
+      document.querySelectorAll(".filters button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const filter = btn.dataset.cat;
+          setFilter(btn);
+          renderGames(filter);
+        });
+      });
+    };
+  </script>
+</body>
+</html>
