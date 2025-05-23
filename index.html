@@ -485,7 +485,7 @@
     let score = 0;
     let highScores = JSON.parse(localStorage.getItem("tetrisHighScores")) || [];
     let level = 1;
-    let fallSpeed = 300; // Initial fall speed in milliseconds (faster: 300ms per drop)
+    let fallSpeed = 500; // Adjusted to 500ms for testing
     let blocksLanded = 0;
     let gameOver = false;
     let gameStarted = false;
@@ -542,7 +542,9 @@
       currentColor = COLORS[type];
       currentX = Math.floor((BOARD_WIDTH - currentPiece[0].length) / 2);
       currentY = 0;
+      console.log(`Piece created: Type=${type}, X=${currentX}, Y=${currentY}, Color=${currentColor}`); // Debug log
       if (collides()) {
+        console.log("Piece collides immediately - Game Over");
         gameOver = true;
         restartButton.style.display = "block";
         if (highScores.length < 10 || score > highScores[highScores.length - 1].score) {
@@ -585,8 +587,9 @@
       scoreElement.textContent = score;
       if (blocksLanded % 10 === 0) {
         level++;
-        fallSpeed = Math.max(100, fallSpeed - 30); // Reduce by 30ms per level, min 100ms
+        fallSpeed = Math.max(100, fallSpeed - 50); // Adjusted to 50ms per level
         levelElement.textContent = level;
+        console.log(`Level up: Level=${level}, FallSpeed=${fallSpeed}ms`); // Debug log
       }
     }
 
@@ -639,7 +642,8 @@
       }
 
       // Draw the current piece
-      if (currentPiece && gameStarted) {
+      if (currentPiece) {
+        console.log(`Drawing piece at X=${currentX}, Y=${currentY}, GameStarted=${gameStarted}`); // Debug log
         for (let y = 0; y < currentPiece.length; y++) {
           for (let x = 0; x < currentPiece[y].length; x++) {
             if (currentPiece[y][x]) {
@@ -767,26 +771,33 @@
     // Game loop
     let lastTime = 0;
     let lastDropTime = 0;
-    function gameLoop(time = 0) {
+    let frameCount = 0;
+    let lastFrameLog = 0;
+    function gameLoop(time = performance.now()) {
       if (!gameStarted || gameOver) return;
 
       const deltaTime = time - lastTime;
       lastTime = time;
 
+      // Debug: Log frame rate every second
+      frameCount++;
+      if (time - lastFrameLog >= 1000) {
+        console.log(`Frame rate: ${frameCount} fps`);
+        frameCount = 0;
+        lastFrameLog = time;
+      }
+
       // Debug: Log the actual time between drops
       if (lastDropTime) {
         const timeSinceLastDrop = time - lastDropTime;
         if (timeSinceLastDrop >= fallSpeed) {
-          console.log(`Time since last drop: ${timeSinceLastDrop}ms, Expected: ${fallSpeed}ms`);
+          console.log(`Time since last drop: ${timeSinceLastDrop}ms, Expected: ${fallSpeed}ms, Position: X=${currentX}, Y=${currentY}`);
           lastDropTime = time;
+          moveDown();
         }
       } else {
         lastDropTime = time;
-      }
-
-      if (deltaTime > fallSpeed) {
         moveDown();
-        lastTime = time; // Reset lastTime to prevent accumulated delta
       }
 
       requestAnimationFrame(gameLoop);
@@ -808,11 +819,15 @@
       scoreElement.textContent = score;
       level = 1;
       levelElement.textContent = level;
-      fallSpeed = 300;
+      fallSpeed = 500;
       blocksLanded = 0;
       gameOver = false;
       gameStarted = true;
       lineClearAnimation = 0;
+      currentPiece = null;
+      currentX = 0;
+      currentY = 0;
+      currentColor = null;
       restartButton.style.display = "none";
       createPiece();
       drawBoard();
