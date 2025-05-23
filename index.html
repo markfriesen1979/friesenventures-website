@@ -176,7 +176,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5); /* Semi-transparent to show board */
+      background: rgba(0, 0, 0, 0.5);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -485,11 +485,11 @@
     let score = 0;
     let highScores = JSON.parse(localStorage.getItem("tetrisHighScores")) || [];
     let level = 1;
-    let fallSpeed = 700; // Initial fall speed in milliseconds (faster start)
+    let fallSpeed = 300; // Initial fall speed in milliseconds (faster: 300ms per drop)
     let blocksLanded = 0;
     let gameOver = false;
     let gameStarted = false;
-    let lineClearAnimation = 0; // For line clearing animation
+    let lineClearAnimation = 0;
 
     const PIECES = [
       [[1, 1, 1, 1]], // I
@@ -545,7 +545,6 @@
       if (collides()) {
         gameOver = true;
         restartButton.style.display = "block";
-        // Check for new high score
         if (highScores.length < 10 || score > highScores[highScores.length - 1].score) {
           highScoreInput.style.display = "flex";
           playerInitialsInput.focus();
@@ -586,7 +585,7 @@
       scoreElement.textContent = score;
       if (blocksLanded % 10 === 0) {
         level++;
-        fallSpeed = Math.max(200, fallSpeed - 100);
+        fallSpeed = Math.max(100, fallSpeed - 30); // Reduce by 30ms per level, min 100ms
         levelElement.textContent = level;
       }
     }
@@ -607,7 +606,7 @@
         else if (linesCleared === 3) score += 600;
         else if (linesCleared === 4) score += 1000;
         scoreElement.textContent = score;
-        lineClearAnimation = 10; // Trigger line clear animation
+        lineClearAnimation = 10;
       }
     }
 
@@ -653,9 +652,9 @@
       // Draw a static "preview" board before the game starts
       if (!gameStarted && !gameOver) {
         const previewBlocks = [
-          [5, 19, "#00f"], [6, 19, "#00f"], [5, 18, "#00f"], [6, 18, "#00f"], // O piece
-          [8, 19, "#f00"], [9, 19, "#f00"], [7, 18, "#f00"], [8, 18, "#f00"], // O piece
-          [1, 19, "#0f0"], [2, 19, "#0f0"], [2, 18, "#0f0"], [3, 18, "#0f0"], // S piece
+          [5, 19, "#00f"], [6, 19, "#00f"], [5, 18, "#00f"], [6, 18, "#00f"],
+          [8, 19, "#f00"], [9, 19, "#f00"], [7, 18, "#f00"], [8, 18, "#f00"],
+          [1, 19, "#0f0"], [2, 19, "#0f0"], [2, 18, "#0f0"], [3, 18, "#0f0"],
         ];
         previewBlocks.forEach(([x, y, color]) => {
           drawBlock(x, y, color, blockSize);
@@ -673,7 +672,6 @@
     }
 
     function drawBlock(x, y, color, blockSize) {
-      // Gradient fill for 3D effect
       const gradient = ctx.createLinearGradient(
         x * blockSize,
         y * blockSize,
@@ -685,7 +683,6 @@
       ctx.fillStyle = gradient;
       ctx.fillRect(x * blockSize, y * blockSize, blockSize - 1, blockSize - 1);
 
-      // Highlight and shadow for 3D effect
       ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
       ctx.beginPath();
       ctx.moveTo(x * blockSize, (y + 1) * blockSize - 1);
@@ -760,7 +757,7 @@
       const initials = playerInitialsInput.value.toUpperCase().slice(0, 3) || "???";
       highScores.push({ name: initials, score: score });
       highScores.sort((a, b) => b.score - a.score);
-      highScores = highScores.slice(0, 10); // Keep top 10
+      highScores = highScores.slice(0, 10);
       localStorage.setItem("tetrisHighScores", JSON.stringify(highScores));
       updateHighScoreDisplay();
       highScoreInput.style.display = "none";
@@ -769,14 +766,27 @@
 
     // Game loop
     let lastTime = 0;
+    let lastDropTime = 0;
     function gameLoop(time = 0) {
       if (!gameStarted || gameOver) return;
+
       const deltaTime = time - lastTime;
       lastTime = time;
 
+      // Debug: Log the actual time between drops
+      if (lastDropTime) {
+        const timeSinceLastDrop = time - lastDropTime;
+        if (timeSinceLastDrop >= fallSpeed) {
+          console.log(`Time since last drop: ${timeSinceLastDrop}ms, Expected: ${fallSpeed}ms`);
+          lastDropTime = time;
+        }
+      } else {
+        lastDropTime = time;
+      }
+
       if (deltaTime > fallSpeed) {
         moveDown();
-        lastTime = time;
+        lastTime = time; // Reset lastTime to prevent accumulated delta
       }
 
       requestAnimationFrame(gameLoop);
@@ -798,7 +808,7 @@
       scoreElement.textContent = score;
       level = 1;
       levelElement.textContent = level;
-      fallSpeed = 700;
+      fallSpeed = 300;
       blocksLanded = 0;
       gameOver = false;
       gameStarted = true;
