@@ -133,17 +133,37 @@
       background: #000;
       border: 2px solid #0ff;
       box-shadow: 0 0 10px #0ff;
+      width: 100%;
+      max-width: 240px;
+      height: auto;
+      aspect-ratio: 12 / 20;
     }
     .tetris-container p {
       font-family: 'Press Start 2P', cursive;
       color: #fff;
-      margin-top: 1rem;
+      margin: 1rem 0;
       font-size: 0.8rem;
     }
-    .fullscreen-btn {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
+    .tetris-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .tetris-controls button {
+      background: #00f;
+      color: #fff;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      border-radius: 4px;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.8rem;
+      cursor: pointer;
+      box-shadow: 0 0 8px #00f;
+      touch-action: manipulation;
+    }
+    .fullscreen-btn, .restart-btn, .start-btn {
       background: #00f;
       color: #fff;
       border: none;
@@ -151,6 +171,26 @@
       border-radius: 4px;
       cursor: pointer;
       box-shadow: 0 0 8px #00f;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .fullscreen-btn, .restart-btn {
+      position: absolute;
+      top: 1rem;
+    }
+    .fullscreen-btn {
+      right: 1rem;
+    }
+    .restart-btn {
+      left: 1rem;
+    }
+    .start-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1rem;
+      padding: 0.8rem 1.6rem;
+      z-index: 10;
     }
     .tetris-container.fullscreen {
       position: fixed;
@@ -166,14 +206,37 @@
       background: rgba(10, 10, 10, 0.95);
     }
     .tetris-container.fullscreen canvas {
-      width: 80%;
-      max-width: 800px;
-      height: auto;
-      margin: 0 auto;
-      display: block;
+      max-width: 480px;
     }
     .tetris-container.fullscreen p {
       font-size: 1rem;
+    }
+    .tetris-container.fullscreen .start-btn {
+      font-size: 1.5rem;
+      padding: 1rem 2rem;
+    }
+    @media (max-width: 600px) {
+      .tetris-container {
+        max-width: 100%;
+        padding: 0.5rem;
+      }
+      .tetris-container canvas {
+        max-width: 100%;
+        width: 80vw;
+        max-width: 300px;
+      }
+      .tetris-container.fullscreen canvas {
+        width: 90vw;
+        max-width: 400px;
+      }
+      .tetris-controls button {
+        padding: 0.6rem 1rem;
+        font-size: 0.7rem;
+      }
+      .start-btn {
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+      }
     }
   </style>
 </head>
@@ -200,12 +263,19 @@
   </div>
 
   <main>
-    <!-- Tetris game section -->
     <div class="tetris-container" id="tetrisContainer">
       <h2>Tetris</h2>
+      <button class="restart-btn" onclick="restartGame()" style="display: none;">Restart</button>
       <button class="fullscreen-btn" onclick="toggleFullscreen()">Full Screen</button>
-      <canvas id="tetrisCanvas" width="240" height="400"></canvas>
-      <p>Score: <span id="tetrisScore">0</span> | Use Arrow Keys to Play</p>
+      <button class="start-btn" onclick="startGame()">Start</button>
+      <canvas id="tetrisCanvas"></canvas>
+      <p>Score: <span id="tetrisScore">0</span> | Use Arrow Keys or Buttons Below</p>
+      <div class="tetris-controls">
+        <button ontouchstart="moveLeft()" ontouchend="stopMove()">Left</button>
+        <button ontouchstart="moveRight()" ontouchend="stopMove()">Right</button>
+        <button ontouchstart="moveDown()" ontouchend="stopMove()">Down</button>
+        <button ontouchstart="rotate()">Rotate</button>
+      </div>
     </div>
 
     <h2 style="text-align:center; font-size: 2rem; color: #0ff; text-shadow: 0 0 5px #0ff;">
@@ -231,7 +301,6 @@
   </footer>
 
   <script>
-    // ——— GAMES ARRAY (Tetris removed since it's embedded) ———
     const games = [
       {
         title: "OpenCity",
@@ -279,29 +348,20 @@
       if (button) button.classList.add("active");
     }
 
-    // Full-screen toggle for Tetris
     function toggleFullscreen() {
       const container = document.getElementById("tetrisContainer");
       container.classList.toggle("fullscreen");
       const btn = container.querySelector(".fullscreen-btn");
       btn.textContent = container.classList.contains("fullscreen") ? "Exit Full Screen" : "Full Screen";
-      // Adjust canvas size on fullscreen toggle
-      const canvas = document.getElementById("tetrisCanvas");
-      if (container.classList.contains("fullscreen")) {
-        canvas.width = 480; // Double the size for fullscreen
-        canvas.height = 800;
-      } else {
-        canvas.width = 240; // Default size
-        canvas.height = 400;
-      }
-      // Redraw the board to fit the new size
+      resizeCanvas();
       drawBoard();
     }
 
-    // ——— TETRIS GAME LOGIC ———
     const canvas = document.getElementById("tetrisCanvas");
     const ctx = canvas.getContext("2d");
     const scoreElement = document.getElementById("tetrisScore");
+    const startBtn = document.querySelector(".start-btn");
+    const restartBtn = document.querySelector(".restart-btn");
 
     const BLOCK_SIZE = 20;
     const BOARD_WIDTH = 12;
@@ -309,31 +369,41 @@
     let board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
     let score = 0;
     let gameOver = false;
+    let gameStarted = false;
 
-    // Tetris pieces (tetrominoes)
     const PIECES = [
-      [[1, 1, 1, 1]], // I
-      [[1, 1], [1, 1]], // O
-      [[1, 1, 1], [0, 1, 0]], // T
-      [[1, 1, 1], [1, 0, 0]], // L
-      [[1, 1, 1], [0, 0, 1]], // J
-      [[1, 1, 0], [0, 1, 1]], // S
-      [[0, 1, 1], [1, 1, 0]] // Z
+      [[1, 1, 1, 1]],
+      [[1, 1], [1, 1]],
+      [[1, 1, 1], [0, 1, 0]],
+      [[1, 1, 1], [1, 0, 0]],
+      [[1, 1, 1], [0, 0, 1]],
+      [[1, 1, 0], [0, 1, 1]],
+      [[0, 1, 1], [1, 1, 0]]
     ];
 
     const COLORS = [
-      "#00f", // I (blue)
-      "#ff0", // O (yellow)
-      "#f0f", // T (purple)
-      "#ffa500", // L (orange)
-      "#00f", // J (blue)
-      "#0f0", // S (green)
-      "#f00" // Z (red)
+      "#00f",
+      "#ff0",
+      "#f0f",
+      "#ffa500",
+      "#00f",
+      "#0f0",
+      "#f00"
     ];
 
     let currentPiece = null;
     let currentX = 0;
     let currentY = 0;
+    let currentColor = null;
+    let moveInterval = null;
+
+    function resizeCanvas() {
+      const container = document.getElementById("tetrisContainer");
+      const maxWidth = container.classList.contains("fullscreen") ? 480 : 240;
+      canvas.width = Math.min(window.innerWidth * 0.8, maxWidth);
+      canvas.height = canvas.width * (BOARD_HEIGHT / BOARD_WIDTH);
+      drawBoard();
+    }
 
     function createPiece() {
       const type = Math.floor(Math.random() * PIECES.length);
@@ -343,6 +413,8 @@
       currentY = 0;
       if (collides()) {
         gameOver = true;
+        startBtn.style.display = "block";
+        restartBtn.style.display = "block";
       }
     }
 
@@ -394,10 +466,8 @@
 
     function drawBoard() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      // Scale block size based on canvas size
       const blockSize = canvas.width / BOARD_WIDTH;
 
-      // Draw the board
       for (let y = 0; y < BOARD_HEIGHT; y++) {
         for (let x = 0; x < BOARD_WIDTH; x++) {
           if (board[y][x]) {
@@ -409,8 +479,7 @@
         }
       }
 
-      // Draw the current piece
-      if (currentPiece) {
+      if (currentPiece && gameStarted) {
         ctx.fillStyle = currentColor;
         for (let y = 0; y < currentPiece.length; y++) {
           for (let x = 0; x < currentPiece[y].length; x++) {
@@ -423,7 +492,14 @@
         }
       }
 
-      if (gameOver) {
+      if (!gameStarted) {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0ff";
+        ctx.font = `${blockSize}px 'Press Start 2P'`;
+        ctx.textAlign = "center";
+        ctx.fillText("Press Start", canvas.width / 2, canvas.height / 2);
+      } else if (gameOver) {
         ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#f00";
@@ -434,7 +510,7 @@
     }
 
     function moveDown() {
-      if (gameOver) return;
+      if (gameOver || !gameStarted) return;
       currentY++;
       if (collides()) {
         currentY--;
@@ -446,7 +522,7 @@
     }
 
     function moveLeft() {
-      if (gameOver) return;
+      if (gameOver || !gameStarted) return;
       currentX--;
       if (collides()) {
         currentX++;
@@ -455,7 +531,7 @@
     }
 
     function moveRight() {
-      if (gameOver) return;
+      if (gameOver || !gameStarted) return;
       currentX++;
       if (collides()) {
         currentX--;
@@ -464,7 +540,7 @@
     }
 
     function rotate() {
-      if (gameOver) return;
+      if (gameOver || !gameStarted) return;
       const rotated = currentPiece[0].map((_, index) =>
         currentPiece.map(row => row[index]).reverse()
       );
@@ -476,45 +552,29 @@
       drawBoard();
     }
 
-    // Game loop
-    let lastTime = 0;
-    function gameLoop(time = 0) {
-      const deltaTime = time - lastTime;
-      lastTime = time;
-
-      if (deltaTime > 1000) { // Move down every second
-        moveDown();
-        lastTime = time;
-      }
-
-      if (!gameOver) {
-        requestAnimationFrame(gameLoop);
-      }
+    function stopMove() {
+      clearInterval(moveInterval);
+      moveInterval = null;
     }
 
-    // Keyboard controls
-    document.addEventListener("keydown", e => {
-      if (e.key === "ArrowLeft") moveLeft();
-      if (e.key === "ArrowRight") moveRight();
-      if (e.key === "ArrowDown") moveDown();
-      if (e.key === "ArrowUp") rotate();
-    });
+    function startGame() {
+      if (gameStarted && !gameOver) return;
+      gameStarted = true;
+      gameOver = false;
+      board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
+      score = 0;
+      scoreElement.textContent = score;
+      startBtn.style.display = "none";
+      restartBtn.style.display = "block";
+      createPiece();
+      drawBoard();
+      gameLoop();
+    }
 
-    // Start the game
-    createPiece();
-    drawBoard();
-    gameLoop();
-
-    window.onload = () => {
-      renderGames();
-      document.querySelectorAll(".filters button").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const filter = btn.dataset.cat;
-          setFilter(btn);
-          renderGames(filter);
-        });
-      });
-    };
-  </script>
-</body>
-</html>
+    function restartGame() {
+      gameStarted = false;
+      gameOver = false;
+      board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
+      score = 0;
+      scoreElement.textContent = score;
+      startBtn.style
