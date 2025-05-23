@@ -113,7 +113,7 @@
       color: #0ff;
       text-decoration: underline;
     }
-    /* City Builder Styles */
+    /* Tron City Styles */
     .city-container {
       margin: 2rem auto;
       text-align: center;
@@ -129,14 +129,22 @@
       font-family: 'Press Start 2P', cursive;
       text-shadow: 0 0 5px #0ff;
     }
-    .city-container canvas {
-      background: #000;
-      border: 2px solid #0ff;
-      box-shadow: 0 0 10px #0ff;
+    #game-box {
       width: 100%;
-      max-width: 300px;
-      height: auto;
-      aspect-ratio: 1 / 1;
+      max-width: 400px;
+      height: 400px;
+      background: #000;
+      border: 3px solid #ff007a;
+      box-shadow: 0 0 15px #ff007a, 0 0 30px #00f6ff;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .city-container canvas {
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+      background: #0a0a0a;
     }
     .city-stats {
       display: flex;
@@ -173,14 +181,14 @@
     .city-controls button.active {
       background: #0f0;
     }
-    .save-load {
+    .extra-controls {
       display: flex;
       justify-content: center;
       gap: 1rem;
       flex-wrap: wrap;
       margin-top: 1rem;
     }
-    .save-load button {
+    .extra-controls button {
       background: #00f;
       color: #fff;
       border: none;
@@ -197,10 +205,9 @@
         max-width: 100%;
         padding: 0.5rem;
       }
-      .city-container canvas {
+      #game-box {
         max-width: 100%;
-        width: 80vw;
-        max-width: 250px;
+        height: 250px;
       }
       .city-controls button {
         padding: 0.6rem 1rem;
@@ -235,22 +242,27 @@
   </div>
 
   <main>
-    <!-- City Builder Game Section -->
+    <!-- Tron City Game Section -->
     <div class="city-container" id="cityContainer">
-      <h2>City Builder</h2>
-      <canvas id="cityCanvas"></canvas>
+      <h2>Tron City</h2>
+      <div id="game-box">
+        <canvas id="cityCanvas" width="128" height="128"></canvas>
+      </div>
       <div class="city-stats">
         <div>Population: <span id="cityPopulation">0</span></div>
-        <div>Budget: $<span id="cityBudget">10000</span></div>
+        <div>Budget: $<span id="cityBudget">1000</span></div>
       </div>
       <div class="city-controls">
-        <button id="zoneResidential" onclick="selectZone('Residential')">Residential</button>
-        <button id="zoneCommercial" onclick="selectZone('Commercial')">Commercial</button>
-        <button id="zoneIndustrial" onclick="selectZone('Industrial')">Industrial</button>
+        <button id="road-btn" class="active">Road ($10)</button>
+        <button id="residential-btn">Residential ($100)</button>
+        <button id="commercial-btn">Commercial ($100)</button>
+        <button id="industrial-btn">Industrial ($100)</button>
       </div>
-      <div class="save-load">
-        <button onclick="saveGame()">Save</button>
-        <button onclick="loadGame()">Load</button>
+      <div class="extra-controls">
+        <button id="fullscreen-btn">Fullscreen</button>
+        <button id="reset-zoom-btn">Reset Zoom</button>
+        <button id="save-btn">Save</button>
+        <button id="load-btn">Load</button>
       </div>
     </div>
 
@@ -276,8 +288,9 @@
     <a href="mailto:markfriesen2014@gmail.com">Contact Us</a>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
   <script>
-    // ——— Original Website Game Grid Logic ———
+    // Game Grid Logic
     const games = [
       {
         title: "OpenCity",
@@ -287,11 +300,11 @@
         categories: ["City Builder", "Nostalgic Classics"]
       },
       {
-        title: "Tetris",
-        desc: "Arrange falling blocks to clear lines in this timeless puzzle game.",
-        thumb: "images/tetris-thumb.jpg",
-        url: "Arcade/Tetris/index.html",
-        categories: ["Puzzle", "Arcade", "Nostalgic Classics"]
+        title: "Tron City",
+        desc: "Build a neon-lit cyberpunk city in this nostalgic 2D city builder inspired by classic SimCity.",
+        thumb: "images/tron-city-thumb.jpg",
+        url: "#cityContainer",
+        categories: ["City Builder", "Nostalgic Classics", "Mobile Friendly"]
       },
       {
         title: "Your Ad Here",
@@ -332,151 +345,195 @@
       if (button) button.classList.add("active");
     }
 
-    // ——— City Builder Game Logic ———
+    // Tron City Game Logic
     const canvas = document.getElementById("cityCanvas");
     const ctx = canvas.getContext("2d");
+    const gameBox = document.getElementById("game-box");
     const populationElement = document.getElementById("cityPopulation");
     const budgetElement = document.getElementById("cityBudget");
 
-    const GRID_SIZE = 10;
-    const BLOCK_SIZE = canvas.width / GRID_SIZE;
-    let city = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill("Empty"));
+    const GRID_SIZE = 16;
+    const TILE_SIZE = 8;
+    let grid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0)); // 0: empty, 1: road, 2: residential, 3: commercial, 4: industrial
     let population = 0;
-    let budget = 10000;
-    let selectedZone = "Residential";
-    let lastUpdateTime = 0;
+    let budget = 1000;
+    let selectedTile = 1; // Default: road
+    const costs = { 1: 10, 2: 100, 3: 100, 4: 100 };
+    let zoomLevel = 1;
+    let panX = 0;
+    let panY = 0;
+    let lastScale = 1;
 
-    function resizeCanvas() {
-      const container = document.getElementById("cityContainer");
-      const maxWidth = container.clientWidth > 300 ? 300 : container.clientWidth;
-      canvas.width = maxWidth;
-      canvas.height = maxWidth; // 1:1 aspect ratio
-      drawCity();
+    // Button handling
+    const buttons = {
+      'road-btn': 1,
+      'residential-btn': 2,
+      'commercial-btn': 3,
+      'industrial-btn': 4
+    };
+    Object.keys(buttons).forEach(id => {
+      const btn = document.getElementById(id);
+      btn.addEventListener('click', () => {
+        selectedTile = buttons[id];
+        Object.values(buttons).forEach(b => {
+          document.getElementById(Object.keys(buttons).find(k => buttons[k] === b)).classList.remove('active');
+        });
+        btn.classList.add('active');
+      });
+    });
+
+    // Draw tile
+    function drawTile(x, y, type) {
+      ctx.fillStyle = {
+        0: '#0a0a0a', // Empty
+        1: '#00f6ff', // Road: cyan
+        2: '#00ffaa', // Residential: green-cyan
+        3: '#ff007a', // Commercial: pink
+        4: '#ffaa00'  // Industrial: orange
+      }[type];
+      ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+      if (type !== 0) {
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x * TILE_SIZE + 0.5, y * TILE_SIZE + 0.5, TILE_SIZE - 1, TILE_SIZE - 1);
+      }
     }
 
-    function drawCity() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const blockSize = canvas.width / GRID_SIZE;
-
-      // Draw grid
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+    // Render grid
+    function render() {
+      ctx.save();
+      ctx.scale(zoomLevel, zoomLevel);
+      ctx.translate(panX, panY);
+      ctx.clearRect(-panX, -panY, canvas.width / zoomLevel, canvas.height / zoomLevel);
       for (let y = 0; y < GRID_SIZE; y++) {
         for (let x = 0; x < GRID_SIZE; x++) {
-          ctx.strokeRect(x * blockSize, y * blockSize, blockSize, blockSize);
+          drawTile(x, y, grid[y][x]);
         }
       }
+      ctx.restore();
+    }
 
-      // Draw zones
+    // Simulation
+    function simulate() {
+      let newPop = 0;
       for (let y = 0; y < GRID_SIZE; y++) {
         for (let x = 0; x < GRID_SIZE; x++) {
-          const zone = city[y][x];
-          if (zone !== "Empty") {
-            ctx.fillStyle = zone === "Residential" ? "#0f0" : zone === "Commercial" ? "#00f" : "#ff0";
-            ctx.fillRect(x * blockSize + 1, y * blockSize + 1, blockSize - 2, blockSize - 2);
+          if (grid[y][x] >= 2) { // Zones
+            const hasRoad = (x > 0 && grid[y][x-1] === 1) ||
+                            (x < GRID_SIZE-1 && grid[y][x+1] === 1) ||
+                            (y > 0 && grid[y-1][x] === 1) ||
+                            (y < GRID_SIZE-1 && grid[y+1][x] === 1);
+            if (hasRoad) newPop += 10;
           }
         }
       }
-    }
-
-    function selectZone(zone) {
-      selectedZone = zone;
-      document.querySelectorAll(".city-controls button").forEach(btn => btn.classList.remove("active"));
-      document.getElementById(`zone${zone}`).classList.add("active");
-    }
-
-    function placeZone(x, y) {
-      const blockSize = canvas.width / GRID_SIZE;
-      const gridX = Math.floor(x / blockSize);
-      const gridY = Math.floor(y / blockSize);
-      if (gridX >= 0 && gridX < GRID_SIZE && gridY >= 0 && gridY < GRID_SIZE) {
-        const cost = selectedZone === "Residential" ? 100 : selectedZone === "Commercial" ? 150 : 200;
-        if (budget >= cost) {
-          city[gridY][gridX] = selectedZone;
-          budget -= cost;
-          budgetElement.textContent = budget;
-          drawCity();
-        } else {
-          alert("Not enough budget!");
-        }
-      }
-    }
-
-    function updateSimulation() {
-      let newPopulation = 0;
-      for (let y = 0; y < GRID_SIZE; y++) {
-        for (let x = 0; x < GRID_SIZE; x++) {
-          if (city[y][x] === "Residential") newPopulation += 10;
-          else if (city[y][x] === "Commercial") newPopulation += 5;
-          else if (city[y][x] === "Industrial") newPopulation += 3;
-        }
-      }
-      population = newPopulation;
-      budget += Math.floor(population / 10); // Tax income
+      population = newPop;
+      budget += Math.floor(population / 10);
       populationElement.textContent = population;
       budgetElement.textContent = budget;
+      render();
     }
 
-    function saveGame() {
-      const gameState = {
-        city: city,
-        population: population,
-        budget: budget
-      };
-      localStorage.setItem("cityGameState", JSON.stringify(gameState));
-      alert("Game Saved!");
+    // Place tile
+    function placeTile(x, y) {
+      const gridX = Math.floor(x / TILE_SIZE);
+      const gridY = Math.floor(y / TILE_SIZE);
+      if (gridX >= 0 && gridX < GRID_SIZE && gridY >= 0 && gridY < GRID_SIZE) {
+        if (budget >= costs[selectedTile]) {
+          grid[gridY][gridX] = selectedTile;
+          budget -= costs[selectedTile];
+          budgetElement.textContent = budget;
+          render();
+          simulate();
+        } else {
+          alert('Not enough budget!');
+        }
+      }
     }
 
-    function loadGame() {
-      const savedState = localStorage.getItem("cityGameState");
+    // Input handling
+    function handleInput(e, isTouch = false) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+      const clientY = isTouch ? e.touches[0].clientY : e.clientY;
+      const x = (clientX - rect.left - panX * zoomLevel) / zoomLevel;
+      const y = (clientY - rect.top - panY * zoomLevel) / zoomLevel;
+      placeTile(x, y);
+    }
+
+    canvas.addEventListener('click', handleInput);
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      handleInput(e, true);
+    });
+
+    // Touch gestures
+    const hammer = new Hammer(canvas);
+    hammer.get('pinch').set({ enable: true });
+    hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+
+    hammer.on('pinch', (e) => {
+      zoomLevel = Math.max(0.5, Math.min(3, lastScale * e.scale));
+      render();
+    });
+    hammer.on('pinchstart', () => {
+      lastScale = zoomLevel;
+    });
+    hammer.on('pan', (e) => {
+      panX += e.deltaX / zoomLevel;
+      panY += e.deltaY / zoomLevel;
+      render();
+    });
+
+    // Fullscreen
+    document.getElementById('fullscreen-btn').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        gameBox.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    // Reset zoom
+    document.getElementById('reset-zoom-btn').addEventListener('click', () => {
+      zoomLevel = 1;
+      panX = 0;
+      panY = 0;
+      lastScale = 1;
+      render();
+    });
+
+    // Save/load
+    document.getElementById('save-btn').addEventListener('click', () => {
+      const state = { grid, population, budget };
+      localStorage.setItem('tronCityState', JSON.stringify(state));
+      alert('Game Saved!');
+    });
+    document.getElementById('load-btn').addEventListener('click', () => {
+      const savedState = localStorage.getItem('tronCityState');
       if (savedState) {
-        const gameState = JSON.parse(savedState);
-        city = gameState.city;
-        population = gameState.population;
-        budget = gameState.budget;
+        const { grid: savedGrid, population: savedPop, budget: savedBudget } = JSON.parse(savedState);
+        for (let y = 0; y < GRID_SIZE; y++) {
+          for (let x = 0; x < GRID_SIZE; x++) {
+            grid[y][x] = savedGrid[y][x];
+          }
+        }
+        population = savedPop;
+        budget = savedBudget;
         populationElement.textContent = population;
         budgetElement.textContent = budget;
-        drawCity();
-        alert("Game Loaded!");
+        render();
+        alert('Game Loaded!');
       } else {
-        alert("No saved game found!");
+        alert('No saved game found!');
       }
-    }
-
-    // Event Listeners for Click and Touch
-    canvas.addEventListener("click", (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      placeZone(x, y);
     });
 
-    canvas.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      const rect = canvas.getBoundingClientRect();
-      const touch = e.touches[0];
-      const x = touch.clientX - rect.left;
-      const y = touch.clientY - rect.top;
-      placeZone(x, y);
-    });
+    // Game loop
+    setInterval(simulate, 5000);
+    render();
 
-    // Game Loop for Simulation Updates
-    function gameLoop(time) {
-      if (time - lastUpdateTime >= 5000) { // Update every 5 seconds
-        updateSimulation();
-        lastUpdateTime = time;
-      }
-      requestAnimationFrame(gameLoop);
-    }
-
-    // Initialize Game
-    resizeCanvas();
-    drawCity();
-    selectZone("Residential");
-    requestAnimationFrame(gameLoop);
-
-    window.addEventListener("resize", resizeCanvas);
-
-    // Original Website Load
+    // Initialize Website
     window.onload = () => {
       renderGames();
       document.querySelectorAll(".filters button").forEach(btn => {
