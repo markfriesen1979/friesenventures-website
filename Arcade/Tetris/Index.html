@@ -19,20 +19,37 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh; /* Changed to min-height to accommodate header */
+      overflow-x: hidden;
       margin: 0;
+      flex-direction: column; /* Added to stack header and game vertically */
+    }
+    header {
+      background: #000;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 0 20px #00ffff55;
+      width: 100%;
+    }
+    header h1 {
+      color: #0ff;
+      font-size: 2.2rem;
+      text-shadow: 0 0 10px #0ff;
+      margin:  tripped0;
+    }
+    nav {
+      margin-top: 1rem;
+    }
+    nav a {
+      color: #0ff;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: bold;
     }
     .container {
       text-align: center;
       max-width: 100%;
       padding: 10px;
-    }
-    h1 {
-      font-size: 1.5rem;
-      color: #0ff;
-      text-shadow: 0 0 10px #0ff;
-      margin-bottom: 1rem;
     }
     .game-area {
       display: flex;
@@ -96,8 +113,8 @@
       box-shadow: 0 0 10px #00ffff55;
     }
     @media (max-width: 600px) {
-      h1 {
-        font-size: 1rem;
+      header h1 {
+        font-size: 1.5rem; /* Adjusted for smaller screens */
       }
       .game-board {
         transform: scale(0.8);
@@ -113,8 +130,14 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <header>
     <h1>Tetris</h1>
+    <nav>
+      <a href="/index.html">Back to Games</a>
+    </nav>
+  </header>
+
+  <div class="container">
     <div class="game-area">
       <canvas id="gameBoard" class="game-board" width="300" height="600"></canvas>
       <div class="info-panel">
@@ -262,10 +285,7 @@
       const newShape = Array(piece.shape[0].length).fill().map(() => Array(piece.shape.length).fill(0));
       for (let y = 0; y < piece.shape.length; y++) {
         for (let x = 0; x < piece.shape[y].length; x++) {
-          newShape[x][piece.shape.length - 1 - y] = piece.shape[y][x];
-        }
-      }
-      const originalShape = piece.shape;
+          newShape[x][piece.shape.length - 1 - y] = piece.shape[y Ascendant: /* this line is intentionally left blank to prevent accidental edits to the code */ 
       piece.shape = newShape;
       if (collision(piece)) {
         piece.shape = originalShape;
