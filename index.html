@@ -113,8 +113,8 @@
       color: #0ff;
       text-decoration: underline;
     }
-    /* Tetris-specific styles */
-    .tetris-container {
+    /* City Builder Styles */
+    .city-container {
       margin: 2rem auto;
       text-align: center;
       background: #1a1a1a;
@@ -124,21 +124,21 @@
       max-width: 600px;
       position: relative;
     }
-    .tetris-container h2 {
+    .city-container h2 {
       color: #0ff;
       font-family: 'Press Start 2P', cursive;
       text-shadow: 0 0 5px #0ff;
     }
-    .tetris-container canvas {
+    .city-container canvas {
       background: #000;
       border: 2px solid #0ff;
       box-shadow: 0 0 10px #0ff;
       width: 100%;
-      max-width: 240px;
+      max-width: 300px;
       height: auto;
-      aspect-ratio: 12 / 20;
+      aspect-ratio: 1 / 1;
     }
-    .tetris-stats {
+    .city-stats {
       display: flex;
       justify-content: space-around;
       flex-wrap: wrap;
@@ -147,18 +147,18 @@
       margin: 1rem 0;
       font-size: 0.9rem;
     }
-    .tetris-stats span {
+    .city-stats span {
       color: #0ff;
       text-shadow: 0 0 5px #0ff;
     }
-    .tetris-controls {
+    .city-controls {
       display: flex;
       justify-content: center;
       gap: 1rem;
       flex-wrap: wrap;
       margin-top: 1rem;
     }
-    .tetris-controls button {
+    .city-controls button {
       background: #00f;
       color: #fff;
       border: none;
@@ -170,163 +170,43 @@
       box-shadow: 0 0 8px #00f;
       touch-action: manipulation;
     }
-    .start-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+    .city-controls button.active {
+      background: #0f0;
+    }
+    .save-load {
       display: flex;
       justify-content: center;
-      align-items: center;
-      z-index: 10;
-    }
-    .start-overlay button {
-      background: #00f;
-      color: #fff;
-      border: none;
-      padding: 1rem 2rem;
-      border-radius: 4px;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 1rem;
-      cursor: pointer;
-      box-shadow: 0 0 8px #00f;
-      touch-action: manipulation;
-    }
-    .highscore-input {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-      font-family: 'Press Start 2P', cursive;
-      color: #fff;
-    }
-    .highscore-input input {
-      margin: 1rem;
-      padding: 0.5rem;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 1rem;
-      text-align: center;
-      text-transform: uppercase;
-      background: #111;
-      color: #0ff;
-      border: 2px solid #0ff;
-      border-radius: 4px;
-    }
-    .highscore-input button {
-      background: #00f;
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 0.8rem;
-      cursor: pointer;
-      box-shadow: 0 0 8px #00f;
-    }
-    .leaderboard {
+      gap: 1rem;
+      flex-wrap: wrap;
       margin-top: 1rem;
-      font-family: 'Press Start 2P', cursive;
-      color: #fff;
-      font-size: 0.8rem;
     }
-    .leaderboard h3 {
-      color: #0ff;
-      text-shadow: 0 0 5px #0ff;
-      margin-bottom: 0.5rem;
-    }
-    .leaderboard ul {
-      list-style: none;
-      padding: 0;
-    }
-    .leaderboard li {
-      margin: 0.2rem 0;
-    }
-    .leaderboard li span {
-      color: #0ff;
-    }
-    .fullscreen-btn, .restart-btn {
-      position: absolute;
-      top: 1rem;
+    .save-load button {
       background: #00f;
       color: #fff;
       border: none;
       padding: 0.5rem 1rem;
       border-radius: 4px;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.8rem;
       cursor: pointer;
       box-shadow: 0 0 8px #00f;
-      font-family: 'Segoe UI', sans-serif;
       touch-action: manipulation;
-    }
-    .fullscreen-btn {
-      right: 1rem;
-    }
-    .restart-btn {
-      left: 1rem;
-    }
-    .tetris-container.fullscreen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      max-width: none;
-      z-index: 1000;
-      margin: 0;
-      padding: 2rem;
-      box-sizing: border-box;
-      background: rgba(10, 10, 10, 0.95);
-    }
-    .tetris-container.fullscreen canvas {
-      max-width: 480px;
-    }
-    .tetris-container.fullscreen .tetris-stats {
-      font-size: 1.2rem;
-    }
-    .tetris-container.fullscreen .leaderboard {
-      font-size: 1rem;
     }
     @media (max-width: 600px) {
-      .tetris-container {
+      .city-container {
         max-width: 100%;
         padding: 0.5rem;
       }
-      .tetris-container canvas {
+      .city-container canvas {
         max-width: 100%;
         width: 80vw;
-        max-width: 300px;
+        max-width: 250px;
       }
-      .tetris-container.fullscreen canvas {
-        width: 90vw;
-        max-width: 400px;
-      }
-      .tetris-controls button {
+      .city-controls button {
         padding: 0.6rem 1rem;
         font-size: 0.7rem;
       }
-      .start-overlay button {
-        padding: 0.8rem 1.5rem;
-        font-size: 0.9rem;
-      }
-      .tetris-stats {
-        font-size: 0.7rem;
-      }
-      .leaderboard {
-        font-size: 0.6rem;
-      }
-      .highscore-input input {
-        font-size: 0.8rem;
-        padding: 0.4rem;
-      }
-      .highscore-input button {
+      .city-stats {
         font-size: 0.7rem;
       }
     }
@@ -355,33 +235,22 @@
   </div>
 
   <main>
-    <div class="tetris-container" id="tetrisContainer">
-      <h2>Tetris</h2>
-      <button class="restart-btn" onclick="restartGame()" style="display: none;">Restart</button>
-      <button class="fullscreen-btn" onclick="toggleFullscreen()">Full Screen</button>
-      <div class="start-overlay" id="startOverlay">
-        <button onclick="startGame()" ontouchstart="startGame()">Start</button>
+    <!-- City Builder Game Section -->
+    <div class="city-container" id="cityContainer">
+      <h2>City Builder</h2>
+      <canvas id="cityCanvas"></canvas>
+      <div class="city-stats">
+        <div>Population: <span id="cityPopulation">0</span></div>
+        <div>Budget: $<span id="cityBudget">10000</span></div>
       </div>
-      <div class="highscore-input" id="highScoreInput" style="display: none;">
-        <div>New High Score!</div>
-        <input type="text" id="playerInitials" maxlength="3" placeholder="ABC" />
-        <button onclick="saveHighScore()" ontouchstart="saveHighScore()">Save</button>
+      <div class="city-controls">
+        <button id="zoneResidential" onclick="selectZone('Residential')">Residential</button>
+        <button id="zoneCommercial" onclick="selectZone('Commercial')">Commercial</button>
+        <button id="zoneIndustrial" onclick="selectZone('Industrial')">Industrial</button>
       </div>
-      <canvas id="tetrisCanvas"></canvas>
-      <div class="tetris-stats">
-        <div>Score: <span id="tetrisScore">0</span></div>
-        <div>High Score: <span id="tetrisHighScore">0</span></div>
-        <div>Level: <span id="tetrisLevel">1</span></div>
-      </div>
-      <div class="tetris-controls">
-        <button ontouchstart="moveLeft()" ontouchend="stopMove()">Left</button>
-        <button ontouchstart="moveRight()" ontouchend="stopMove()">Right</button>
-        <button ontouchstart="moveDown()" ontouchend="stopMove()">Down</button>
-        <button ontouchstart="rotate()">Rotate</button>
-      </div>
-      <div class="leaderboard" id="leaderboard">
-        <h3>Top 10 High Scores</h3>
-        <ul id="highScoreList"></ul>
+      <div class="save-load">
+        <button onclick="saveGame()">Save</button>
+        <button onclick="loadGame()">Load</button>
       </div>
     </div>
 
@@ -408,7 +277,7 @@
   </footer>
 
   <script>
-    // ——— GAMES ARRAY (Tetris removed since it's embedded) ———
+    // ——— Original Website Game Grid Logic ———
     const games = [
       {
         title: "OpenCity",
@@ -416,6 +285,13 @@
         thumb: "images/opencity-thumb.jpg",
         url: "city-builders/opencity/index.html",
         categories: ["City Builder", "Nostalgic Classics"]
+      },
+      {
+        title: "Tetris",
+        desc: "Arrange falling blocks to clear lines in this timeless puzzle game.",
+        thumb: "images/tetris-thumb.jpg",
+        url: "Arcade/Tetris/index.html",
+        categories: ["Puzzle", "Arcade", "Nostalgic Classics"]
       },
       {
         title: "Your Ad Here",
@@ -456,400 +332,151 @@
       if (button) button.classList.add("active");
     }
 
-    // Full-screen toggle for Tetris
-    function toggleFullscreen() {
-      const container = document.getElementById("tetrisContainer");
-      container.classList.toggle("fullscreen");
-      const btn = container.querySelector(".fullscreen-btn");
-      btn.textContent = container.classList.contains("fullscreen") ? "Exit Full Screen" : "Full Screen";
-      resizeCanvas();
-      drawBoard();
-    }
-
-    // ——— TETRIS GAME LOGIC ———
-    const canvas = document.getElementById("tetrisCanvas");
+    // ——— City Builder Game Logic ———
+    const canvas = document.getElementById("cityCanvas");
     const ctx = canvas.getContext("2d");
-    const scoreElement = document.getElementById("tetrisScore");
-    const highScoreElement = document.getElementById("tetrisHighScore");
-    const levelElement = document.getElementById("tetrisLevel");
-    const startOverlay = document.getElementById("startOverlay");
-    const highScoreInput = document.getElementById("highScoreInput");
-    const playerInitialsInput = document.getElementById("playerInitials");
-    const highScoreList = document.getElementById("highScoreList");
-    const restartButton = document.querySelector(".restart-btn");
+    const populationElement = document.getElementById("cityPopulation");
+    const budgetElement = document.getElementById("cityBudget");
 
-    const BLOCK_SIZE = 20;
-    const BOARD_WIDTH = 12;
-    const BOARD_HEIGHT = 20;
-    let board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
-    let score = 0;
-    let highScores = JSON.parse(localStorage.getItem("tetrisHighScores")) || [];
-    let level = 1;
-    let fallSpeed = 500; // Adjusted to 500ms for testing
-    let blocksLanded = 0;
-    let gameOver = false;
-    let gameStarted = false;
-    let lineClearAnimation = 0;
-
-    const PIECES = [
-      [[1, 1, 1, 1]], // I
-      [[1, 1], [1, 1]], // O
-      [[1, 1, 1], [0, 1, 0]], // T
-      [[1, 1, 1], [1, 0, 0]], // L
-      [[1, 1, 1], [0, 0, 1]], // J
-      [[1, 1, 0], [0, 1, 1]], // S
-      [[0, 1, 1], [1, 1, 0]] // Z
-    ];
-
-    const COLORS = [
-      "#00f", // I (blue)
-      "#ff0", // O (yellow)
-      "#f0f", // T (purple)
-      "#ffa500", // L (orange)
-      "#00f", // J (blue)
-      "#0f0", // S (green)
-      "#f00" // Z (red)
-    ];
-
-    let currentPiece = null;
-    let currentX = 0;
-    let currentY = 0;
-    let currentColor = null;
-    let moveInterval = null;
-
-    // Initialize high score display
-    function updateHighScoreDisplay() {
-      highScoreList.innerHTML = "";
-      highScores.slice(0, 10).forEach((entry, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `${index + 1}. ${entry.name}: <span>${entry.score}</span>`;
-        highScoreList.appendChild(li);
-      });
-      highScoreElement.textContent = highScores.length > 0 ? highScores[0].score : 0;
-    }
+    const GRID_SIZE = 10;
+    const BLOCK_SIZE = canvas.width / GRID_SIZE;
+    let city = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill("Empty"));
+    let population = 0;
+    let budget = 10000;
+    let selectedZone = "Residential";
+    let lastUpdateTime = 0;
 
     function resizeCanvas() {
-      const container = document.getElementById("tetrisContainer");
-      const maxWidth = container.classList.contains("fullscreen") ? 480 : 240;
-      canvas.width = Math.min(window.innerWidth * 0.8, maxWidth);
-      canvas.height = canvas.width * (BOARD_HEIGHT / BOARD_WIDTH);
-      drawBoard();
+      const container = document.getElementById("cityContainer");
+      const maxWidth = container.clientWidth > 300 ? 300 : container.clientWidth;
+      canvas.width = maxWidth;
+      canvas.height = maxWidth; // 1:1 aspect ratio
+      drawCity();
     }
 
-    function createPiece() {
-      const type = Math.floor(Math.random() * PIECES.length);
-      currentPiece = PIECES[type];
-      currentColor = COLORS[type];
-      currentX = Math.floor((BOARD_WIDTH - currentPiece[0].length) / 2);
-      currentY = 0;
-      console.log(`Piece created: Type=${type}, X=${currentX}, Y=${currentY}, Color=${currentColor}`); // Debug log
-      if (collides()) {
-        console.log("Piece collides immediately - Game Over");
-        gameOver = true;
-        restartButton.style.display = "block";
-        if (highScores.length < 10 || score > highScores[highScores.length - 1].score) {
-          highScoreInput.style.display = "flex";
-          playerInitialsInput.focus();
-        }
-      }
-    }
-
-    function collides() {
-      for (let y = 0; y < currentPiece.length; y++) {
-        for (let x = 0; x < currentPiece[y].length; x++) {
-          if (currentPiece[y][x]) {
-            const boardX = currentX + x;
-            const boardY = currentY + y;
-            if (
-              boardX < 0 ||
-              boardX >= BOARD_WIDTH ||
-              boardY >= BOARD_HEIGHT ||
-              (boardY >= 0 && board[boardY][boardX])
-            ) {
-              return true;
-            }
-          }
-        }
-      }
-      return false;
-    }
-
-    function merge() {
-      for (let y = 0; y < currentPiece.length; y++) {
-        for (let x = 0; x < currentPiece[y].length; x++) {
-          if (currentPiece[y][x]) {
-            board[currentY + y][currentX + x] = currentColor;
-          }
-        }
-      }
-      blocksLanded++;
-      score += 10;
-      scoreElement.textContent = score;
-      if (blocksLanded % 10 === 0) {
-        level++;
-        fallSpeed = Math.max(100, fallSpeed - 50); // Adjusted to 50ms per level
-        levelElement.textContent = level;
-        console.log(`Level up: Level=${level}, FallSpeed=${fallSpeed}ms`); // Debug log
-      }
-    }
-
-    function clearLines() {
-      let linesCleared = 0;
-      for (let y = BOARD_HEIGHT - 1; y >= 0; y--) {
-        if (board[y].every(cell => cell !== 0)) {
-          board.splice(y, 1);
-          board.unshift(Array(BOARD_WIDTH).fill(0));
-          linesCleared++;
-          y++;
-        }
-      }
-      if (linesCleared > 0) {
-        if (linesCleared === 1) score += 100;
-        else if (linesCleared === 2) score += 300;
-        else if (linesCleared === 3) score += 600;
-        else if (linesCleared === 4) score += 1000;
-        scoreElement.textContent = score;
-        lineClearAnimation = 10;
-      }
-    }
-
-    function drawBoard() {
+    function drawCity() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const blockSize = canvas.width / BOARD_WIDTH;
+      const blockSize = canvas.width / GRID_SIZE;
 
-      // Draw grid background
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
-      for (let y = 0; y < BOARD_HEIGHT; y++) {
-        for (let x = 0; x < BOARD_WIDTH; x++) {
+      // Draw grid
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+      for (let y = 0; y < GRID_SIZE; y++) {
+        for (let x = 0; x < GRID_SIZE; x++) {
           ctx.strokeRect(x * blockSize, y * blockSize, blockSize, blockSize);
         }
       }
 
-      // Line clear animation
-      if (lineClearAnimation > 0) {
-        ctx.fillStyle = `rgba(0, 255, 255, ${lineClearAnimation / 10})`;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        lineClearAnimation--;
-      }
-
-      // Draw the board
-      for (let y = 0; y < BOARD_HEIGHT; y++) {
-        for (let x = 0; x < BOARD_WIDTH; x++) {
-          if (board[y][x]) {
-            drawBlock(x, y, board[y][x], blockSize);
+      // Draw zones
+      for (let y = 0; y < GRID_SIZE; y++) {
+        for (let x = 0; x < GRID_SIZE; x++) {
+          const zone = city[y][x];
+          if (zone !== "Empty") {
+            ctx.fillStyle = zone === "Residential" ? "#0f0" : zone === "Commercial" ? "#00f" : "#ff0";
+            ctx.fillRect(x * blockSize + 1, y * blockSize + 1, blockSize - 2, blockSize - 2);
           }
         }
       }
+    }
 
-      // Draw the current piece
-      if (currentPiece) {
-        console.log(`Drawing piece at X=${currentX}, Y=${currentY}, GameStarted=${gameStarted}`); // Debug log
-        for (let y = 0; y < currentPiece.length; y++) {
-          for (let x = 0; x < currentPiece[y].length; x++) {
-            if (currentPiece[y][x]) {
-              drawBlock(currentX + x, currentY + y, currentColor, blockSize);
-            }
-          }
+    function selectZone(zone) {
+      selectedZone = zone;
+      document.querySelectorAll(".city-controls button").forEach(btn => btn.classList.remove("active"));
+      document.getElementById(`zone${zone}`).classList.add("active");
+    }
+
+    function placeZone(x, y) {
+      const blockSize = canvas.width / GRID_SIZE;
+      const gridX = Math.floor(x / blockSize);
+      const gridY = Math.floor(y / blockSize);
+      if (gridX >= 0 && gridX < GRID_SIZE && gridY >= 0 && gridY < GRID_SIZE) {
+        const cost = selectedZone === "Residential" ? 100 : selectedZone === "Commercial" ? 150 : 200;
+        if (budget >= cost) {
+          city[gridY][gridX] = selectedZone;
+          budget -= cost;
+          budgetElement.textContent = budget;
+          drawCity();
+        } else {
+          alert("Not enough budget!");
         }
       }
-
-      // Draw a static "preview" board before the game starts
-      if (!gameStarted && !gameOver) {
-        const previewBlocks = [
-          [5, 19, "#00f"], [6, 19, "#00f"], [5, 18, "#00f"], [6, 18, "#00f"],
-          [8, 19, "#f00"], [9, 19, "#f00"], [7, 18, "#f00"], [8, 18, "#f00"],
-          [1, 19, "#0f0"], [2, 19, "#0f0"], [2, 18, "#0f0"], [3, 18, "#0f0"],
-        ];
-        previewBlocks.forEach(([x, y, color]) => {
-          drawBlock(x, y, color, blockSize);
-        });
-      }
-
-      if (gameOver) {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#f00";
-        ctx.font = `${blockSize}px 'Press Start 2P'`;
-        ctx.textAlign = "center";
-        ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
-      }
     }
 
-    function drawBlock(x, y, color, blockSize) {
-      const gradient = ctx.createLinearGradient(
-        x * blockSize,
-        y * blockSize,
-        (x + 1) * blockSize,
-        (y + 1) * blockSize
-      );
-      gradient.addColorStop(0, color);
-      gradient.addColorStop(1, darkenColor(color));
-      ctx.fillStyle = gradient;
-      ctx.fillRect(x * blockSize, y * blockSize, blockSize - 1, blockSize - 1);
-
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-      ctx.beginPath();
-      ctx.moveTo(x * blockSize, (y + 1) * blockSize - 1);
-      ctx.lineTo(x * blockSize, y * blockSize);
-      ctx.lineTo((x + 1) * blockSize - 1, y * blockSize);
-      ctx.stroke();
-
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
-      ctx.beginPath();
-      ctx.moveTo((x + 1) * blockSize - 1, y * blockSize);
-      ctx.lineTo((x + 1) * blockSize - 1, (y + 1) * blockSize - 1);
-      ctx.lineTo(x * blockSize, (y + 1) * blockSize - 1);
-      ctx.stroke();
-    }
-
-    function darkenColor(color) {
-      const r = parseInt(color.slice(1, 3), 16);
-      const g = parseInt(color.slice(3, 5), 16);
-      const b = parseInt(color.slice(5, 7), 16);
-      return `rgb(${Math.max(0, r - 50)}, ${Math.max(0, g - 50)}, ${Math.max(0, b - 50)})`;
-    }
-
-    function moveDown() {
-      if (gameOver || !gameStarted) return;
-      currentY++;
-      if (collides()) {
-        currentY--;
-        merge();
-        clearLines();
-        createPiece();
-      }
-      drawBoard();
-    }
-
-    function moveLeft() {
-      if (gameOver || !gameStarted) return;
-      currentX--;
-      if (collides()) {
-        currentX++;
-      }
-      drawBoard();
-    }
-
-    function moveRight() {
-      if (gameOver || !gameStarted) return;
-      currentX++;
-      if (collides()) {
-        currentX--;
-      }
-      drawBoard();
-    }
-
-    function rotate() {
-      if (gameOver || !gameStarted) return;
-      const rotated = currentPiece[0].map((_, index) =>
-        currentPiece.map(row => row[index]).reverse()
-      );
-      const prevPiece = currentPiece;
-      currentPiece = rotated;
-      if (collides()) {
-        currentPiece = prevPiece;
-      }
-      drawBoard();
-    }
-
-    function stopMove() {
-      clearInterval(moveInterval);
-      moveInterval = null;
-    }
-
-    function saveHighScore() {
-      const initials = playerInitialsInput.value.toUpperCase().slice(0, 3) || "???";
-      highScores.push({ name: initials, score: score });
-      highScores.sort((a, b) => b.score - a.score);
-      highScores = highScores.slice(0, 10);
-      localStorage.setItem("tetrisHighScores", JSON.stringify(highScores));
-      updateHighScoreDisplay();
-      highScoreInput.style.display = "none";
-      playerInitialsInput.value = "";
-    }
-
-    // Game loop
-    let lastTime = 0;
-    let lastDropTime = 0;
-    let frameCount = 0;
-    let lastFrameLog = 0;
-    function gameLoop(time = performance.now()) {
-      if (!gameStarted || gameOver) return;
-
-      const deltaTime = time - lastTime;
-      lastTime = time;
-
-      // Debug: Log frame rate every second
-      frameCount++;
-      if (time - lastFrameLog >= 1000) {
-        console.log(`Frame rate: ${frameCount} fps`);
-        frameCount = 0;
-        lastFrameLog = time;
-      }
-
-      // Debug: Log the actual time between drops
-      if (lastDropTime) {
-        const timeSinceLastDrop = time - lastDropTime;
-        if (timeSinceLastDrop >= fallSpeed) {
-          console.log(`Time since last drop: ${timeSinceLastDrop}ms, Expected: ${fallSpeed}ms, Position: X=${currentX}, Y=${currentY}`);
-          lastDropTime = time;
-          moveDown();
+    function updateSimulation() {
+      let newPopulation = 0;
+      for (let y = 0; y < GRID_SIZE; y++) {
+        for (let x = 0; x < GRID_SIZE; x++) {
+          if (city[y][x] === "Residential") newPopulation += 10;
+          else if (city[y][x] === "Commercial") newPopulation += 5;
+          else if (city[y][x] === "Industrial") newPopulation += 3;
         }
+      }
+      population = newPopulation;
+      budget += Math.floor(population / 10); // Tax income
+      populationElement.textContent = population;
+      budgetElement.textContent = budget;
+    }
+
+    function saveGame() {
+      const gameState = {
+        city: city,
+        population: population,
+        budget: budget
+      };
+      localStorage.setItem("cityGameState", JSON.stringify(gameState));
+      alert("Game Saved!");
+    }
+
+    function loadGame() {
+      const savedState = localStorage.getItem("cityGameState");
+      if (savedState) {
+        const gameState = JSON.parse(savedState);
+        city = gameState.city;
+        population = gameState.population;
+        budget = gameState.budget;
+        populationElement.textContent = population;
+        budgetElement.textContent = budget;
+        drawCity();
+        alert("Game Loaded!");
       } else {
-        lastDropTime = time;
-        moveDown();
+        alert("No saved game found!");
       }
+    }
 
+    // Event Listeners for Click and Touch
+    canvas.addEventListener("click", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      placeZone(x, y);
+    });
+
+    canvas.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      placeZone(x, y);
+    });
+
+    // Game Loop for Simulation Updates
+    function gameLoop(time) {
+      if (time - lastUpdateTime >= 5000) { // Update every 5 seconds
+        updateSimulation();
+        lastUpdateTime = time;
+      }
       requestAnimationFrame(gameLoop);
     }
 
-    function startGame() {
-      console.log("startGame() called");
-      gameStarted = true;
-      startOverlay.style.display = "none";
-      createPiece();
-      drawBoard();
-      gameLoop();
-    }
-
-    function restartGame() {
-      console.log("restartGame() called");
-      board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
-      score = 0;
-      scoreElement.textContent = score;
-      level = 1;
-      levelElement.textContent = level;
-      fallSpeed = 500;
-      blocksLanded = 0;
-      gameOver = false;
-      gameStarted = true;
-      lineClearAnimation = 0;
-      currentPiece = null;
-      currentX = 0;
-      currentY = 0;
-      currentColor = null;
-      restartButton.style.display = "none";
-      createPiece();
-      drawBoard();
-      gameLoop();
-    }
-
-    // Keyboard controls for PC
-    document.addEventListener("keydown", e => {
-      if (e.key === "ArrowLeft") moveLeft();
-      if (e.key === "ArrowRight") moveRight();
-      if (e.key === "ArrowDown") moveDown();
-      if (e.key === "ArrowUp") rotate();
-    });
-
-    // Initialize game
+    // Initialize Game
     resizeCanvas();
-    drawBoard();
-    updateHighScoreDisplay();
+    drawCity();
+    selectZone("Residential");
+    requestAnimationFrame(gameLoop);
 
-    // Handle window resize for responsive canvas
     window.addEventListener("resize", resizeCanvas);
 
+    // Original Website Load
     window.onload = () => {
       renderGames();
       document.querySelectorAll(".filters button").forEach(btn => {
