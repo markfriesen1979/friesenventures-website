@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Friesen Ventures Gaming Hub</title>
   <link rel="icon" href="favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -112,9 +113,125 @@
       color: #0ff;
       text-decoration: underline;
     }
+    /* Tetris-specific styles */
+    .tetris-container {
+      margin: 2rem auto;
+      text-align: center;
+      background: #1a1a1a;
+      border-radius: 8px;
+      box-shadow: 0 0 12px #00ffff55;
+      padding: 1rem;
+      max-width: 600px;
+      position: relative;
+    }
+    .tetris-container h2 {
+      color: #0ff;
+      font-family: 'Press Start 2P', cursive;
+      text-shadow: 0 0 5px #0ff;
+    }
+    .tetris-container canvas {
+      background: #000;
+      border: 2px solid #0ff;
+      box-shadow: 0 0 10px #0ff;
+    }
+    .tetris-container p {
+      font-family: 'Press Start 2P', cursive;
+      color: #fff;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+    }
+    .fullscreen-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #00f;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 0 8px #00f;
+    }
+    .tetris-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      z-index: 1000;
+      margin: 0;
+      padding: 2rem;
+      box-sizing: border-box;
+      background: rgba(10, 10, 10, 0.95);
+    }
+    .tetris-container.fullscreen canvas {
+      width: 80%;
+      max-width: 800px;
+      height: auto;
+      margin: 0 auto;
+      display: block;
+    }
+    .tetris-container.fullscreen p {
+      font-size: 1rem;
+    }
   </style>
+</head>
+<body>
+  <header>
+    <h1>Friesen Ventures Gaming Hub</h1>
+    <nav>
+      <a href="/">Home</a>
+    </nav>
+  </header>
+
+  <div class="ad-banner">
+    Your Ad Here — <a href="mailto:markfriesen2014@gmail.com" style="color:#0ff;">Advertise with us</a>
+  </div>
+
+  <div class="filters">
+    <button data-cat="">All</button>
+    <button data-cat="Mobile Friendly">Mobile Friendly</button>
+    <button data-cat="PC Only">PC Only</button>
+    <button data-cat="City Builder">City Builders</button>
+    <button data-cat="Simulators">Simulators</button>
+    <button data-cat="Arcade">Arcade</button>
+    <button data-cat="Nostalgic Classics">Nostalgic</button>
+  </div>
+
+  <main>
+    <!-- Tetris game section -->
+    <div class="tetris-container" id="tetrisContainer">
+      <h2>Tetris</h2>
+      <button class="fullscreen-btn" onclick="toggleFullscreen()">Full Screen</button>
+      <canvas id="tetrisCanvas" width="240" height="400"></canvas>
+      <p>Score: <span id="tetrisScore">0</span> | Use Arrow Keys to Play</p>
+    </div>
+
+    <h2 style="text-align:center; font-size: 2rem; color: #0ff; text-shadow: 0 0 5px #0ff;">
+      Featured Games
+    </h2>
+    <p style="text-align:center; color: #0ff; font-size: 1rem; margin-top: -1rem;">
+      <em>
+        Stay tuned for new games coming soon to Friesen Ventures Gaming Hub!
+      </em>
+    </p>
+
+    <div id="gameGrid" class="game-grid"></div>
+  </main>
+
+  <div class="ad-banner">
+    Promote your brand or product here.
+    Email <a href="mailto:markfriesen2014@gmail.com">markfriesen2014@gmail.com</a>
+  </div>
+
+  <footer>
+    © 2025 Friesen Ventures •
+    <a href="mailto:markfriesen2014@gmail.com">Contact Us</a>
+  </footer>
+
   <script>
-    // ——— GAMES ARRAY ———
+    // ——— GAMES ARRAY (Tetris removed since it's embedded) ———
     const games = [
       {
         title: "OpenCity",
@@ -122,13 +239,6 @@
         thumb: "images/opencity-thumb.jpg",
         url: "city-builders/opencity/index.html",
         categories: ["City Builder", "Nostalgic Classics"]
-      },
-      {
-        title: "Tetris",
-        desc: "Arrange falling blocks to clear lines in this timeless puzzle game.",
-        thumb: "images/tetris-thumb.jpg",
-        url: "Arcade/Tetris/index.html", // Fixed case to match directory (Arcade instead of arcade)
-        categories: ["Puzzle", "Arcade", "Nostalgic Classics"]
       },
       {
         title: "Your Ad Here",
@@ -169,6 +279,232 @@
       if (button) button.classList.add("active");
     }
 
+    // Full-screen toggle for Tetris
+    function toggleFullscreen() {
+      const container = document.getElementById("tetrisContainer");
+      container.classList.toggle("fullscreen");
+      const btn = container.querySelector(".fullscreen-btn");
+      btn.textContent = container.classList.contains("fullscreen") ? "Exit Full Screen" : "Full Screen";
+      // Adjust canvas size on fullscreen toggle
+      const canvas = document.getElementById("tetrisCanvas");
+      if (container.classList.contains("fullscreen")) {
+        canvas.width = 480; // Double the size for fullscreen
+        canvas.height = 800;
+      } else {
+        canvas.width = 240; // Default size
+        canvas.height = 400;
+      }
+      // Redraw the board to fit the new size
+      drawBoard();
+    }
+
+    // ——— TETRIS GAME LOGIC ———
+    const canvas = document.getElementById("tetrisCanvas");
+    const ctx = canvas.getContext("2d");
+    const scoreElement = document.getElementById("tetrisScore");
+
+    const BLOCK_SIZE = 20;
+    const BOARD_WIDTH = 12;
+    const BOARD_HEIGHT = 20;
+    let board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
+    let score = 0;
+    let gameOver = false;
+
+    // Tetris pieces (tetrominoes)
+    const PIECES = [
+      [[1, 1, 1, 1]], // I
+      [[1, 1], [1, 1]], // O
+      [[1, 1, 1], [0, 1, 0]], // T
+      [[1, 1, 1], [1, 0, 0]], // L
+      [[1, 1, 1], [0, 0, 1]], // J
+      [[1, 1, 0], [0, 1, 1]], // S
+      [[0, 1, 1], [1, 1, 0]] // Z
+    ];
+
+    const COLORS = [
+      "#00f", // I (blue)
+      "#ff0", // O (yellow)
+      "#f0f", // T (purple)
+      "#ffa500", // L (orange)
+      "#00f", // J (blue)
+      "#0f0", // S (green)
+      "#f00" // Z (red)
+    ];
+
+    let currentPiece = null;
+    let currentX = 0;
+    let currentY = 0;
+
+    function createPiece() {
+      const type = Math.floor(Math.random() * PIECES.length);
+      currentPiece = PIECES[type];
+      currentColor = COLORS[type];
+      currentX = Math.floor((BOARD_WIDTH - currentPiece[0].length) / 2);
+      currentY = 0;
+      if (collides()) {
+        gameOver = true;
+      }
+    }
+
+    function collides() {
+      for (let y = 0; y < currentPiece.length; y++) {
+        for (let x = 0; x < currentPiece[y].length; x++) {
+          if (currentPiece[y][x]) {
+            const boardX = currentX + x;
+            const boardY = currentY + y;
+            if (
+              boardX < 0 ||
+              boardX >= BOARD_WIDTH ||
+              boardY >= BOARD_HEIGHT ||
+              (boardY >= 0 && board[boardY][boardX])
+            ) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    function merge() {
+      for (let y = 0; y < currentPiece.length; y++) {
+        for (let x = 0; x < currentPiece[y].length; x++) {
+          if (currentPiece[y][x]) {
+            board[currentY + y][currentX + x] = currentColor;
+          }
+        }
+      }
+    }
+
+    function clearLines() {
+      let linesCleared = 0;
+      for (let y = BOARD_HEIGHT - 1; y >= 0; y--) {
+        if (board[y].every(cell => cell !== 0)) {
+          board.splice(y, 1);
+          board.unshift(Array(BOARD_WIDTH).fill(0));
+          linesCleared++;
+          y++;
+        }
+      }
+      if (linesCleared > 0) {
+        score += linesCleared * 100;
+        scoreElement.textContent = score;
+      }
+    }
+
+    function drawBoard() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Scale block size based on canvas size
+      const blockSize = canvas.width / BOARD_WIDTH;
+
+      // Draw the board
+      for (let y = 0; y < BOARD_HEIGHT; y++) {
+        for (let x = 0; x < BOARD_WIDTH; x++) {
+          if (board[y][x]) {
+            ctx.fillStyle = board[y][x];
+            ctx.fillRect(x * blockSize, y * blockSize, blockSize - 1, blockSize - 1);
+            ctx.strokeStyle = "#fff";
+            ctx.strokeRect(x * blockSize, y * blockSize, blockSize - 1, blockSize - 1);
+          }
+        }
+      }
+
+      // Draw the current piece
+      if (currentPiece) {
+        ctx.fillStyle = currentColor;
+        for (let y = 0; y < currentPiece.length; y++) {
+          for (let x = 0; x < currentPiece[y].length; x++) {
+            if (currentPiece[y][x]) {
+              ctx.fillRect((currentX + x) * blockSize, (currentY + y) * blockSize, blockSize - 1, blockSize - 1);
+              ctx.strokeStyle = "#fff";
+              ctx.strokeRect((currentX + x) * blockSize, (currentY + y) * blockSize, blockSize - 1, blockSize - 1);
+            }
+          }
+        }
+      }
+
+      if (gameOver) {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#f00";
+        ctx.font = `${blockSize}px 'Press Start 2P'`;
+        ctx.textAlign = "center";
+        ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+      }
+    }
+
+    function moveDown() {
+      if (gameOver) return;
+      currentY++;
+      if (collides()) {
+        currentY--;
+        merge();
+        clearLines();
+        createPiece();
+      }
+      drawBoard();
+    }
+
+    function moveLeft() {
+      if (gameOver) return;
+      currentX--;
+      if (collides()) {
+        currentX++;
+      }
+      drawBoard();
+    }
+
+    function moveRight() {
+      if (gameOver) return;
+      currentX++;
+      if (collides()) {
+        currentX--;
+      }
+      drawBoard();
+    }
+
+    function rotate() {
+      if (gameOver) return;
+      const rotated = currentPiece[0].map((_, index) =>
+        currentPiece.map(row => row[index]).reverse()
+      );
+      const prevPiece = currentPiece;
+      currentPiece = rotated;
+      if (collides()) {
+        currentPiece = prevPiece;
+      }
+      drawBoard();
+    }
+
+    // Game loop
+    let lastTime = 0;
+    function gameLoop(time = 0) {
+      const deltaTime = time - lastTime;
+      lastTime = time;
+
+      if (deltaTime > 1000) { // Move down every second
+        moveDown();
+        lastTime = time;
+      }
+
+      if (!gameOver) {
+        requestAnimationFrame(gameLoop);
+      }
+    }
+
+    // Keyboard controls
+    document.addEventListener("keydown", e => {
+      if (e.key === "ArrowLeft") moveLeft();
+      if (e.key === "ArrowRight") moveRight();
+      if (e.key === "ArrowDown") moveDown();
+      if (e.key === "ArrowUp") rotate();
+    });
+
+    // Start the game
+    createPiece();
+    drawBoard();
+    gameLoop();
+
     window.onload = () => {
       renderGames();
       document.querySelectorAll(".filters button").forEach(btn => {
@@ -180,50 +516,5 @@
       });
     };
   </script>
-</head>
-<body>
-  <header>
-    <h1>Friesen Ventures Gaming Hub</h1>
-    <nav>
-      <a href="/">Home</a>
-    </nav>
-  </header>
-
-  <div class="ad-banner">
-    Your Ad Here — <a href="mailto:markfriesen2014@gmail.com" style="color:#0ff;">Advertise with us</a>
-  </div>
-
-  <div class="filters">
-    <button data-cat="">All</button>
-    <button data-cat="Mobile Friendly">Mobile Friendly</button>
-    <button data-cat="PC Only">PC Only</button>
-    <button data-cat="City Builder">City Builders</button>
-    <button data-cat="Simulators">Simulators</button>
-    <button data-cat="Arcade">Arcade</button>
-    <button data-cat="Nostalgic Classics">Nostalgic</button>
-  </div>
-
-  <main>
-    <h2 style="text-align:center; font-size: 2rem; color: #0ff; text-shadow: 0 0 5px #0ff;">
-      Featured Games
-    </h2>
-    <p style="text-align:center; color: #0ff; font-size: 1rem; margin-top: -1rem;">
-      <em>
-        Stay tuned for new games coming soon to Friesen Ventures Gaming Hub!
-      </em>
-    </p>
-
-    <div id="gameGrid" class="game-grid"></div>
-  </main>
-
-  <div class="ad-banner">
-    Promote your brand or product here.
-    Email <a href="mailto:markfriesen2014@gmail.com">markfriesen2014@gmail.com</a>
-  </div>
-
-  <footer>
-    © 2025 Friesen Ventures •
-    <a href="mailto:markfriesen2014@gmail.com">Contact Us</a>
-  </footer>
 </body>
 </html>
