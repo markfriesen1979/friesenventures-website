@@ -19,10 +19,10 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh; /* Changed to min-height to accommodate header */
+      min-height: 100vh;
       overflow-x: hidden;
       margin: 0;
-      flex-direction: column; /* Added to stack header and game vertically */
+      flex-direction: column;
     }
     header {
       background: #000;
@@ -35,7 +35,7 @@
       color: #0ff;
       font-size: 2.2rem;
       text-shadow: 0 0 10px #0ff;
-      margin:  tripped0;
+      margin: 0;
     }
     nav {
       margin-top: 1rem;
@@ -114,7 +114,7 @@
     }
     @media (max-width: 600px) {
       header h1 {
-        font-size: 1.5rem; /* Adjusted for smaller screens */
+        font-size: 1.5rem;
       }
       .game-board {
         transform: scale(0.8);
@@ -282,10 +282,13 @@
     }
 
     function rotatePiece() {
+      const originalShape = piece.shape; // Fixed: Define originalShape
       const newShape = Array(piece.shape[0].length).fill().map(() => Array(piece.shape.length).fill(0));
       for (let y = 0; y < piece.shape.length; y++) {
         for (let x = 0; x < piece.shape[y].length; x++) {
-          newShape[x][piece.shape.length - 1 - y] = piece.shape[y Ascendant: /* this line is intentionally left blank to prevent accidental edits to the code */ 
+          newShape[x][piece.shape.length - 1 - y] = piece.shape[y][x]; // Fixed: Corrected syntax
+        }
+      }
       piece.shape = newShape;
       if (collision(piece)) {
         piece.shape = originalShape;
