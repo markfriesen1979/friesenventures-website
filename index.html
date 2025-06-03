@@ -1,225 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Friesen Ventures Gaming Hub</title>
-  <link rel="icon" href="favicon.ico" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friesen Ventures - Pet & Home Decor Boutique</title>
+  <link rel="icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #0a0a0a;
-      color: #eee;
-    }
-    header {
-      background: #000;
-      padding: 1.5rem;
-      text-align: center;
-      box-shadow: 0 0 20px #00ffff55;
-    }
-    header h1 {
-      color: #0ff;
-      font-size: 2.2rem;
-      text-shadow: 0 0 10px #0ff;
-      margin: 0;
-    }
-    nav {
-      margin-top: 1rem;
-    }
-    nav a {
-      color: #0ff;
-      text-decoration: none;
-      margin: 0 1rem;
-      font-weight: bold;
-    }
-    .ad-banner {
-      background: #111;
-      color: #0ff;
-      text-align: center;
-      padding: 1rem;
-      border-top: 1px solid #333;
-      border-bottom: 1px solid #333;
-    }
-    .filters {
-      text-align: center;
-      margin: 2rem 0;
-    }
-    .filters button {
-      margin: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: #111;
-      border: 1px solid #0ff;
-      color: #0ff;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .filters button.active {
-      background: #0ff;
-      color: #000;
-    }
-    main {
-      max-width: 1200px;
-      margin: auto;
-      padding: 2rem;
-    }
-    .game-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-    .game-card {
-      background: #1a1a1a;
-      border-radius: 8px;
-      box-shadow: 0 0 12px #00ffff55;
-      padding: 1rem;
-      text-align: center;
-    }
-    .game-card img {
-      width: 100%;
-      border-radius: 6px;
-      max-height: 150px;
-      object-fit: cover;
-    }
-    .game-card h3 {
-      color: #0ff;
-      margin: 1rem 0 0.5rem;
-    }
-    .game-card p {
-      font-size: 0.95rem;
-      color: #ccc;
-    }
-    .button {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.6rem 1.2rem;
-      background: #00f;
-      color: #fff;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      box-shadow: 0 0 8px #00f;
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background: #000;
-      color: #0ff;
-      margin-top: 4rem;
-      font-size: 0.9rem;
-    }
-    footer a {
-      color: #0ff;
-      text-decoration: underline;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Arial', sans-serif; background: #f4f4f4; color: #333; line-height: 1.6; }
+    header { background: linear-gradient(135deg, #2196F3, #4CAF50); color: white; text-align: center; padding: 3rem 1rem; }
+    header h1 { font-size: 3rem; font-weight: 700; }
+    header p { font-size: 1.3rem; margin-top: 0.5rem; }
+    nav { background: #333; padding: 1rem; text-align: center; }
+    nav button { background: #4CAF50; color: white; border: none; padding: 0.8rem 1.5rem; margin: 0 0.5rem; font-size: 1.1rem; cursor: pointer; border-radius: 5px; transition: background 0.3s ease; }
+    nav button:hover { background: #388E3C; }
+    nav button.active { background: #2196F3; }
+    .latest { background: #FF9800; color: white; padding: 2rem; text-align: center; margin: 2rem auto; max-width: 1200px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+    .latest h2 { font-size: 2rem; font-weight: 700; }
+    .latest .product { background: white; margin: 1.5rem auto; padding: 1.5rem; max-width: 400px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+    .category { margin: 3rem 0; }
+    .category h2 { font-size: 1.8rem; color: #2196F3; font-weight: 700; margin-bottom: 1.5rem; }
+    .products { display: flex; flex-wrap: wrap; gap: 2rem; }
+    .product { background: white; flex: 1 1 300px; padding: 1.5rem; border-radius: 8px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+    .product:hover { transform: translateY(-5px); }
+    .product img { max-width: 220px; height: auto; border-radius: 6px; loading: lazy; }
+    .product h3 { font-size: 1.6rem; color: #333; margin: 0.5rem 0; }
+    .product p { font-size: 1rem; color: #666; }
+    .product a { display: inline-block; background: #2196F3; color: white; padding: 0.8rem 1.5rem; margin-top: 0.8rem; text-decoration: none; border-radius: 5px; font-weight: 700; transition: background 0.3s ease; }
+    .product a:hover { background: #1976D2; }
+    footer { background: #333; color: white; text-align: center; padding: 1.5rem; margin-top: 3rem; font-size: 0.95rem; }
+    footer a { color: #4CAF50; text-decoration: underline; }
+    @media (max-width: 768px) {
+      header h1 { font-size: 2rem; }
+      .latest h2 { font-size: 1.6rem; }
+      .category h2 { font-size: 1.5rem; }
+      .products { flex-direction: column; }
+      .product { flex: 1 1 100%; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Friesen Ventures Gaming Hub</h1>
-    <nav>
-      <a href="/">Home</a>
-    </nav>
+    <h1>Friesen Ventures</h1>
+    <p>Premium Pet Products & Unique Home Decor Boutique</p>
   </header>
-
-  <div class="ad-banner">
-    Your Ad Here — <a href="mailto:markfriesen2014@gmail.com" style="color:#0ff;">Advertise with us</a>
+  <nav>
+    <button class="filter active" data-category="all">All Products</button>
+    <button class="filter" data-category="pet">Pet Products</button>
+    <button class="filter" data-category="decor">Home Decor</button>
+  </nav>
+  <div class="latest">
+    <h2>Latest Addition: 2L Silent Pet Fountain</h2>
+    <div class="product">
+      <img src="https://via.placeholder.com/220?text=Pet+Fountain" alt="Pet Fountain" loading="lazy">
+      <h3>2L Silent Pet Fountain</h3>
+      <p>Keep your pets hydrated with our BPA-free, quiet fountain.</p>
+      <a href="YOUR_AMAZON_PET_FOUNTAIN_LINK_HERE">Shop on Amazon</a>
+    </div>
   </div>
-
-  <div class="filters">
-    <button data-cat="">All</button>
-    <button data-cat="Mobile Friendly">Mobile Friendly</button>
-    <button data-cat="PC Only">PC Only</button>
-    <button data-cat="Simulators">Simulators</button>
-    <button data-cat="Arcade">Arcade</button>
-    <button data-cat="Nostalgic Classics">Nostalgic</button>
+  <div class="container">
+    <div class="category" id="pet">
+      <h2>Pet Products</h2>
+      <div class="products">
+        <div class="product" data-category="pet">
+          <img src="https://via.placeholder.com/220?text=Pet+Fountain" alt="Pet Fountain" loading="lazy">
+          <h3>2L Silent Pet Fountain</h3>
+          <p>BPA-free, quiet pump for happy pets.</p>
+          <a href="YOUR_AMAZON_PET_FOUNTAIN_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="pet">
+          <img src="https://via.placeholder.com/220?text=Pet+Collar" alt="Pet Collar" loading="lazy">
+          <h3>LED Pet Collar</h3>
+          <p>Glowing collar for pet safety at night.</p>
+          <a href="YOUR_AMAZON_PET_COLLAR_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="pet">
+          <img src="https://via.placeholder.com/220?text=Pet+Bed" alt="Pet Bed" loading="lazy">
+          <h3>Cozy Pet Bed</h3>
+          <p>Soft, washable bed for pet comfort.</p>
+          <a href="YOUR_AMAZON_PET_BED_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="pet">
+          <img src="https://via.placeholder.com/220?text=Pet+Toy" alt="Pet Toy" loading="lazy">
+          <h3>Interactive Pet Toy</h3>
+          <p>Durable chew toy for endless fun.</p>
+          <a href="YOUR_AMAZON_PET_TOY_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="pet">
+          <img src="https://via.placeholder.com/220?text=Pet+Feeder" alt="Pet Feeder" loading="lazy">
+          <h3>Automatic Pet Feeder</h3>
+          <p>Smart feeder for scheduled meals.</p>
+          <a href="YOUR_AMAZON_PET_FEEDER_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="pet">
+          <img src="https://via.placeholder.com/220?text=Pet+Grooming" alt="Pet Grooming" loading="lazy">
+          <h3>Pet Grooming Brush</h3>
+          <p>Gentle brush for a shiny coat.</p>
+          <a href="YOUR_AMAZON_PET_GROOMING_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="pet">
+          <img src="https://via.placeholder.com/220?text=Pet+Leash" alt="Pet Leash" loading="lazy">
+          <h3>Reflective Pet Leash</h3>
+          <p>Strong leash for safe walks.</p>
+          <a href="YOUR_AMAZON_PET_LEASH_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="pet">
+          <img src="https://via.placeholder.com/220?text=Pet+Bowl" alt="Pet Bowl" loading="lazy">
+          <h3>Non-Slip Pet Bowl</h3>
+          <p>Sturdy bowl for mess-free meals.</p>
+          <a href="YOUR_AMAZON_PET_BOWL_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="pet">
+          <img src="https://via.placeholder.com/220?text=Pet+Camera" alt="Pet Camera" loading="lazy">
+          <h3>Pet Monitoring Camera</h3>
+          <p>Keep an eye on your pet remotely.</p>
+          <a href="YOUR_AMAZON_PET_CAMERA_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="pet">
+          <img src="https://via.placeholder.com/220?text=Pet+Carrier" alt="Pet Carrier" loading="lazy">
+          <h3>Portable Pet Carrier</h3>
+          <p>Comfortable travel for your pet.</p>
+          <a href="YOUR_AMAZON_PET_CARRIER_LINK_HERE">Shop on Amazon</a>
+        </div>
+      </div>
+    </div>
+    <div class="category" id="decor">
+      <h2>Home Decor</h2>
+      <div class="products">
+        <div class="product" data-category="decor">
+          <img src="https://via.placeholder.com/220?text=Totem+Pole" alt="Totem Pole" loading="lazy">
+          <h3>Mini Resin Totem Pole</h3>
+          <p>Handcrafted replica for cultural elegance.</p>
+          <a href="YOUR_AMAZON_TOTEM_POLE_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="decor">
+          <img src="https://via.placeholder.com/220?text=Wood+Totem" alt="Wood Totem" loading="lazy">
+          <h3>Carved Wood Totem Pole</h3>
+          <p>Authentic cedar totem for home display.</p>
+          <a href="YOUR_AMAZON_WOOD_TOTEM_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="decor">
+          <img src="https://via.placeholder.com/220?text=Wall+Art" alt="Wall Art" loading="lazy">
+          <h3>Tribal Wall Art</h3>
+          <p>Vibrant canvas print for modern decor.</p>
+          <a href="YOUR_AMAZON_WALL_ART_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="decor">
+          <img src="https://via.placeholder.com/220?text=Wall+Sculpture" alt="Wall Sculpture" loading="lazy">
+          <h3>Metal Wall Sculpture</h3>
+          <p>Abstract design for contemporary spaces.</p>
+          <a href="YOUR_AMAZON_WALL_SCULPTURE_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="decor">
+          <img src="https://via.placeholder.com/220?text=Planter" alt="Planter" loading="lazy">
+          <h3>Ceramic Planter</h3>
+          <p>Stylish pot for indoor plants.</p>
+          <a href="YOUR_AMAZON_PLANTER_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="decor">
+          <img src="https://via.placeholder.com/220?text=Candle+Holder" alt="Candle Holder" loading="lazy">
+          <h3>Glass Candle Holder</h3>
+          <p>Elegant holder for ambient lighting.</p>
+          <a href="YOUR_AMAZON_CANDLE_HOLDER_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="decor">
+          <img src="https://via.placeholder.com/220?text=Photo+Frame" alt="Photo Frame" loading="lazy">
+          <h3>Wooden Photo Frame</h3>
+          <p>Classic frame for cherished memories.</p>
+          <a href="YOUR_AMAZON_PHOTO_FRAME_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="decor">
+          <img src="https://via.placeholder.com/220?text=Vase" alt="Vase" loading="lazy">
+          <h3>Decorative Vase</h3>
+          <p>Chic vase for floral arrangements.</p>
+          <a href="YOUR_AMAZON_VASE_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="decor">
+          <img src="https://via.placeholder.com/220?text=Throw+Pillow" alt="Throw Pillow" loading="lazy">
+          <h3>Patterned Throw Pillow</h3>
+          <p>Cozy accent for your living space.</p>
+          <a href="YOUR_AMAZON_THROW_PILLOW_LINK_HERE">Shop on Amazon</a>
+        </div>
+        <div class="product" data-category="decor">
+          <img src="https://via.placeholder.com/220?text=Wall+Clock" alt="Wall Clock" loading="lazy">
+          <h3>Modern Wall Clock</h3>
+          <p>Sleek timepiece for stylish interiors.</p>
+          <a href="YOUR_AMAZON_WALL_CLOCK_LINK_HERE">Shop on Amazon</a>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <main>
-    <h2 style="text-align:center; font-size: 2rem; color: #0ff; text-shadow: 0 0 5px #0ff;">
-      Featured Games
-    </h2>
-    <p style="text-align:center; color: #0ff; font-size: 1rem; margin-top: -1rem;">
-      <em>
-        Stay tuned for new games coming soon to Friesen Ventures Gaming Hub!
-      </em>
-    </p>
-
-    <div id="gameGrid" class="game-grid"></div>
-  </main>
-
-  <div class="ad-banner">
-    Promote your brand or product here.
-    Email <a href="mailto:markfriesen2014@gmail.com">markfriesen2014@gmail.com</a>
-  </div>
-
   <footer>
-    © 2025 Friesen Ventures •
-    <a href="mailto:markfriesen2014@gmail.com">Contact Us</a>
+    <p>© 2025 Friesen Ventures • <a href="mailto:markfriesen2014@gmail.com">Contact Us</a></p>
   </footer>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
   <script>
-    // Game Grid Logic
-    const games = [
-      {
-        title: "OpenCity",
-        desc: "Build your city in 3D with zoning and infrastructure management. Download required.",
-        thumb: "images/opencity-thumb.jpg",
-        url: "city-builders/opencity/index.html",
-        categories: ["Nostalgic Classics"]
-      },
-      {
-        title: "Your Ad Here",
-        desc: "Reach 10,000+ players. Promote your game or website.",
-        thumb: "images/ad-placeholder.jpg",
-        url: "mailto:markfriesen2014@gmail.com",
-        categories: ["Promotion"]
-      }
-    ];
+    const buttons = document.querySelectorAll('.filter');
+    const products = document.querySelectorAll('.product');
 
-    function renderGames(filter = "") {
-      const grid = document.getElementById("gameGrid");
-      grid.innerHTML = "";
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        buttons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
 
-      const filtered = !filter
-        ? games
-        : games.filter(g => g.categories.includes(filter));
-
-      if (filtered.length === 0) {
-        grid.innerHTML = "<p style='text-align:center;'>No games found.</p>";
-        return;
-      }
-
-      filtered.forEach(g => {
-        grid.innerHTML += `
-          <div class="game-card">
-            <img src="${g.thumb}" alt="${g.title}" />
-            <h3>${g.title}</h3>
-            <p>${g.desc}</p>
-            <a class="button" href="${g.url}">Play Now</a>
-          </div>
-        `;
-      });
-    }
-
-    function setFilter(button) {
-      document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active"));
-      if (button) button.classList.add("active");
-    }
-
-    // Initialize Website
-    window.onload = () => {
-      renderGames();
-      document.querySelectorAll(".filters button").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const filter = btn.dataset.cat;
-          setFilter(btn);
-          renderGames(filter);
+        const category = button.getAttribute('data-category');
+        products.forEach(product => {
+          product.style.display = (category === 'all' || product.getAttribute('data-category') === category) ? 'block' : 'none';
         });
       });
-    };
+    });
+
+    // Lazy load images
+    document.addEventListener('DOMContentLoaded', () => {
+      const images = document.querySelectorAll('img[loading="lazy"]');
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              img.src = img.dataset.src || img.src;
+              observer.unobserve(img);
+            }
+          });
+        });
+        images.forEach(img => observer.observe(img));
+      }
+    });
   </script>
 </body>
 </html>
